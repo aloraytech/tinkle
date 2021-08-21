@@ -1,0 +1,32 @@
+<?php
+
+namespace tinkle\app\models{{namespace}};
+
+use tinkle\framework\Model;
+
+class {{name}} extends Model
+{
+
+
+     public function tableName(): string
+     {
+            return "{{lowname}}";
+     }
+
+
+    public function labels(): array
+    {
+        // TODO: Implement labels() method.
+    }
+
+
+    public function attributes(): array
+    {
+        // TODO: Implement attributes() method.
+    }
+
+
+
+
+
+}

@@ -1,0 +1,1 @@
+{"controllers":"1","models":"1","middlewares":"1","plugins":"1","config":"1","migrations":"1","seeders":"1","views":"1","routes":"1","cache":"1","logs":"1","runtime":"1","AppController":true,"AuthController":true,"Config":true,"web":true,"private":true,"api":true,"listeners":true,"env":true,"tinkle":true}

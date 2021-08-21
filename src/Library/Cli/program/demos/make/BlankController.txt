@@ -1,0 +1,33 @@
+<?php
+
+namespace tinkle\app\controllers{{namespace}};
+
+use tinkle\framework\Controller;
+use tinkle\framework\Request;
+use tinkle\framework\Response;
+
+/**
+ * Class {{name}}
+ * @package tinkle\app\controllers
+ */
+class {{name}} extends Controller
+{
+
+
+
+
+    /**
+     * @param Request $request
+     * @param Response $response
+     */
+    public function _demo(Request $request, Response $response)
+    {
+        // TODO: Implement _demo() method.
+    }
+
+
+
+
+
+
+}

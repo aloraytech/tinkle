@@ -1,0 +1,22 @@
+{
+    "name": "xJunk/tinkle/tinkle",
+    
+    "autoload": {
+        "psr-4": {
+            "tinkle\\framework\\": "src/",
+            "tinkle\\": "./"
+        }
+    },
+    "authors": [
+        {
+            "name": "Krishanu Bhattacharya",
+            "email": "krishanu.info@gmail.com"
+        }
+    ],
+    "require": {
+        "vlucas/phpdotenv": "^5.3",
+        "symfony/http-foundation": "^5.3",
+        "twig/twig": "^3.3",
+      "ext-password": "*"
+    }
+}
