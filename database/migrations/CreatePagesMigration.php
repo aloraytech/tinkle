@@ -1,12 +1,12 @@
 <?php
 
 
-namespace tinkle\database\migrations;
+namespace Database\migrations;
 
-use tinkle\framework\Database\Migrations\Column;
-use tinkle\framework\Database\Migrations\ColumnAlter;
-use tinkle\framework\interfaces\MigrationInterface;
-use tinkle\framework\Database\Migrations\Schema;
+use Tinkle\Database\Migrations\Column;
+use Tinkle\Database\Migrations\ColumnAlter;
+use Tinkle\interfaces\MigrationInterface;
+use Tinkle\Database\Migrations\Schema;
 
 class CreatePagesMigration implements MigrationInterface
 {

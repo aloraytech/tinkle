@@ -1,17 +1,17 @@
 <?php
 
 
-namespace tinkle\framework;
+namespace Tinkle;
 
 
 
 
-use tinkle\framework\interfaces\ControllerInterface;
-use tinkle\framework\Middlewares\SecurityMiddleware;
+use Tinkle\interfaces\ControllerInterface;
+use Tinkle\Middlewares\SecurityMiddleware;
 
 /**
  * Class Controller
- * @package tinkle\framework
+ * @package Tinkle
  *
  */
 abstract class Controller

@@ -1,11 +1,11 @@
 <?php
 
 
-namespace tinkle\framework\Library\Cli\program\model\Make;
+namespace Tinkle\Library\Cli\program\model\Make;
 
 
-use tinkle\framework\Controller;
-use tinkle\framework\Tinkle;
+use Tinkle\Controller;
+use Tinkle\Tinkle;
 
 class MakerModel
 {

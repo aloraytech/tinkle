@@ -1,17 +1,34 @@
 <?php
 
 
-namespace tinkle\framework\Library\Essential;
+namespace Tinkle\Library\Essential;
 
-use tinkle\framework\Exceptions\Display;
-use tinkle\framework\Library\Essential\Helpers\Helper;
-use tinkle\framework\Library\Essential\Helpers\RegexHandler;
-use tinkle\framework\Library\Essential\Helpers\StringHandler;
-use tinkle\framework\Library\Essential\Token;
-use tinkle\framework\Tinkle;
+use Tinkle\Exceptions\Display;
+use Tinkle\Library\Essential\Helpers\Faker;
+use Tinkle\Library\Essential\Helpers\Helper;
+use Tinkle\Library\Essential\Helpers\RegexHandler;
+use Tinkle\Library\Essential\Helpers\StringHandler;
+use Tinkle\Library\Essential\Token;
+use Tinkle\Tinkle;
 
 class Essential
 {
+    public static Helper $helper;
+    public static RegexHandler $regex;
+    public static StringHandler $str;
+    public static Faker $faker;
+
+    /**
+     * Essential constructor.
+     */
+    public function __construct()
+    {
+        self::$helper = self::getHelper();
+        self::$regex = new RegexHandler();
+        self::$str = new StringHandler();
+        self::$faker = new Faker();
+    }
+
 
     public static function init()
     {

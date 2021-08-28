@@ -1,13 +1,13 @@
 <?php
 
 
-namespace tinkle\framework\Library\Cli\program\controller;
+namespace Tinkle\Library\Cli\program\controller;
 
 
-use tinkle\framework\interfaces\CliControllerInterface;
-use tinkle\framework\Library\Cli\program\CliController;
-use tinkle\framework\Library\Logger\Logger;
-use tinkle\framework\Tinkle;
+use Tinkle\interfaces\CliControllerInterface;
+use Tinkle\Library\Cli\program\CliController;
+use Tinkle\Library\Logger\Logger;
+use Tinkle\Tinkle;
 
 class Clear extends CliController implements CliControllerInterface
 {

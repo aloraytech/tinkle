@@ -1,7 +1,7 @@
 <?php
 
 
-namespace tinkle\framework\Library\Commander;
+namespace Tinkle\Library\Commander;
 
 
 class Commands

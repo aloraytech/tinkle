@@ -1,12 +1,12 @@
 <?php
 
 
-namespace tinkle\framework\Library\Explorer;
+namespace Tinkle\Library\Explorer;
 
 
-use tinkle\framework\Request;
-use tinkle\framework\Response;
-use tinkle\framework\Tinkle;
+use Tinkle\Request;
+use Tinkle\Response;
+use Tinkle\Tinkle;
 
 class Explorer
 {

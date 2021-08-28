@@ -1,10 +1,10 @@
 <?php
 
 
-namespace tinkle\framework;
+namespace Tinkle;
 
-use tinkle\framework\Library\Essential\Essential;
-use tinkle\framework\Library\Http\SessionHandler;
+use Tinkle\Library\Essential\Essential;
+use Tinkle\Library\Http\SessionHandler;
 
 class Session extends SessionHandler
 {

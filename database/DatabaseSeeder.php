@@ -1,7 +1,7 @@
 <?php
 
 
-namespace tinkle\database;
+namespace Database;
 
 
 

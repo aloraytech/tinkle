@@ -1,7 +1,7 @@
 <?php
 
 
-namespace tinkle\framework\interfaces;
+namespace Tinkle\interfaces;
 
 
 interface CliControllerInterface

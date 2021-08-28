@@ -1,10 +1,10 @@
 <?php
 
 
-namespace tinkle\framework\Library\Logger;
+namespace Tinkle\Library\Logger;
 
 
-use tinkle\framework\Tinkle;
+use Tinkle\Tinkle;
 
 class Logger
 {
@@ -38,8 +38,7 @@ class Logger
      */
     private static function makeLog(bool $show=true)
     {
-        $root = $_SERVER['ROOT_PATH'] ?? Tinkle::$ROOT_DIR.'/';
-        $logfile = $root."storage/logs/".date("Y-m-d");
+        $logfile = self::getLogFile();
         $logfileHandler = fopen($logfile,"a+") or die("Unable to open file!");
         $msg = "[" . date("Y-m-d H:i:s") . "] - " . self::$message . "\n";
         fwrite($logfileHandler,$msg);
@@ -51,6 +50,28 @@ class Logger
 
     }
 
+
+    protected static function getLogFile()
+    {
+        $logStorage = Tinkle::$ROOT_DIR."storage/logs/";
+        if(!is_dir($logStorage))
+        {
+            if(is_dir(Tinkle::$ROOT_DIR."storage/"))
+            {
+                mkdir(Tinkle::$ROOT_DIR."storage/logs/");
+            }else{
+                mkdir(Tinkle::$ROOT_DIR."storage");
+                mkdir(Tinkle::$ROOT_DIR."storage/logs/");
+            }
+
+        }
+
+        $logfile = $logStorage.date("Y-m-d");
+
+
+        return $logfile;
+
+    }
 
 
 

@@ -1,14 +1,14 @@
 <?php
 
 
-namespace tinkle\framework\Middlewares;
+namespace Tinkle\Middlewares;
 
 
-use tinkle\framework\interfaces\MiddlewareInterface;
-use tinkle\framework\Library\Essential\Activity;
-use tinkle\framework\Library\Http\DomDocumentHandler;
-use tinkle\framework\Middleware;
-use tinkle\framework\Tinkle;
+use Tinkle\interfaces\MiddlewareInterface;
+use Tinkle\Library\Essential\Activity;
+use Tinkle\Library\Http\DomDocumentHandler;
+use Tinkle\Middleware;
+use Tinkle\Tinkle;
 
 class SecurityMiddleware extends Middleware implements MiddlewareInterface
 {
@@ -17,9 +17,9 @@ class SecurityMiddleware extends Middleware implements MiddlewareInterface
     {
        // echo "Security Applied <br>";
 
-        echo "<pre>";
-       $this->updateActivity();
-       die();
+     //   echo "<pre>";
+//       $this->updateActivity();
+//       die();
     }
 
 

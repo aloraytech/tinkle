@@ -1,9 +1,9 @@
 <?php
 
 
-namespace tinkle\framework\Library\Designer\Div;
-use tinkle\framework\Library\Designer\Div\Card as CardDesigner;
-use tinkle\framework\Library\Designer\Nav\Nav;
+namespace Tinkle\Library\Designer\Div;
+use Tinkle\Library\Designer\Div\Card as CardDesigner;
+use Tinkle\Library\Designer\Nav\Nav;
 
 class Div
 {

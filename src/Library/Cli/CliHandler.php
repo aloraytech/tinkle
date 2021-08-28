@@ -1,12 +1,12 @@
 <?php
 
 
-namespace tinkle\framework\Library\Cli;
+namespace Tinkle\Library\Cli;
 
 
-use tinkle\framework\Library\Cli\program\CliController;
-use tinkle\framework\Library\Logger\Logger;
-use tinkle\framework\Tinkle;
+use Tinkle\Library\Cli\program\CliController;
+use Tinkle\Library\Logger\Logger;
+use Tinkle\Tinkle;
 
 class CliHandler
 {

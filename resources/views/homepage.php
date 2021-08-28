@@ -1,5 +1,6 @@
 <?php
-use tinkle\framework\Tinkle;
+use Tinkle\Tinkle;
+
 ?>
 
 {{extend('layout/bootstrap')}}

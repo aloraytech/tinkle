@@ -1,8 +1,8 @@
 <?php
 
 
-namespace tinkle\framework\Designer\Form;
-use tinkle\framework\Model;
+namespace Tinkle\Designer\Form;
+use Tinkle\Model;
 
 class TextArea extends Fields
 {

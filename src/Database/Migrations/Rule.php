@@ -1,11 +1,11 @@
 <?php
 
 
-namespace tinkle\framework\Database\Migrations;
+namespace Tinkle\Database\Migrations;
 
 /**
  * Class Rule
- * @package tinkle\framework\Database\Migrations
+ * @package Tinkle\Database\Migrations
  */
 class Rule
 {

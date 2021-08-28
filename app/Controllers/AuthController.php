@@ -1,14 +1,14 @@
 <?php
 
-namespace tinkle\app\controllers;
+namespace App\Controllers;
 
 use tinkle\app\models\Auth\LoginModel;
 use tinkle\app\models\UsersModel;
-use tinkle\framework\Controller;
-use tinkle\framework\interfaces\ControllerInterface;
-use tinkle\framework\Middlewares\AuthMiddleware;
-use tinkle\framework\Request;
-use tinkle\framework\Response;
+use Tinkle\Controller;
+use Tinkle\interfaces\ControllerInterface;
+use Tinkle\Middlewares\AuthMiddleware;
+use Tinkle\Request;
+use Tinkle\Response;
 
 /**
  * Class AuthController

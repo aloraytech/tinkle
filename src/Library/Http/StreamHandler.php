@@ -1,7 +1,7 @@
 <?php
 
 
-namespace tinkle\framework\Library\Http;
+namespace Tinkle\Library\Http;
 
 
 abstract class StreamHandler

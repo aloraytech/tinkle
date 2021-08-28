@@ -1,15 +1,15 @@
 <?php
 
 
-namespace tinkle\framework\Library\Designer;
+namespace Tinkle\Library\Designer;
 
 
 
 
-use tinkle\framework\Database\Manager\DBManager;
-use tinkle\framework\Library\Designer\Div\Div;
-use tinkle\framework\Library\Designer\Form\Form;
-use tinkle\framework\Library\Designer\Nav\Nav;
+use Tinkle\Database\Manager\DBManager;
+use Tinkle\Library\Designer\Div\Div;
+use Tinkle\Library\Designer\Form\Form;
+use Tinkle\Library\Designer\Nav\Nav;
 
 class Designer
 {

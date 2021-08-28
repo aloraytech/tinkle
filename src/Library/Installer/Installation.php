@@ -1,10 +1,10 @@
 <?php
 
 
-namespace tinkle\framework\Library\Installer;
+namespace Tinkle\Library\Installer;
 
 
-use tinkle\framework\Controller;
+use Tinkle\Controller;
 
 class Installation extends Controller
 {

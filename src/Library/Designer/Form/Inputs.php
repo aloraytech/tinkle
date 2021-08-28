@@ -1,8 +1,8 @@
 <?php
 
 
-namespace tinkle\framework\Library\Designer\Form;
-use tinkle\framework\Database\Manager\DBManager;
+namespace Tinkle\Library\Designer\Form;
+use Tinkle\Database\Manager\DBManager;
 
 class Inputs extends Fields
 {

@@ -1,7 +1,7 @@
 <?php
 
 
-namespace tinkle\framework\Library\Essential\Helpers;
+namespace Tinkle\Library\Essential\Helpers;
 
 
 class Faker

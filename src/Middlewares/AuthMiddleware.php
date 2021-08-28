@@ -1,12 +1,12 @@
 <?php
 
 
-namespace tinkle\framework\Middlewares;
+namespace Tinkle\Middlewares;
 
 
-use tinkle\framework\interfaces\MiddlewareInterface;
-use tinkle\framework\Middleware;
-use tinkle\framework\Tinkle;
+use Tinkle\interfaces\MiddlewareInterface;
+use Tinkle\Middleware;
+use Tinkle\Tinkle;
 
 class AuthMiddleware extends Middleware implements MiddlewareInterface
 {

@@ -1,15 +1,15 @@
 <?php
 
 
-namespace tinkle\framework\Library\Http;
+namespace Tinkle\Library\Http;
 
-use tinkle\framework\Library\Essential\Essential;
+use Tinkle\Library\Essential\Essential;
 use Symfony\Component\HttpFoundation\Session\Attribute\AttributeBag;
 use Symfony\Component\HttpFoundation\Session\Session as SymfonySession;
 use Symfony\Component\HttpFoundation\Session\Storage\NativeSessionStorage;
 use Symfony\Component\HttpFoundation\Session\Storage\Handler\PdoSessionHandler;
 
-use tinkle\framework\Tinkle;
+use Tinkle\Tinkle;
 
 abstract class SessionHandler
 {

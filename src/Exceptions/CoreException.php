@@ -1,14 +1,14 @@
 <?php
 
-namespace tinkle\framework\Exceptions;
+namespace Tinkle\Exceptions;
 
-use tinkle\framework\interfaces\ExceptionInterface as IException;
+use Tinkle\interfaces\ExceptionInterface as IException;
 use \Exception;
 //extends Exception implements IException
 
 /**
  * Class CoreException
- * @package tinkle\framework\Exceptions
+ * @package Tinkle\Exceptions
  */
 abstract class CoreException extends Exception implements IException
 {

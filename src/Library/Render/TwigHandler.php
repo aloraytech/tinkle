@@ -1,10 +1,10 @@
 <?php
 
 
-namespace tinkle\framework\Library\Render;
+namespace Tinkle\Library\Render;
 
 
-use tinkle\framework\interfaces\RenderHandlerInterface;
+use Tinkle\interfaces\RenderHandlerInterface;
 
 class TwigHandler implements RenderHandlerInterface
 {

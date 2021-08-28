@@ -1,13 +1,13 @@
 <?php
 
 
-namespace tinkle\framework\Library\Designer\Form;
+namespace Tinkle\Library\Designer\Form;
 
 
-use tinkle\framework\Database\Manager\DBManager;
-use tinkle\framework\Designer\Form\TextArea;
-use tinkle\framework\Library\Encryption\Hash;
-use tinkle\framework\Token;
+use Tinkle\Database\Manager\DBManager;
+use Tinkle\Designer\Form\TextArea;
+use Tinkle\Library\Encryption\Hash;
+use Tinkle\Token;
 
 class Form
 {

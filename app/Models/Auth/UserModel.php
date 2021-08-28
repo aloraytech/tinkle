@@ -1,8 +1,8 @@
 <?php
 
-namespace tinkle\app\models;
+namespace App\Models;
 
-use tinkle\framework\Model;
+use Tinkle\Model;
 
 class UserModel extends Model
 {

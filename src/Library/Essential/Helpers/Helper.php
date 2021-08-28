@@ -1,14 +1,15 @@
 <?php
 
 
-namespace tinkle\framework\Library\Essential\Helpers;
+namespace Tinkle\Library\Essential\Helpers;
 
 
-use tinkle\framework\Request;
-use tinkle\framework\Tinkle;
+use Tinkle\Request;
+use Tinkle\Tinkle;
 
 class Helper
 {
+
 
 
 
@@ -77,7 +78,10 @@ class Helper
 
 
 
-
+    public function ArrayToString(array $array)
+    {
+        return implode(", ",$array);
+    }
 
 
 

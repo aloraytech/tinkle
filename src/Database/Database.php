@@ -1,17 +1,17 @@
 <?php
 
 
-namespace tinkle\framework\Database;
+namespace Tinkle\Database;
 
 
-use tinkle\framework\Database\Driver\MySqlDriver;
-use tinkle\framework\Database\Driver\SqliteDriver;
-use tinkle\framework\Exceptions\Display;
-use tinkle\framework\Tinkle;
+use Tinkle\Database\Driver\MySqlDriver;
+use Tinkle\Database\Driver\SqliteDriver;
+use Tinkle\Exceptions\Display;
+use Tinkle\Tinkle;
 use \PDO;
 /**
  * Class Database
- * @package tinkle\framework\Database
+ * @package Tinkle\Database
  */
 class Database
 {

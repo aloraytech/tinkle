@@ -1,11 +1,11 @@
 <?php
 
 
-namespace tinkle\framework\Library\Http;
+namespace Tinkle\Library\Http;
 
 
-use tinkle\framework\Request;
-use tinkle\framework\Tinkle;
+use Tinkle\Request;
+use Tinkle\Tinkle;
 
 class DomDocumentHandler
 {

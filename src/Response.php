@@ -1,9 +1,9 @@
 <?php
 
 
-namespace tinkle\framework;
+namespace Tinkle;
 
-use tinkle\framework\Library\Http\ResponseHandler;
+use Tinkle\Library\Http\ResponseHandler;
 
 
 class Response extends ResponseHandler

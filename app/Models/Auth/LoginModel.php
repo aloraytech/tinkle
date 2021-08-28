@@ -1,10 +1,10 @@
 <?php
 
-namespace tinkle\app\models\Auth;
+namespace App\Models\Auth;
 
 use tinkle\app\models\UsersModel;
-use tinkle\framework\Model;
-use tinkle\framework\Tinkle;
+use Tinkle\Model;
+use Tinkle\Tinkle;
 
 class LoginModel extends Model
 {

@@ -1,15 +1,15 @@
 <?php
 
 
-namespace tinkle\framework\Library\Http;
+namespace Tinkle\Library\Http;
 
 
 use Symfony\Component\HttpFoundation\Cookie as SymfonyCookie;
 use Symfony\Component\HttpFoundation\Response as SymfonyResponse;
 use Symfony\Component\HttpFoundation\Request as SymfonyRequest;
 use Symfony\Component\HttpFoundation\RedirectResponse;
-use tinkle\framework\Request;
-use tinkle\framework\Tinkle;
+use Tinkle\Request;
+use Tinkle\Tinkle;
 
 abstract class ResponseHandler
 {

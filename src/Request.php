@@ -1,9 +1,9 @@
 <?php
 
 
-namespace tinkle\framework;
+namespace Tinkle;
 
-use tinkle\framework\Library\Http\RequestHandler;
+use Tinkle\Library\Http\RequestHandler;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 

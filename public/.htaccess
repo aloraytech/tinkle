@@ -12,19 +12,20 @@ DirectoryIndex index.php
 </IfModule>
 Options -Indexes
 
-SetEnv TZ America/Indianapolis
+SetEnv TZ Asia/Kolkata
+
 ServerSignature Off
 
 
-RewriteCond %{HTTP_REFERER} !^$
-RewriteCond %{REQUEST_URI} !^/(wp-login.php|wp-admin/|wp-content/plugins/|wp-includes/).* [NC]
-RewriteCond %{HTTP_REFERER} !^http://www.askapache.com.*$ [NC]
-RewriteRule \.(ico|pdf|flv|jpg|jpeg|mp3|mpg|mp4|mov|wav|wmv|png|gif|swf|css|js)$ - [F,NS,L]
+#RewriteCond %{HTTP_REFERER} !^$
+#RewriteCond %{REQUEST_URI} !^/(wp-login.php|wp-admin/|wp-content/plugins/|wp-includes/).* [NC]
+#RewriteCond %{HTTP_REFERER} !^http://www.askapache.com.*$ [NC]
+#RewriteRule \.(ico|pdf|flv|jpg|jpeg|mp3|mpg|mp4|mov|wav|wmv|png|gif|swf|css|js)$ - [F,NS,L]
 
-RewriteCond %{REQUEST_METHOD} ^(TRACE|TRACK|OPTIONS|HEAD)$ [NC]
-RewriteRule ^.*$ - [F]
-RewriteCond %{REQUEST_METHOD} !^(GET|HEAD|POST|PROPFIND|OPTIONS|PUT)$ [NC]
-RewriteRule .? - [F,NS,L]
+#RewriteCond %{REQUEST_METHOD} ^(TRACE|TRACK|OPTIONS|HEAD)$ [NC]
+#RewriteRule ^.*$ - [F]
+#RewriteCond %{REQUEST_METHOD} !^(GET|HEAD|POST|PROPFIND|OPTIONS|PUT)$ [NC]
+#RewriteRule .? - [F,NS,L]
 
 #Redirect to SSL
 #SSLOptions +StrictRequire
@@ -33,7 +34,7 @@ RewriteRule .? - [F,NS,L]
 #ErrorDocument 403 https://myproject.test
 
 #Denies any Direct request for files ending in .php with a 403 Forbidden
-RewriteCond %{THE_REQUEST} ^[A-Z]{3,9}\ /wp-includes/.*$ [NC]
-RewriteCond %{THE_REQUEST} !^[A-Z]{3,9}\ /wp-includes/js/.+/.+\ HTTP/ [NC]
-RewriteCond %{REQUEST_FILENAME} ^.+\.php$
-RewriteRule .? - [F,NS,L]
+#RewriteCond %{THE_REQUEST} ^[A-Z]{3,9}\ /wp-includes/.*$ [NC]
+#RewriteCond %{THE_REQUEST} !^[A-Z]{3,9}\ /wp-includes/js/.+/.+\ HTTP/ [NC]
+#RewriteCond %{REQUEST_FILENAME} ^.+\.php$
+#RewriteRule .? - [F,NS,L]

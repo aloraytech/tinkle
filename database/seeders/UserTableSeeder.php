@@ -1,12 +1,12 @@
 <?php
 
 
-namespace tinkle\database\seeders;
+namespace Database\seeders;
 
 
-use tinkle\framework\Database\Migrations\Seeder;
-use tinkle\framework\Library\Encryption\Hash;
-use tinkle\framework\Token;
+use Tinkle\Database\Migrations\Seeder;
+use Tinkle\Library\Encryption\Hash;
+use Tinkle\Token;
 
 /**
  * Class UserTableSeeder

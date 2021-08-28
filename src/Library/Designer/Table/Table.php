@@ -1,7 +1,7 @@
 <?php
 
 
-namespace tinkle\framework\Library\Designer\Designer\Table;
+namespace Tinkle\Library\Designer\Designer\Table;
 
 
 class Table

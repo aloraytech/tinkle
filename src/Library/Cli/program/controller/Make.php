@@ -1,15 +1,15 @@
 <?php
 
 
-namespace tinkle\framework\Library\Cli\program\controller;
+namespace Tinkle\Library\Cli\program\controller;
 
 
-use tinkle\framework\interfaces\CliControllerInterface;
-use tinkle\framework\Library\Cli\program\model\Make\ControllerModel;
-use tinkle\framework\Library\Cli\program\model\Make\MakerModel;
-use tinkle\framework\Library\Cli\program\model\Make\ModelMaker;
-use tinkle\framework\Library\Cli\program\model\Make\MigrationMaker;
-use tinkle\framework\Library\Cli\program\CliController;
+use Tinkle\interfaces\CliControllerInterface;
+use Tinkle\Library\Cli\program\model\Make\ControllerModel;
+use Tinkle\Library\Cli\program\model\Make\MakerModel;
+use Tinkle\Library\Cli\program\model\Make\ModelMaker;
+use Tinkle\Library\Cli\program\model\Make\MigrationMaker;
+use Tinkle\Library\Cli\program\CliController;
 
 class Make extends CliController implements CliControllerInterface
 {

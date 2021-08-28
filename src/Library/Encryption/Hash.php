@@ -1,10 +1,10 @@
 <?php
 
 
-namespace tinkle\framework\Library\Encryption;
+namespace Tinkle\Library\Encryption;
 
 
-use tinkle\framework\Tinkle;
+use Tinkle\Tinkle;
 
 class Hash
 {

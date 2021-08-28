@@ -1,11 +1,11 @@
 <?php
 
-namespace tinkle\app\models;
+namespace App\Models;
 
-use tinkle\framework\interfaces\ModelInterface;
-use tinkle\framework\Model;
-use tinkle\framework\Tinkle;
-use tinkle\framework\UserHandler;
+use Tinkle\interfaces\ModelInterface;
+use Tinkle\Model;
+use Tinkle\Tinkle;
+use Tinkle\UserHandler;
 
 class UsersModel extends UserHandler implements ModelInterface
 {

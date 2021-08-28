@@ -1,12 +1,12 @@
 <?php
 
 
-namespace tinkle\framework\Library\Cli\program\model\Make;
+namespace Tinkle\Library\Cli\program\model\Make;
 
 
-use tinkle\framework\Library\Cli\CliHandler;
-use tinkle\framework\Library\Cli\program\Model;
-use tinkle\framework\Tinkle;
+use Tinkle\Library\Cli\CliHandler;
+use Tinkle\Library\Cli\program\Model;
+use Tinkle\Tinkle;
 
 class MigrationMaker extends Model
 {

@@ -1,11 +1,11 @@
 <?php
 
 
-namespace tinkle\framework\Library\Render;
+namespace Tinkle\Library\Render;
 
 
-use tinkle\framework\interfaces\RenderHandlerInterface;
-use tinkle\framework\Tinkle;
+use Tinkle\interfaces\RenderHandlerInterface;
+use Tinkle\Tinkle;
 
 class PhpHandler implements RenderHandlerInterface
 {
@@ -84,7 +84,7 @@ class PhpHandler implements RenderHandlerInterface
      */
     private function updateTemplateWithLayout()
     {
-        $this->template = file_get_contents($this->path.$this->template.$this->ext);
+        $this->template = @file_get_contents($this->path.$this->template.$this->ext);
         if(!empty($this->template))
         {
             // Get Layout From Template File {{extend('layout/layoutName')}}
@@ -138,7 +138,7 @@ class PhpHandler implements RenderHandlerInterface
                 // we get layout and load layout details
                 if(file_exists($givenLayout) && is_readable($givenLayout))
                 {
-                    return $this->layout = file_get_contents($givenLayout);
+                    return $this->layout = @file_get_contents($givenLayout);
                 }else{
                     echo "Layout Not Found - $givenLayoutName";
                     return $this->layout;
@@ -152,7 +152,7 @@ class PhpHandler implements RenderHandlerInterface
                 // we get layout and load layout details
                 if(file_exists($givenLayout) && is_readable($givenLayout))
                 {
-                    return $this->layout = file_get_contents($givenLayout);
+                    return $this->layout = @file_get_contents($givenLayout);
                 }else{
                     echo "Layout Not Found :- $givenLayoutName";
                     return $this->layout;
@@ -215,7 +215,8 @@ class PhpHandler implements RenderHandlerInterface
                         // IF YOU DON'T USE BASE64 ENCODED IMAGE YOU HAVE TO MODIFY TINKLE VIEW CSP DESCRIPTION
                         // If Asset Is An Image; We Convert Into Base64 Encoded Image;
                         $imgInfo = pathinfo($replacement);
-                        $imgData = base64_encode(file_get_contents($replacement));
+                        $imgData = @file_get_contents($replacement);
+                        $imgData = base64_encode($imgData);
                         $format = 'data:image/' . $imgInfo['extension'] . ';charset=utf-8;base64, '.$imgData;
                         // Now Only Takes Known Image Type And Apply Our Format..
                         if($imgInfo['extension'] === 'jpg' || $imgInfo['extension'] === 'jpeg' || $imgInfo['extension'] === 'png' || $imgInfo['extension'] === 'gif')
@@ -282,9 +283,9 @@ class PhpHandler implements RenderHandlerInterface
                             ob_start();
 
                             require_once $givenFile;
-                            $tmpFile = Tinkle::$ROOT_DIR."storage/runtime/views/temp.html";
+                            $tmpFile = Tinkle::$ROOT_DIR."storage/runtime/temp.html";
                             file_put_contents($tmpFile, ob_get_clean());
-                            $replacement = file_get_contents($tmpFile);
+                            $replacement = @file_get_contents($tmpFile);
                             $fileName = str_replace($link,$replacement,$fileName);
                             unlink($tmpFile);
                         }else{
@@ -324,7 +325,7 @@ class PhpHandler implements RenderHandlerInterface
 
                         $given = str_replace("')}}","",str_replace("{{code('",'',$link));
                         $block = '<'."?php echo ".$given."; ?".'>';
-                        $givenFile = Tinkle::$ROOT_DIR."storage/runtime/views/".$given.$this->ext ?? '';
+                        $givenFile = Tinkle::$ROOT_DIR."storage/runtime/".$given.$this->ext ?? '';
                         $handler = fopen($givenFile,'w+');
                         fwrite($handler,$block);
                         fclose($handler);
@@ -335,9 +336,9 @@ class PhpHandler implements RenderHandlerInterface
                             ob_start();
 
                             require_once $givenFile;
-                            $tmpFile = Tinkle::$ROOT_DIR."storage/runtime/views/temp.html";
+                            $tmpFile = Tinkle::$ROOT_DIR."storage/runtime/temp.html";
                             file_put_contents($tmpFile, ob_get_clean());
-                            $replacement = file_get_contents($tmpFile);
+                            $replacement = @file_get_contents($tmpFile);
                             $fileName = str_replace($link,$replacement,$fileName);
                             unlink($tmpFile);
                             unlink($givenFile);
@@ -377,7 +378,7 @@ class PhpHandler implements RenderHandlerInterface
         $subject =$this->config['url']?? 'landing';
         $tempFileName = str_replace("/","",$subject."-".$this->tempTemplate);
 
-        $this->display = Tinkle::$ROOT_DIR."storage/runtime/views/".$tempFileName.$this->ext;
+        $this->display = Tinkle::$ROOT_DIR."storage/runtime/".$tempFileName.$this->ext;
 //        $tempFile = fopen($this->display,"w+");
 //        fwrite($tempFile,$this->layout);
 //        fclose($tempFile);

@@ -1,7 +1,7 @@
 <?php
 
 
-namespace tinkle\framework\Library\Designer\Nav;
+namespace Tinkle\Library\Designer\Nav;
 
 
 class B5

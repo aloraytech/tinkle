@@ -1,7 +1,7 @@
 <?php
 
 
-namespace tinkle\framework\Library\Http\Handler;
+namespace Tinkle\Library\Http\Handler;
 
 
 abstract class CacheHandler

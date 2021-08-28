@@ -22,9 +22,9 @@
   <div class="container-fluid">
       <?php
       // Flash Success Message
-      if (\tinkle\framework\Tinkle::$app->session->getFlash('success')) : ?>
+      if (\Tinkle\Tinkle::$app->session->getFlash('success')) : ?>
           <div class="alert alert-success">
-              <?php echo \tinkle\framework\Tinkle::$app->session->getFlash('success');  ?>
+              <?php echo \Tinkle\Tinkle::$app->session->getFlash('success');  ?>
           </div>
       <?php endif;
       // Flash Success Message

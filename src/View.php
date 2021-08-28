@@ -1,13 +1,13 @@
 <?php
 
 
-namespace tinkle\framework;
+namespace Tinkle;
 
 
 use tinkle\config\Config;
-use tinkle\framework\Library\Dictionary\Dictionary;
-use tinkle\framework\Library\Render\Render;
-use tinkle\framework\Library\Render\ViewSetup;
+use Tinkle\Library\Dictionary\Dictionary;
+use Tinkle\Library\Render\Render;
+use Tinkle\Library\Render\ViewSetup;
 
 class View extends Render
 {
@@ -66,7 +66,7 @@ class View extends Render
 
     private function checkForBadWords(string $htmlTemplate)
     {
-        if(Tinkle::$app->config['security']['spellCheck'])
+        if(Tinkle::$app->config['app']['spellCheck'])
         {
             $spell = new Dictionary($htmlTemplate);
             if($spell->check())
@@ -113,7 +113,7 @@ class View extends Render
     }
 
 
-    private function display(string $output)
+    public function display(string $output)
     {
 
         $statusCode = ViewSetup::$responseCode ?? 200;

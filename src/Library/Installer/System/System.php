@@ -1,11 +1,11 @@
 <?php
 
 
-namespace tinkle\framework\Library\Installer\System;
+namespace Tinkle\Library\Installer\System;
 
 
-use tinkle\framework\Library\Essential\Essential;
-use tinkle\framework\Tinkle;
+use Tinkle\Library\Essential\Essential;
+use Tinkle\Tinkle;
 
 class System
 {

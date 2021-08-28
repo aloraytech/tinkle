@@ -1,15 +1,15 @@
 <?php
 
 
-namespace tinkle\framework\Library\Cli\program\controller;
+namespace Tinkle\Library\Cli\program\controller;
 
-use tinkle\framework\interfaces\CliControllerInterface;
-use tinkle\framework\Library\Cli\CliHandler;
-use tinkle\framework\Library\Cli\program\CliController;
+use Tinkle\interfaces\CliControllerInterface;
+use Tinkle\Library\Cli\CliHandler;
+use Tinkle\Library\Cli\program\CliController;
 
 /**
  * Class Help
- * @package tinkle\framework\Library\Cli\program\controller
+ * @package Tinkle\Library\Cli\program\controller
  */
 class Help extends CliController implements CliControllerInterface
 {

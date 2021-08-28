@@ -1,7 +1,7 @@
 <?php
 
 
-namespace tinkle\framework\Library\Http;
+namespace Tinkle\Library\Http;
 
 use Symfony\Component\HttpFoundation\Request as SymfonyRequest;
 

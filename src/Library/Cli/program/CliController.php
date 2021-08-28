@@ -1,15 +1,15 @@
 <?php
 
 
-namespace tinkle\framework\Library\Cli\program;
+namespace Tinkle\Library\Cli\program;
 
 
-use tinkle\framework\interfaces\LibraryInterface;
-use tinkle\framework\Library\Cli\CliHandler;
-use tinkle\framework\Library\Logger\Logger;
-use tinkle\framework\Tinkle;
+use Tinkle\interfaces\LibraryInterface;
+use Tinkle\Library\Cli\CliHandler;
+use Tinkle\Library\Logger\Logger;
+use Tinkle\Tinkle;
 
-class CliController implements LibraryInterface
+class CliController
 {
 
 

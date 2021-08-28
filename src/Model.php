@@ -1,10 +1,10 @@
 <?php
 
 
-namespace tinkle\framework;
+namespace Tinkle;
 
 
-use tinkle\framework\Database\DBModel;
+use Tinkle\Database\DBModel;
 
 abstract class Model extends DBModel
 {

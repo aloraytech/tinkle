@@ -1,12 +1,12 @@
 <?php
 
 
-namespace tinkle\database\migrations;
+namespace Database\migrations;
 
-use tinkle\framework\Database\Migrations\Schema;
-use tinkle\framework\Database\Migrations\Column;
-use tinkle\framework\Database\Migrations\RULE;
-use tinkle\framework\interfaces\MigrationInterface;
+use Tinkle\Database\Migrations\Schema;
+use Tinkle\Database\Migrations\Column;
+use Tinkle\Database\Migrations\RULE;
+use Tinkle\interfaces\MigrationInterface;
 
 class CreateUsersMigration implements MigrationInterface
 {

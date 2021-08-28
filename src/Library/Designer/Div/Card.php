@@ -1,7 +1,7 @@
 <?php
 
 
-namespace tinkle\framework\Designer\Div;
+namespace Tinkle\Designer\Div;
 
 
 class Card

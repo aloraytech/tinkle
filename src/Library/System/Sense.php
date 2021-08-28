@@ -1,7 +1,7 @@
 <?php
 
 
-namespace tinkle\framework\Library\System;
+namespace Tinkle\Library\System;
 
 
 class Sense

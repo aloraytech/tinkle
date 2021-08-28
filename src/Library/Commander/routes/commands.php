@@ -1,5 +1,5 @@
 <?php
-use tinkle\framework\Library\Commander\Commands;
+use Tinkle\Library\Commander\Commands;
 
 
 Commands::get('db',[]);

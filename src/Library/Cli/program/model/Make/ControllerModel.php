@@ -1,12 +1,12 @@
 <?php
 
 
-namespace tinkle\framework\Library\Cli\program\model\Make;
+namespace Tinkle\Library\Cli\program\model\Make;
 
 
 
-use tinkle\framework\Library\Cli\CliModel;
-use tinkle\framework\Tinkle;
+use Tinkle\Library\Cli\CliModel;
+use Tinkle\Tinkle;
 
 class ControllerModel extends CliModel
 {

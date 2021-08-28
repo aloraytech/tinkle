@@ -1,19 +1,19 @@
 <?php
 
-use tinkle\framework\Router;
+use Tinkle\Router;
 
 /**
  * Routers For Auth Management
  */
 
-Router::get('login',[\tinkle\app\controllers\AuthController::class,'login']);
-Router::post('login',[\tinkle\app\controllers\AuthController::class,'login']);
+Router::get('login',[\App\controllers\AuthController::class,'login']);
+Router::post('login',[\App\controllers\AuthController::class,'login']);
 
-Router::get('register',[\tinkle\app\controllers\AuthController::class,'register']);
-Router::post('register',[\tinkle\app\controllers\AuthController::class,'register']);
+Router::get('register',[\App\controllers\AuthController::class,'register']);
+Router::post('register',[\App\controllers\AuthController::class,'register']);
 
 
 
-Router::get("-@tinkle-admin",[\tinkle\framework\Library\Developer\Developer::class,'devLogin']);
-Router::post("tinkle-admin/register",[\tinkle\framework\Library\Developer\Developer::class,'devDashboard']);
+//Router::get("-@tinkle-admin",[\Tinkle\Library\Developer\Developer::class,'devLogin']);
+//Router::post("tinkle-admin/register",[\Tinkle\Library\Developer\Developer::class,'devDashboard']);
 

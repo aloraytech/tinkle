@@ -1,12 +1,12 @@
 <?php
 
 
-namespace tinkle\framework\Library\System;
+namespace Tinkle\Library\System;
 
 
-use tinkle\framework\Request;
-use tinkle\framework\Response;
-use tinkle\framework\System\Activity;
+use Tinkle\Request;
+use Tinkle\Response;
+use Tinkle\System\Activity;
 
 class System
 {

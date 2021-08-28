@@ -1,15 +1,15 @@
 <?php
 
 
-namespace tinkle\framework\Library\Essential;
+namespace Tinkle\Library\Essential;
 
 
 
 
-use tinkle\framework\Library\Essential\Essential;
-use tinkle\framework\Request;
-use tinkle\framework\Response;
-use tinkle\framework\Tinkle;
+use Tinkle\Library\Essential\Essential;
+use Tinkle\Request;
+use Tinkle\Response;
+use Tinkle\Tinkle;
 
 class Activity
 {

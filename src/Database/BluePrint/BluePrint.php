@@ -1,10 +1,10 @@
 <?php
 
 
-namespace tinkle\framework\Database\BluePrint;
+namespace Tinkle\Database\BluePrint;
 
 
-use tinkle\framework\Tinkle;
+use Tinkle\Tinkle;
 
 abstract class BluePrint
 {

@@ -1,7 +1,7 @@
 <?php
 
 
-namespace tinkle\framework;
+namespace Tinkle;
 
 
 abstract class Middleware

@@ -1,7 +1,7 @@
 <?php
 
 
-namespace tinkle\framework\Library\Render;
+namespace Tinkle\Library\Render;
 
 
 class ViewSetup

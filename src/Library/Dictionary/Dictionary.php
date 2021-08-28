@@ -1,7 +1,7 @@
 <?php
 
 
-namespace tinkle\framework\Library\Dictionary;
+namespace Tinkle\Library\Dictionary;
 
 
 class Dictionary

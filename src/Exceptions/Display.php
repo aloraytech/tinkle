@@ -1,31 +1,63 @@
 <?php
 
 
-namespace tinkle\framework\Exceptions;
+namespace Tinkle\Exceptions;
 
 
-use tinkle\framework\Exceptions\CoreException;
+use Tinkle\Exceptions\CoreException;
+use Tinkle\Tinkle;
 
 /**
  * Class Display
- * @package tinkle\framework\Exceptions
+ * @package Tinkle\Exceptions
  */
 class Display extends CoreException
 {
 
 
+    public const HTTP_USE_PROXY = 305;
+    public const HTTP_RESERVED = 306;
+    public const HTTP_BAD_REQUEST = 400;
+    public const HTTP_UNAUTHORIZED = 401;
+    public const HTTP_PAYMENT_REQUIRED = 402;
+    public const HTTP_FORBIDDEN = 403;
+    public const HTTP_NOT_FOUND = 404;
+    public const HTTP_METHOD_NOT_ALLOWED = 405;
+    public const HTTP_PROXY_AUTHENTICATION_REQUIRED = 407;
+    public const HTTP_REQUEST_TIMEOUT = 408;
+    public const HTTP_REQUEST_URI_TOO_LONG = 414;
+    public const HTTP_UNSUPPORTED_MEDIA_TYPE = 415;
+    public const HTTP_REQUESTED_RANGE_NOT_SATISFIABLE = 416;
+    public const HTTP_EXPECTATION_FAILED = 417;
+
+    public const HTTP_LOCKED = 423;                                                      // RFC4918
+    public const HTTP_UPGRADE_REQUIRED = 426;                                            // RFC2817
+    public const HTTP_TOO_MANY_REQUESTS = 429;                                           // RFC6585
+    public const HTTP_REQUEST_HEADER_FIELDS_TOO_LARGE = 431;                             // RFC6585
+    public const HTTP_INTERNAL_SERVER_ERROR = 500;
+    public const HTTP_NOT_IMPLEMENTED = 501;
+    public const HTTP_BAD_GATEWAY = 502;
+    public const HTTP_SERVICE_UNAVAILABLE = 503;
+    public const HTTP_GATEWAY_TIMEOUT = 504;
+    public const HTTP_VERSION_NOT_SUPPORTED = 505;
+    public const HTTP_INSUFFICIENT_STORAGE = 507;                                        // RFC4918
+    public const HTTP_LOOP_DETECTED = 508;                                               // RFC5842
+    public const HTTP_NETWORK_AUTHENTICATION_REQUIRED = 511;
+
+
+
+
+
+
     public function ErrorToException()
     {
-        $_msg='';
-        $_severity=500;
-        $_line='';
-        $_file='';
-        parse_str($this->message);
+
+        parse_str($this->message,$var);
         $data = [
-            'message' => $_msg,
-            'code' => $_severity,
-            'line' => $_line,
-            'file' => $_file,
+            'message' => $var['_msg'],
+            'code' => $var['_severity'],
+            'line' => $var['_line'],
+            'file' => $var['_file'],
             'trace' => $this->getTrace()
         ];
 
@@ -34,6 +66,17 @@ class Display extends CoreException
     }
 
 
+    public function CliError()
+    {
+        echo "\e[92m  Exception Found : "."\n".
+                "message :".$this->message ."\n".
+                "code : ". $this->code ."\n".
+                "line :". $this->line ."\n".
+                "file :". $this->file."\n".
+                "\n\e[0m";
+
+        die;
+    }
 
 
 
@@ -132,7 +175,7 @@ class Display extends CoreException
     {
         if(is_array($data))
         {
-
+            http_response_code($data['code']);
             $this->layout($this->layoutBody($data));
         }
 

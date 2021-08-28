@@ -1,7 +1,7 @@
 <?php
 
 
-namespace tinkle\app\Plugins;
+namespace App\Plugins;
 
 
 class Plugins

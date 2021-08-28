@@ -1,11 +1,11 @@
 <?php
 
 
-namespace tinkle\framework\Library\Cli;
+namespace Tinkle\Library\Cli;
 
 
-use tinkle\framework\Database\Database;
-use tinkle\framework\Tinkle;
+use Tinkle\Database\Database;
+use Tinkle\Tinkle;
 
 class CliModel extends Database
 {

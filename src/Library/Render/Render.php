@@ -1,14 +1,14 @@
 <?php
 
 
-namespace tinkle\framework\Library\Render;
+namespace Tinkle\Library\Render;
 
 
 
-use tinkle\framework\Database\Migrations\Rule;
-use tinkle\framework\Request;
-use tinkle\framework\Response;
-use tinkle\framework\Tinkle;
+use Tinkle\Database\Migrations\Rule;
+use Tinkle\Request;
+use Tinkle\Response;
+use Tinkle\Tinkle;
 
 abstract class Render
 {
@@ -77,7 +77,7 @@ abstract class Render
             'fullUrl'=> $this->request->getUrl(),
             'url' => $this->request->getRequestUrl(),
             'clientIp' => $this->request->getClientIP(),
-            'env'=> Tinkle::$app->config['application']['production']
+            'env'=> Tinkle::$app->config['app']['production']
         ];
     }
 

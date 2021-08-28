@@ -1,10 +1,10 @@
 <?php
 
-namespace tinkle\framework\Database;
+namespace Tinkle\Database;
 
 
-use tinkle\framework\Database\Manager\DBManager;
-use tinkle\framework\Tinkle;
+use Tinkle\Database\Manager\DBManager;
+use Tinkle\Tinkle;
 
 abstract class DBModel extends DBManager
 {

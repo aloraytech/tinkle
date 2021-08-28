@@ -1,13 +1,13 @@
 <?php
 
 
-namespace tinkle\framework\Library\Cli\program\model\DB;
+namespace Tinkle\Library\Cli\program\model\DB;
 
 
 
-use tinkle\framework\Library\Cli\CliModel;
-use tinkle\framework\Model;
-use tinkle\framework\Library\Logger\Logger;
+use Tinkle\Library\Cli\CliModel;
+use Tinkle\Model;
+use Tinkle\Library\Logger\Logger;
 
 
 class MigrationModel extends CliModel

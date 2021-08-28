@@ -1,7 +1,7 @@
 <?php
 
 
-namespace tinkle\framework\Database\Migrations;
+namespace Tinkle\Database\Migrations;
 
 
 class Migration

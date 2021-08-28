@@ -1,23 +1,18 @@
 <?php
 
-namespace tinkle\app\controllers;
+namespace App\Controllers;
 
-
-use Symfony\Component\HttpFoundation\File\UploadedFile;
-use tinkle\app\models\UsersModel;
-use tinkle\database\seeders\UserTableSeeder;
-use tinkle\framework\Controller;
-
-
-use tinkle\framework\interfaces\ControllerInterface;
-use tinkle\framework\Library\Cli\program\controller\DB;
-use tinkle\framework\Library\Explorer\Explorer;
-use tinkle\framework\Library\Installer\Installer;
-use tinkle\framework\Tinkle;
-use tinkle\framework\Request;
-use tinkle\framework\Response;
-use tinkle\framework\Token;
-use tinkle\framework\View;
+use App\models\UsersModel;
+use Tinkle\Controller;
+use Tinkle\interfaces\ControllerInterface;
+use Tinkle\Library\Cli\program\controller\DB;
+use Tinkle\Library\Explorer\Explorer;
+use Tinkle\Library\Robo\Robo;
+use Tinkle\Tinkle;
+use Tinkle\Request;
+use Tinkle\Response;
+use Tinkle\Token;
+use Tinkle\View;
 
 
 class AppController extends Controller implements ControllerInterface
@@ -41,7 +36,7 @@ class AppController extends Controller implements ControllerInterface
 
         //$data = getAllContentFrom('http://myproject.test/show');
 
-
+        $app = new Robo();
 
 
 
@@ -82,7 +77,12 @@ class AppController extends Controller implements ControllerInterface
     }
 
 
+    public function item(Request $request, Response $response)
+    {
 
+        echo "<h1>Item Loaded</h1>";
+
+    }
 
 
 
@@ -175,13 +175,13 @@ class AppController extends Controller implements ControllerInterface
     public function load(Request $request, Response $response)
     {
 
-        $_token = new Token();
-        $_token->create();
-        echo "<pre>";
-        print_r($_token->getTokenBag());
+//        $_token = new Token();
+//        $_token->create();
+//        echo "<pre>";
+//        print_r($_token->getTokenBag());
 
 
-
+            echo "Hello";
 
 
 

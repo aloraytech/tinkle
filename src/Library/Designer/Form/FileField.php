@@ -1,10 +1,10 @@
 <?php
 
 
-namespace tinkle\framework\Library\Designer\Form;
+namespace Tinkle\Library\Designer\Form;
 
 
-use tinkle\framework\Database\Manager\DBManager;
+use Tinkle\Database\Manager\DBManager;
 
 class FileField extends Fields
 {

@@ -1,10 +1,10 @@
 <?php
 
 
-namespace tinkle\framework\Library\Commander;
+namespace Tinkle\Library\Commander;
 
 
-use tinkle\framework\Tinkle;
+use Tinkle\Tinkle;
 
 class Commander extends CommandHandler
 {

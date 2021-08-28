@@ -2,11 +2,17 @@
 /**
  * Here Are Listed All Common Helpers..Which can call directly any time anywhere..
  */
-use tinkle\framework\Tinkle;
+use Tinkle\Tinkle;
+
+
+
+
+
+
 
 function Auth()
 {
-    if(!\tinkle\framework\Tinkle::isGuest())
+    if(!\Tinkle\Tinkle::isGuest())
     {
         return true;
     }else{
@@ -15,26 +21,26 @@ function Auth()
 }
 
 
-    function getAllContentFrom(string $_url)
+
+
+
+
+
+    function dd($param,$bg_color='yellow',$text_color='black')
     {
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL,$_url);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER,1);
-        $output = curl_exec($ch);
-        curl_close($ch);
-        return $output;
+        if(!empty($param))
+        {
+            $bg_color = strtolower($bg_color);
+            $text_color = strtolower($text_color);
+
+            echo "<div style='background-color: $bg_color; color: $text_color;border-style: solid;'><h1 style='margin: 4px;'>Direct Display:-</h1><pre style='padding: 5px;margin: 5px;'>";
+            print_r($param);
+            echo "<br></pre></div>";
+            
+        }
     }
 
 
-
-
-    function getMetaTag($_source)
-    {
-
-
-
-
-    }
 
 
 

@@ -1,14 +1,14 @@
 <?php
 
 
-namespace tinkle\framework\Library\Installer;
+namespace Tinkle\Library\Installer;
 
 
-use tinkle\framework\interfaces\LibraryInterface;
-use tinkle\framework\Request;
-use tinkle\framework\Response;
-use tinkle\framework\Router;
-use tinkle\framework\Tinkle;
+use Tinkle\interfaces\LibraryInterface;
+use Tinkle\Request;
+use Tinkle\Response;
+use Tinkle\Router;
+use Tinkle\Tinkle;
 
 class Installer implements LibraryInterface
 {

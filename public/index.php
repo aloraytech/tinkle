@@ -1,17 +1,26 @@
 <?php
 declare(strict_types=1);
-use tinkle\framework\Tinkle;
+use Tinkle\Framework;
+use Tinkle\Exceptions\Display;
 
 
 
-require_once __DIR__.'/../vendor/autoload.php';
+    try {
+        require_once __DIR__.'/../vendor/autoload.php';
+        $configuration = new \Config\Config();
 
-$configuration = new \tinkle\config\Config();
 
-    if(class_exists(Tinkle::class))
-    {
-        $app = new Tinkle(dirname(__DIR__),$configuration->getConfig());
-        $app->run();
+
+        if(class_exists(Framework::class))
+        {
+            $app = new Framework(dirname(__DIR__),$configuration->getConfig());
+            $app->run();
+        }else{
+            throw new Display('Framework Initialization Failed',Display::HTTP_SERVICE_UNAVAILABLE);
+        }
+
+    }catch (Display $e){
+        $e->Render();
     }
 
 

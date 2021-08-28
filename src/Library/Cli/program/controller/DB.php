@@ -1,16 +1,16 @@
 <?php
 
 
-namespace tinkle\framework\Library\Cli\program\controller;
+namespace Tinkle\Library\Cli\program\controller;
 
 
 use tinkle\database\DatabaseSeeder;
-use tinkle\framework\interfaces\CliControllerInterface;
-use tinkle\framework\Library\Cli\program\model\DB\MigrationModel;
-use tinkle\framework\Library\Cli\program\model\DB\SeederModel;
-use tinkle\framework\Library\Cli\program\CliController;
-use tinkle\framework\Library\Logger\Logger;
-use tinkle\framework\Tinkle;
+use Tinkle\interfaces\CliControllerInterface;
+use Tinkle\Library\Cli\program\model\DB\MigrationModel;
+use Tinkle\Library\Cli\program\model\DB\SeederModel;
+use Tinkle\Library\Cli\program\CliController;
+use Tinkle\Library\Logger\Logger;
+use Tinkle\Tinkle;
 
 class DB extends CliController implements CliControllerInterface
 {
@@ -180,7 +180,7 @@ class DB extends CliController implements CliControllerInterface
         foreach ($toApplyMigrations as $migration)
         {
             $_fileName = str_replace(".php",'',$migration);
-            $_tempObject = "\\tinkle\database\migrations\\".$_fileName;
+            $_tempObject = "\\Database\migrations\\".$_fileName;
             $_instance = array_values(class_implements(new $_tempObject));
             $classList [] =[
                 'class'=> get_class(new $_tempObject),

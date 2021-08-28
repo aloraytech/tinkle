@@ -1,15 +1,20 @@
 <?php
 
 
-namespace tinkle\config;
+namespace Config;
 use Dotenv\Dotenv;
-use tinkle\app\models\UsersModel;
+use App\models\UsersModel;
+use Tinkle\Library\Essential\Essential;
 
 class Config
 {
 
 
-    protected array $config;
+    protected Config|array $config;
+    protected Client $client;
+    protected Database $database;
+    protected App $app;
+    protected static string $authModel = "App\models\UsersModel";
 
     /**
      * Config constructor.
@@ -19,55 +24,36 @@ class Config
         // Load Environment
         $dotenv = Dotenv::createImmutable(dirname(__DIR__));
         $dotenv->load();
-        $this->getDBConfig();
-        $this->getAppConfig();
-        $this->getClientConfig();
-        $this->getSecurityConfig();
+        $this->app = new App();
+        $this->client = new Client();
+        $this->database = new Database();
+        $this->overRideSystem();
+
+
 
     }
 
 
-    protected function getDBConfig()
+    private function overRideSystem()
     {
-        $this->config['db']= [
-            'dsn' => $_ENV['DB_DSN'],
-            'driver'=>$_ENV['DB_DRIVER'],
-            'host'=> $_ENV['DB_HOST'],
-            'port'=>$_ENV['DB_PORT'],
-            'name'=>$_ENV['DB_NAME'],
-            'user' => $_ENV['DB_USER'],
-            'password' => $_ENV['DB_PASSWORD'],
-        ];
-    }
+        /**
+         * REMEMBER THIS SETTING USEFULL IF YOU NEED A CUSTOM ENVIRONMENT WHERE YOU DON'T SEND SOME CUSTOM
+         * PRE SETTINGS DEFINE IN START UP TINKLE
+         */
 
-    protected function getAppConfig()
-    {
-        $this->config['application'] =[
-            'production' => false
-        ];
-    }
-
-    protected function getClientConfig()
-    {
 
     }
 
-    protected function getSecurityConfig()
-    {
-        $this->config['userClass'] = "tinkle\app\models\UsersModel";
-        //$this->config['userClass'] = new UsersModel();
-        $this->config['security'] = [
-            'spellCheck' => false,
-            'imageBase64'=> true,
-            'cache' => true,
-            'autoToken'=>true,
 
-        ];
-    }
+
 
 
     public function getConfig()
     {
+        $this->config ['app']= Essential::getHelper()->JsonToArray($this->app->getConfig());
+        $this->config ['db']= Essential::getHelper()->JsonToArray($this->database->getConfig());
+        $this->config ['client']= Essential::getHelper()->JsonToArray($this->client->getConfig());
+        $this->config['userModel'] = self::$authModel;
         return $this->config;
     }
 

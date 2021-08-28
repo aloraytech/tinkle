@@ -1,20 +1,19 @@
 <?php
 //declare(strict_types=1);
 
-namespace tinkle\framework;
+namespace Tinkle;
 
-use tinkle\app\models\UsersModel;
-use tinkle\config\Config;
-use tinkle\framework\Library\Cli\CliHandler;
-use tinkle\framework\Library\Commander\Commander;
-use tinkle\framework\Library\Essential\Activities;
-use tinkle\framework\Library\Essential\Essential;
-use tinkle\framework\Exceptions\Display;
-use tinkle\framework\Database\Database;
-use tinkle\framework\Library\Designer\Designer;
-use tinkle\framework\System\System;
+use App\models\UsersModel;
 
-class Tinkle {
+use Tinkle\Library\Cli\CliHandler;
+use Tinkle\Library\Commander\Commander;
+use Tinkle\Library\Essential\Essential;
+use Tinkle\Exceptions\Display;
+use Tinkle\Database\Database;
+use Tinkle\Library\Designer\Designer;
+use Tinkle\System\System;
+
+abstract class Tinkle {
 
     public string $layout = 'main';
     public static string $ROOT_DIR;
@@ -51,9 +50,14 @@ class Tinkle {
      */
     public function __construct(string $rootPath,array $config)
     {
+
+
+
+
+
         // First Thing First
-        //restore_error_handler();
-        set_error_handler(array($this, 'ErrorHandler'));
+//        restore_error_handler();
+//        set_error_handler(array($this, 'ErrorHandler'));
         try {
 
             if(is_string($rootPath) && is_array($config) && !empty($rootPath) && !empty($config))
@@ -63,7 +67,8 @@ class Tinkle {
                 self::$app = $this;
                 $this->config = $config;
                 $this->db = new Database ($this->config['db']);
-
+                $this->request =  new Request();
+                $this->response = new Response();
                 if (PHP_SAPI === 'cli')
                 {
                     self::$CLI = new CliHandler($this->config,self::$ROOT_DIR);
@@ -74,19 +79,17 @@ class Tinkle {
                 }else{
 
 
-                    $this->request =  new Request();
-                    $this->response = new Response();
+
                     $this->session = new Session();
                     Essential::init();
                     $this->token = new Token();
                     $this->router = new Router($this->request,$this->response);
-                    $this->load_routes();
                     $this->designer = new Designer();
                     $this->view = new View($this->request,$this->response);
                     $this->event = new Event();
                     $this->load_event_listners();
 
-                    $this->userClass = $this->config['userClass'];
+                    $this->userClass = $this->config['userModel'];
                     // $this->session->set('user',1);
 
                     $primaryValue = $this->session->get('user');
@@ -111,8 +114,6 @@ class Tinkle {
         }catch (Display $e){
             $e->Render();
         }
-
-
 
 
 
@@ -182,16 +183,13 @@ class Tinkle {
 
 
 
-    protected function load_routes()
-    {
-        return require_once Tinkle::$ROOT_DIR.'/routes/web.php';
-    }
 
 
 
     protected function load_event_listners()
     {
-       return require_once Tinkle::$ROOT_DIR.'/routes/listeners.php';
+       require_once Tinkle::$ROOT_DIR.'/routes/listeners.php';
+        return true;
     }
 
 
@@ -239,6 +237,11 @@ class Tinkle {
         $this->user = null;
         self::$app->session->remove('user');
     }
+
+
+    // Php Closers
+
+
 
 
 

@@ -1,17 +1,17 @@
 <?php
 
 
-namespace tinkle\framework\Database\Manager;
+namespace Tinkle\Database\Manager;
 
 
 
 
-use tinkle\framework\Database\Database;
-use tinkle\framework\Tinkle;
+use Tinkle\Database\Database;
+use Tinkle\Tinkle;
 
 /**
  * Class DBManager
- * @package tinkle\framework\Database\Manager
+ * @package Tinkle\Database\Manager
  */
 abstract class DBManager
 {

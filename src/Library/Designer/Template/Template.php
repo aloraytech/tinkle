@@ -1,7 +1,7 @@
 <?php
 
 
-namespace tinkle\framework\Library\Designer\Template;
+namespace Tinkle\Library\Designer\Template;
 
 
 class Template

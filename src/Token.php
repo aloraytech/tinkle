@@ -1,10 +1,10 @@
 <?php
 
 
-namespace tinkle\framework;
+namespace Tinkle;
 
 
-use tinkle\framework\Library\Encryption\Hash;
+use Tinkle\Library\Encryption\Hash;
 
 class Token
 {

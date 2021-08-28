@@ -1,13 +1,13 @@
 <?php
 
 
-namespace tinkle\framework\Database\Migrations;
+namespace Tinkle\Database\Migrations;
 
-use tinkle\framework\Tinkle;
+use Tinkle\Tinkle;
 
 /**
  * Class Schema
- * @package tinkle\framework\Database\Migrations
+ * @package Tinkle\Database\Migrations
  */
 class Schema
 {
