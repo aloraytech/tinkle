@@ -5,15 +5,16 @@ namespace Tinkle;
 
 use App\models\UsersModel;
 
-use Tinkle\Library\Cli\CliHandler;
-use Tinkle\Library\Commander\Commander;
+
+use Tinkle\Exceptions\ExceptionMagic;
+use Tinkle\Library\Console\Console;
 use Tinkle\Library\Essential\Essential;
 use Tinkle\Exceptions\Display;
 use Tinkle\Database\Database;
 use Tinkle\Library\Designer\Designer;
-use Tinkle\System\System;
 
-abstract class Tinkle {
+
+ class Tinkle {
 
     public string $layout = 'main';
     public static string $ROOT_DIR;
@@ -29,10 +30,9 @@ abstract class Tinkle {
     public array $config;
     public Designer $designer;
     public Token $token;
-    public System $system;
+    protected static Console $console;
     public ?UsersModel $user;
-    private static CliHandler $CLI;
-    private static Commander $commander;
+
 
 
       // Put ? sign infront for Null Value like Visitor
@@ -56,57 +56,56 @@ abstract class Tinkle {
 
 
         // First Thing First
-//        restore_error_handler();
-//        set_error_handler(array($this, 'ErrorHandler'));
+      //  restore_error_handler();
+        restore_exception_handler();
+        set_exception_handler([new ExceptionMagic(), 'handle']);
+        set_error_handler(array($this, 'ErrorHandler'));
         try {
 
-            if(is_string($rootPath) && is_array($config) && !empty($rootPath) && !empty($config))
+            if($this->welcome())
             {
 
-                self::$ROOT_DIR = $rootPath.'/';
-                self::$app = $this;
-                $this->config = $config;
-                $this->db = new Database ($this->config['db']);
-                $this->request =  new Request();
-                $this->response = new Response();
-                if (PHP_SAPI === 'cli')
+
+                if(is_string($rootPath) && is_array($config) && !empty($rootPath) && !empty($config))
                 {
-                    self::$CLI = new CliHandler($this->config,self::$ROOT_DIR);
 
-//            self::$commander = new Commander();
-//            self::$commander->setConfig($this->config['argv']);
-
-                }else{
-
-
-
-                    $this->session = new Session();
+                    self::$ROOT_DIR = $rootPath.'/';
+                    self::$app = $this;
+                    $this->config = $config;
                     Essential::init();
-                    $this->token = new Token();
-                    $this->router = new Router($this->request,$this->response);
-                    $this->designer = new Designer();
-                    $this->view = new View($this->request,$this->response);
-                    $this->event = new Event();
-                    $this->load_event_listners();
+                    $this->db = new Database ($this->config['db']);
 
-                    $this->userClass = $this->config['userModel'];
-                    // $this->session->set('user',1);
+                    if (!$this->isCli())
+                    {
+                        $this->request =  new Request();
+                        $this->response = new Response();
+                        $this->session = new Session();
+                        $this->event = new Event();
+                        $this->token = new Token();
+                        $this->router = new Router($this->request,$this->response);
+                        $this->designer = new Designer();
+                        $this->view = new View($this->request,$this->response);
+                        //$this->load_event_listners();
 
-                    $primaryValue = $this->session->get('user');
+                        $this->userClass = $this->config['userModel'];
 
-                    if($primaryValue){
-                        $primaryKey = $this->userClass::primaryKey();
+                        $primaryValue = $this->session->get('user');
 
-                        $this->user = $this->userClass::findOne([$primaryKey => $primaryValue]);
+                        if($primaryValue){
+                            $primaryKey = $this->userClass::primaryKey();
+
+                            $this->user = $this->userClass::findOne([$primaryKey => $primaryValue]);
+                        }else{
+                            $this->user = null;
+                        }
+
                     }else{
-                        $this->user = null;
+                        self::$console = new Console($rootPath);
                     }
 
-
+                }else{
+                    throw new Display('Unexpected Error Found, Please Update or Reset Your Application',Display::HTTP_SERVICE_UNAVAILABLE);
                 }
-
-            }else{
-                throw new Display('Unexpected Error Happen In Tinkle',500);
             }
 
 
@@ -129,35 +128,16 @@ abstract class Tinkle {
      */
     public function run()
     {
-        if (PHP_SAPI === 'cli')
+
+        if ($this->isCli())
         {
-           self::$CLI->run();
-            //   self::$commander->resolve();
+           self::$console->resolve();
         }else{
+
+            Event::trigger(Event::EVENT_ON_LOAD);
             $this->router->resolve();
+            Event::trigger(Event::EVENT_ON_END);
         }
-
-
-
-
-
-        //Apply Event on Process
-//        $this->triggerEvent(self::EVENT_BEFORE_REQUEST);
-//
-//
-//
-//        // Just Echo it
-//        //echo  $this->router->resolve();
-//
-//        //Use Try n Catch For Exception Handeling
-//        try{
-//            echo  $this->router->resolve();
-//        }catch(\Exception $e){
-//            $this->response->setStatusCode($e->getCode());
-//            echo $this->view->renderView('_error',[
-//                'exception' => $e
-//            ]);
-//        }
 
     }
 
@@ -183,9 +163,6 @@ abstract class Tinkle {
 
 
 
-
-
-
     protected function load_event_listners()
     {
        require_once Tinkle::$ROOT_DIR.'/routes/listeners.php';
@@ -194,6 +171,12 @@ abstract class Tinkle {
 
 
 
+    protected function welcome()
+    {
+        restore_error_handler();
+        set_error_handler(array($this, 'ErrorHandler'));
+        return true;
+    }
 
 
 
@@ -239,7 +222,14 @@ abstract class Tinkle {
     }
 
 
-    // Php Closers
+    public function isCli()
+    {
+        if(PHP_SAPI === 'cli')
+        {
+            return true;
+        }
+        return false;
+    }
 
 
 

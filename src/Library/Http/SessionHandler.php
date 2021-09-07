@@ -165,7 +165,7 @@ abstract class SessionHandler
 
 
 
-    public function setRecord(string $_key,$_record)
+    public function setRecord(string $_key,string|array|int $_record)
     {
          $this->dbSession->open(Tinkle::$app->db->getConnect(),$this->getSessionName());
          $this->dbSession->write($_key,json_encode($_record));
@@ -198,7 +198,7 @@ abstract class SessionHandler
         return $this->dbSession->destroy($_key);
     }
 
-    public function updateRecord(string $_key,$_value)
+    public function updateRecord(string $_key,string|array|int $_value)
     {
         return $this->dbSession->updateTimestamp($_key,json_encode($_value));
     }

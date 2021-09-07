@@ -17,6 +17,7 @@ class Framework extends Tinkle
     public function __construct(string $rootPath,array $config)
     {
         parent::__construct($rootPath,$config);
+        
     }
 
 }

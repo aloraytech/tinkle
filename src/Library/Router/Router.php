@@ -18,6 +18,7 @@ class Router
     protected array $routes = [];
     protected static array $_param=[];
     protected const DEFAULT_GROUP='_WEB';
+    protected const DEFAULT_REDIRECT_GROUP='_REDIRECT';
 
     /**
      * Router constructor.
@@ -36,19 +37,21 @@ class Router
     public function add(string $uri, array|object $callback,string $method)
     {
 
-//        $this->routes['uri']= $this->buildUri($uri);
-//        $this->routes['callback']= $callback;
-//        $this->routes['group']= $this->group;
-//        $this->routes['method']= $method;
-//        $this->routes['param']= self::$_param;
 
-        if(strtoupper($this->group) != self::DEFAULT_GROUP)
+
+        if(strtoupper($this->group) === self::DEFAULT_GROUP)
         {
-            $this->routes[$method][$this->group][$this->buildUri(strtolower($this->group).'/'.$uri)] ['callback'] = $this->buildCallback($callback);
-            $this->routes[$method][$this->group][$this->buildUri(strtolower($this->group).'/'.$uri)] ['param'] = self::$_param;
-        }else{
             $this->routes[$method][$this->group][$this->buildUri($uri)] ['callback'] = $this->buildCallback($callback);
             $this->routes[$method][$this->group][$this->buildUri($uri)] ['param'] = self::$_param;
+        }elseif (strtoupper($this->group) === self::DEFAULT_REDIRECT_GROUP)
+        {
+            $this->routes[$method][$this->group][$this->buildUri($uri)] ['callback'] = $callback[0];
+            $this->routes[$method][$this->group][$this->buildUri($uri)] ['param'] = $callback[1];
+
+        }else{
+            $this->routes[$method][$this->group][$this->buildUri(strtolower($this->group).'/'.$uri)] ['callback'] = $this->buildCallback($callback);
+            $this->routes[$method][$this->group][$this->buildUri(strtolower($this->group).'/'.$uri)] ['param'] = self::$_param;
+
         }
 
 

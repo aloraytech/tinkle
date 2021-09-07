@@ -2,77 +2,74 @@
 
 namespace App\Controllers;
 
+use App\middlewares\AppMiddleware;
 use App\models\UsersModel;
+
 use Tinkle\Controller;
+use Tinkle\Event;
+use Tinkle\Framework;
 use Tinkle\interfaces\ControllerInterface;
-use Tinkle\Library\Cli\program\controller\DB;
-use Tinkle\Library\Explorer\Explorer;
-use Tinkle\Library\Robo\Robo;
-use Tinkle\Tinkle;
+use Tinkle\Library\Render\Engine\Engine;
+use Tinkle\Library\Render\Engine\Native\NativeEngine;
+use Tinkle\Middlewares\AuthMiddleware;
 use Tinkle\Request;
 use Tinkle\Response;
-use Tinkle\Token;
 use Tinkle\View;
 
 
 class AppController extends Controller implements ControllerInterface
 {
 
+    public function __construct()
+    {
+        $this->registerMiddleware(new AuthMiddleware(['profile']));
 
+        //$this->registerMiddleware(new TestMiddleware());
+        parent::__construct();
+
+    }
 
 
     public function home(Request $request, Response $response)
     {
-     //  $meta = file_get_contents_curl('http://myproject.test/');
-
-//        echo "<br> Lets Check :" . Tinkle::$app->system->resolve() . "<br>";
 
 
-//        $ch = curl_init();
-//        curl_setopt($ch, CURLOPT_URL,'http://myproject.test/login');
-//        curl_setopt($ch, CURLOPT_RETURNTRANSFER,1);
-//        $output = curl_exec($ch);
-//        curl_close($ch);
-
-        //$data = getAllContentFrom('http://myproject.test/show');
-
-        $app = new Robo();
+      //  echo "<h1>Welcome :</h1>";
 
 
 
-//
-//            $app = new DB();
-//             $app->migrate();
-//        //   $app->dropMigration();
 
-//            $img = "http://myproject.test/resources/upload/example.png";
-//            $imgData = base64_encode(file_get_contents($img));
-//            $format = 'data: ' . mime_content_type($img) . ';base64,'.$imgData;
+        $userModel = new UsersModel();
+        $this->render()->withTheme('ss')->withTemplate('front.home')->withModels([$userModel]);
 
- //       echo "<div><div><img src='/resources/upload/example.png' height='250px' width='350px'></div> <br><br>";
-
-     //   echo "<div><img src='".$format."' height='250px' width='350px'></div></div>";
-//
+        View::$render->output();
 
 
-//        $app = new Installer($request, $response);
-//        $app->check();
-//
-//        die;
-            $userModel = new UsersModel();
-            $this->prepareView('homepage')->withModels([$userModel])->responseCode(200);
-            $this->display();
+
+
+
+
+
+
+//            $userModel = new UsersModel();
+//            $this->prepareView('homepage')->withModels([$userModel])->responseCode(200);
+//            $this->display();
     }
+
+
+
+
+
+
+
 
 
     public function MyFolder(Request $request, Response $response)
     {
 
-        $app = new Explorer($request, $response);
-        $result = ['title'=>$app->explore('')];
-
-
-        $this->render('filemanager',$result);
+        $userModel = new UsersModel();
+        $this->prepareView('homepage')->withModels([$userModel])->responseCode(200);
+        $this->display();
 
     }
 

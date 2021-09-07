@@ -5,8 +5,8 @@ use Tinkle\Request;
 // Still Need A Work
 // Escape Full Controller Namespace or use tag.. load it in router with Env Controller Path or From Config
 
-
-
+//
+//
 Router::get("",[\App\controllers\AppController::class,'home']);
     Router::group('admin')->get('posts/item/{id}',[\App\Controllers\AppController::class,'item']);
     Router::group('admin')->get('pages/item/{id}',[\App\Controllers\AppController::class,'item']);
@@ -39,3 +39,9 @@ Router::get('greet/ing/{id}', [function ($id) {
 Router::get('greet/test/{id}', [function (\App\Controllers\TestController $id) {
     echo $id->getId();
 },\App\Controllers\TestController::class]);
+
+
+
+Router::redirect('user/name','post/new',301);
+//Permanent Redirect
+Router::redirect('user/name','post/new',302);

@@ -24,7 +24,7 @@ class Cloner
 
     /**
      * Cloner constructor.
-     * @param array|object $cloner
+     * @param array|object $callback
      * @throws Display
      */
     public function __construct(array|object $callback)

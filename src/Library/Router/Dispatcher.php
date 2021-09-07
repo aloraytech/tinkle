@@ -17,6 +17,7 @@ class Dispatcher
 
     protected array $routes=[];
     protected const DEFAULT_GROUP='_WEB';
+    protected const DEFAULT_REDIRECT_GROUP='_REDIRECT';
     protected Request $request;
     protected Response $response;
     protected string $_current_url='';
@@ -26,20 +27,21 @@ class Dispatcher
     protected array $_groups =[];
     protected static array $_callback=[];
     protected static object $_closure;
+    protected static int $redirectStatus=302;
+    protected static int $dispatchType=0;
 
 
     /**
      * Dispatcher constructor.
      * @param Request $request
      * @param Response $response
-     * @param array $routes
      */
     public function __construct(Request $request,Response $response)
     {
         $this->request = $request;
         $this->response = $response;
-        $this->_current_url =  preg_replace('/^\//', '', $this->request->getRequestUrl());
-        $this->_current_method = strtoupper($this->request->getMethod());
+        $this->_current_url =  @preg_replace('/^\//', '', $this->request->getRequestUrl());
+        $this->_current_method = @strtoupper($this->request->getMethod());
 
     }
 
@@ -49,6 +51,7 @@ class Dispatcher
     public function dispatch(array $routes_group)
     {
         $this->_groups = $routes_group;
+
         if($this->match())
         {
             $this->send();
@@ -62,8 +65,6 @@ class Dispatcher
     {
 
         $this->_current_route = $this->getMatchingCurrentRouteFromGroup($this->_groups);
-
-        //dd($this->_current_route);
 
         if($this->_current_route != null)
         {
@@ -90,11 +91,11 @@ class Dispatcher
 
                     if($value['callback'] instanceof \Closure)
                     {
-                       // dd($value['callback']);
+
                         self::$_closure =  \Closure::fromCallable($value['callback']);
                         self::$_callback['callback'] = self::$_closure;
                     }else{
-                        echo "Here";
+                        throw new Display("Route Found Black Hole",Display::HTTP_SERVICE_UNAVAILABLE);
                     }
 
 
@@ -133,6 +134,7 @@ class Dispatcher
     {
         if(is_array($groups))
         {
+
             // Filter According Request Method Like GET, POST,PUT etc.
             if(array_key_exists($this->_current_method,$groups))
             {
@@ -150,11 +152,59 @@ class Dispatcher
                     return $this->_current_route;
 
                 }else{
-                    // LETS STEP FORWARD [_WEB CALL]
-                    $availableRoutes = $groups[$this->_current_method][self::DEFAULT_GROUP];
-                    $this->_current_route = $this->getCurrentRoute($availableRoutes);
 
-                    return $this->_current_route;
+                    // LETS STEP FORWARD [_WEB CALL]
+                    if(isset($groups[$this->_current_method][self::DEFAULT_GROUP]))
+                    {
+                        $availableRoute = $groups[$this->_current_method][self::DEFAULT_GROUP];
+
+
+                        if(empty($this->getCurrentRoute($availableRoute)))
+                        {
+
+                            if(isset($groups[$this->_current_method][self::DEFAULT_REDIRECT_GROUP]))
+                            {
+                                $availableRoutes = $groups[$this->_current_method][self::DEFAULT_REDIRECT_GROUP];
+
+                                $this->_current_route = $this->getCurrentRoute($availableRoutes);
+                            }
+
+                        }else{
+                            $this->_current_route = $this->getCurrentRoute($availableRoute);
+                        }
+                    }else{
+                        if(empty($this->_current_route))
+                        {
+
+                            if(isset($groups[$this->_current_method][self::DEFAULT_REDIRECT_GROUP]))
+                            {
+
+                                $availableRoutes = $groups[$this->_current_method][self::DEFAULT_REDIRECT_GROUP];
+                                //dd($availableRoutes);
+                                $this->_current_route = $this->getCurrentRoute($availableRoutes);
+
+                                foreach ($availableRoutes as $key => $value)
+                                {
+                                    foreach ($this->_current_route as $_key => $_value)
+                                    {
+                                        if($_key === $key)
+                                        {
+                                            $this->_current_route[$_key]['param'] = $value['param'];
+                                        }
+                                    }
+
+                                }
+                                self::$dispatchType = 1;
+
+                            }
+
+                        }
+
+                    }
+
+                        return $this->_current_route;
+
+
                 }
 
                 return null;
@@ -168,7 +218,7 @@ class Dispatcher
     protected function getCurrentRoute($availableRoutes)
     {
         try{
-           // dd($availableRoutes);
+
             if(is_array($availableRoutes))
             {
 
@@ -202,7 +252,7 @@ class Dispatcher
                 {
                     return $this->_current_route;
                 }else{
-                    throw new Display("No Valid Route Found For This Url",Display::HTTP_SERVICE_UNAVAILABLE);
+                    throw new Display("No Root Found",Display::HTTP_SERVICE_UNAVAILABLE);
                 }
 
             }
@@ -230,53 +280,60 @@ class Dispatcher
     {
 
         try{
-           //dd($this->_current_route);
+
            foreach ($this->_current_route as $route)
            {
-               if(!is_object($route['callback']))
+               if(self::$dispatchType !=1)
                {
-                   $callback = $route['callback'];
-                   if($callback === false){
-                       throw new Display('Request Not Found',404);
-                   }
-                   if(is_string($callback)){
-                       return Tinkle::$app->view->display($callback);
-                   }
-
-                   if(is_array($callback))
+                   if(!is_object($route['callback']))
                    {
-                       if($route['callback'][0] instanceof \Closure)
+                       $callback = $route['callback'];
+                       if($callback === false){
+                           throw new Display('Request Not Found',404);
+                       }
+                       if(is_string($callback)){
+                           return Tinkle::$app->view->display($callback);
+                       }
+
+                       if(is_array($callback))
+                       {
+                           if($route['callback'][0] instanceof \Closure)
+                           {
+                               $cloner = new Cloner($callback);
+                               $cloner->resolve($route['param']??[]);
+
+                           }else{
+                               // Create Controller Instance
+                               /** @var \App\Controllers $controller */
+                               $controller= new $callback[0]();
+                               Tinkle::$app->controller = $controller;
+                               $controller->action = $callback[1];
+                               $callback[0] = $controller;
+
+                               //Check For Middlewares
+                               foreach($controller->getMiddlewares() as $middleware)
+                               {
+                                   $middleware->execute();
+                               }
+
+                               return call_user_func($callback,$this->request,$this->response);
+                           }
+
+
+                       }
+                   }else{
+                       $callback = $route['callback'];
+                       if(is_object($callback))
                        {
                            $cloner = new Cloner($callback);
                            $cloner->resolve($route['param']??[]);
 
-                       }else{
-                           // Create Controller Instance
-                           /** @var \App\Controllers $controller */
-                           $controller= new $callback[0]();
-                           Tinkle::$app->controller = $controller;
-                           $controller->action = $callback[1];
-                           $callback[0] = $controller;
-
-                           //Check For Middlewares
-                           foreach($controller->getMiddlewares() as $middleware)
-                           {
-                               $middleware->execute();
-                           }
-
-                           return call_user_func($callback,$this->request,$this->response);
                        }
-
-
                    }
                }else{
-                   $callback = $route['callback'];
-                   if(is_object($callback))
-                   {
-                       $cloner = new Cloner($callback);
-                       $cloner->resolve($route['param']??[]);
+                   // Redirect Case
 
-                   }
+                   Tinkle::$app->response->redirect($route['callback'],$route['param']);
                }
            }
 

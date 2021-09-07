@@ -16,7 +16,9 @@
             "App\\": "app/",
             "Config\\": "config/",
             "Tinkle\\": "src/",
-            "Database\\": "database/"
+            "Database\\": "database/",
+            "Plugins\\": "app/Plugins/",
+            "Themes\\": "resources/themes/"
         }
     },
     "autoload-dev": {
@@ -31,7 +33,8 @@
         "symfony/http-foundation": "^5.3",
         "twig/twig": "^3.3",
       "ext-password": "*",
-      "ext-json": "*"
+      "ext-json": "*",
+      "ext-gd": "*"
     },
     "minimum-stability": "dev"
 }

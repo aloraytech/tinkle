@@ -13,6 +13,7 @@ class Token
     public static Token $token;
     protected array $sessionToken=[];
 
+
     /**
      * Token constructor.
      */
@@ -20,7 +21,30 @@ class Token
     {
         self::$token = $this;
 
+
     }
+
+
+    public function create()
+    {
+
+    }
+
+    public static function generate()
+    {
+
+    }
+
+    public function isValid()
+    {
+
+    }
+
+    public function has()
+    {
+
+    }
+
 
 
 

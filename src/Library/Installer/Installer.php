@@ -10,7 +10,7 @@ use Tinkle\Response;
 use Tinkle\Router;
 use Tinkle\Tinkle;
 
-class Installer implements LibraryInterface
+class Installer
 {
 
 

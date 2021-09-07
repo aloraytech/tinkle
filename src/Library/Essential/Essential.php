@@ -6,6 +6,7 @@ namespace Tinkle\Library\Essential;
 use Tinkle\Exceptions\Display;
 use Tinkle\Library\Essential\Helpers\Faker;
 use Tinkle\Library\Essential\Helpers\Helper;
+use Tinkle\Library\Essential\Helpers\LocalRecord;
 use Tinkle\Library\Essential\Helpers\RegexHandler;
 use Tinkle\Library\Essential\Helpers\StringHandler;
 use Tinkle\Library\Essential\Token;
@@ -13,20 +14,15 @@ use Tinkle\Tinkle;
 
 class Essential
 {
-    public static Helper $helper;
-    public static RegexHandler $regex;
-    public static StringHandler $str;
-    public static Faker $faker;
+    public static Essential $essential;
+
 
     /**
      * Essential constructor.
      */
     public function __construct()
     {
-        self::$helper = self::getHelper();
-        self::$regex = new RegexHandler();
-        self::$str = new StringHandler();
-        self::$faker = new Faker();
+        self::$essential = $this;
     }
 
 
@@ -79,7 +75,10 @@ class Essential
     }
 
 
-
+    public static function Record()
+    {
+        return new LocalRecord();
+    }
 
 
 

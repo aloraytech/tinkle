@@ -19,13 +19,16 @@ abstract class RouterHandler
     protected const _PUT='PUT';
     protected const _DELETE='DELETE';
     protected const DEFAULT_GROUP='_WEB';
+    protected const DEFAULT_REDIRECT_GROUP='_REDIRECT';
     public static RouterHandler $router;
     protected Request $request;
     protected Response $response;
     protected static array $routes=[];
     protected static array $groups=[];
-
     protected static string $_group='';
+
+
+
     /**
      * @var Dispatcher
      */
@@ -42,9 +45,11 @@ abstract class RouterHandler
         self::$router = $this;
         $this->request = $request;
         $this->response = $response;
+        $this->loadRoutes();
        $this->dispatcher = new Dispatcher($request,$response);
     }
 
+    abstract protected function loadRoutes():bool;
 
     public static function group(string $group_name)
     {
@@ -107,7 +112,18 @@ abstract class RouterHandler
 
 
 
+    public static function redirect(string $here, string $there, int $status_code=302)
+    {
+        $group = self::DEFAULT_REDIRECT_GROUP;
+        $route = new Router($group);
 
+        $getRoute = $route->add($here,[$there,$status_code],self::_GET);
+        if(self::updateGroup($getRoute))
+        {
+            self::$_group ='';
+        }
+//
+    }
 
 
 
@@ -158,7 +174,28 @@ abstract class RouterHandler
         }
     }
 
-
+    public static function any(string $uri, array|object $callback)
+    {
+        $group = self::getGroup();
+        $route = new Router($group);
+        $getRoute = $route->add($uri,$callback,self::_GET);
+        if(self::updateGroup($getRoute))
+        {
+            $getRoute = $route->add($uri,$callback,self::_POST);
+            if(self::updateGroup($getRoute))
+            {
+                $getRoute = $route->add($uri,$callback,self::_PUT);
+                if(self::updateGroup($getRoute))
+                {
+                    $getRoute = $route->add($uri,$callback,self::_DELETE);
+                    if(self::updateGroup($getRoute))
+                    {
+                        self::$_group ='';
+                    }
+                }
+            }
+        }
+    }
 
 
 

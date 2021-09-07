@@ -5,9 +5,8 @@ namespace Tinkle;
 
 
 
-
-use Tinkle\interfaces\ControllerInterface;
 use Tinkle\Middlewares\SecurityMiddleware;
+use App\middlewares\AppMiddleware;
 
 /**
  * Class Controller
@@ -20,11 +19,12 @@ abstract class Controller
     public string $layout = 'main';
     public string $action = '';
     public Request $request;
-
+    public array $commons=[];
     /**
-     * @var \app\core\middlewares\BaseMiddleware[]
+     * @var Middleware[]
      */
     protected array $middlewares = [];
+    protected array $plugins = [];
 
 
 
@@ -37,6 +37,7 @@ abstract class Controller
     public function __construct()
     {
         $this->registerMiddleware(new SecurityMiddleware());
+
     }
 
     public function get_allDefineParams()
@@ -74,10 +75,9 @@ abstract class Controller
 
 
 
-    public function render(string $template,array $params=[],bool $isTwig=false)
+    public function render()
     {
-        $template = str_replace('.','/',$template);
-        return Tinkle::$app->view->render(trim($template),$params,$isTwig);
+        return Framework::$app->view->fetch();
     }
 
 
@@ -92,22 +92,6 @@ abstract class Controller
     }
 
 
-//    /**
-//     * @param $layout
-//     */
-//    public function setLayout($layout)
-//    {
-//        $this->layout = $layout;
-//    }
-//
-//
-//
-//    public function render(string $view, array $param=[])
-//    {
-//        return Tinkle::$app->view->renderView($view,$param);
-//    }
-
-
     public function registerMiddleware(Middleware $middleware)
     {
         $this->middlewares[] = $middleware;
@@ -116,19 +100,37 @@ abstract class Controller
 
 
 
-
-
     /**
      * Get the value of middlewares
      *
-     * @return  \tinkle\app\middlewares\BaseMiddleware[]
+     * @return  \Tinkle\Middlewares[]
      */
     public function getMiddlewares(): array
     {
+
         return $this->middlewares;
     }
 
 
+    /**
+     * @param string $plugin
+     * @param array $callback
+     */
+    public function setPlugin(string $plugin,array $callback)
+    {
+        $this->plugins[$plugin] = $callback;
+        Event::set(Event::EVENT_ON_RUN,$plugin,$callback);
+    }
+
+    /**
+     * @param string $plugin
+     * @param mixed $parameter
+     * @return mixed
+     */
+    public function getPlugin(string $plugin, string|array|int $parameter='')
+    {
+        return Event::trigger(Event::EVENT_ON_RUN,$plugin,$parameter);
+    }
 
 
 

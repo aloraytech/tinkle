@@ -23,6 +23,6 @@ class ApiMiddleware extends Middleware implements MiddlewareInterface
 
     public function execute()
     {
-        print_r($this->actions);
+       // print_r($this->actions);
     }
 }

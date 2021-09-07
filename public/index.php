@@ -4,7 +4,6 @@ use Tinkle\Framework;
 use Tinkle\Exceptions\Display;
 
 
-
     try {
         require_once __DIR__.'/../vendor/autoload.php';
         $configuration = new \Config\Config();

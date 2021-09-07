@@ -12,7 +12,7 @@ class App implements ConfigInterface
     public function getConfig(): string
     {
         return json_encode([
-            'production' => false,
+            'production' => $_ENV['DEV_MODE'],
             'spellCheck' => false,
             'imageBase64'=> true,
             'cache' => true,
