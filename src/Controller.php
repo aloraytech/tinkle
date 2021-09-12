@@ -16,7 +16,7 @@ use App\middlewares\AppMiddleware;
 abstract class Controller
 {
 
-    public string $layout = 'main';
+    private int $viewStep = 0;
     public string $action = '';
     public Request $request;
     public array $commons=[];
@@ -25,7 +25,7 @@ abstract class Controller
      */
     protected array $middlewares = [];
     protected array $plugins = [];
-
+    public array $pageAttribute=[];
 
 
 
@@ -71,25 +71,27 @@ abstract class Controller
 
 
 
-
-
-
-
-    public function render()
+    public function render(string $template='')
     {
-        return Framework::$app->view->fetch();
+        $this->viewStep = 1;
+        return Tinkle::$app->view->render->render($template,$this->pageAttribute);
+    }
+
+    /**
+     * @param string|mixed $content
+     */
+    public function display($content='')
+    {
+        if($this->viewStep !=0)
+        {
+            return Tinkle::$app->view->render->output($content);
+        }else{
+            return View::$view->render::display($content);
+        }
+
     }
 
 
-    public function prepareView(string $template)
-    {
-        return View::setView($template);
-    }
-
-    public function display()
-    {
-        return View::getView();
-    }
 
 
     public function registerMiddleware(Middleware $middleware)
@@ -107,7 +109,6 @@ abstract class Controller
      */
     public function getMiddlewares(): array
     {
-
         return $this->middlewares;
     }
 
@@ -119,7 +120,7 @@ abstract class Controller
     public function setPlugin(string $plugin,array $callback)
     {
         $this->plugins[$plugin] = $callback;
-        Event::set(Event::EVENT_ON_RUN,$plugin,$callback);
+        Tinkle::$app->setEvent($plugin,$callback);
     }
 
     /**
@@ -129,7 +130,7 @@ abstract class Controller
      */
     public function getPlugin(string $plugin, string|array|int $parameter='')
     {
-        return Event::trigger(Event::EVENT_ON_RUN,$plugin,$parameter);
+        return Tinkle::$app->getEvent($plugin,$parameter);
     }
 
 

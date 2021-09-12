@@ -4,7 +4,7 @@
 namespace Tinkle\Library\Router;
 
 
-
+use Tinkle\Library\Platform\Platform;
 use App\Controllers\AppController;
 use Tinkle\Exceptions\Display;
 use Tinkle\Library\Essential\Essential;
@@ -23,13 +23,14 @@ class Dispatcher
     protected string $_current_url='';
     protected string $_current_method='';
     protected array $_current_route=[];
+    protected string $_current_platform='';
     protected array $params = [];
     protected array $_groups =[];
     protected static array $_callback=[];
     protected static object $_closure;
     protected static int $redirectStatus=302;
     protected static int $dispatchType=0;
-
+    protected static array $platform=[];
 
     /**
      * Dispatcher constructor.
@@ -48,8 +49,9 @@ class Dispatcher
 
 
 
-    public function dispatch(array $routes_group)
+    public function dispatch(array $routes_group,array $platform_routes)
     {
+        self::$platform = $platform_routes;
         $this->_groups = $routes_group;
 
         if($this->match())
@@ -252,7 +254,15 @@ class Dispatcher
                 {
                     return $this->_current_route;
                 }else{
-                    throw new Display("No Root Found",Display::HTTP_SERVICE_UNAVAILABLE);
+                    // Platform Routes
+                    if($this->foundInPlatform())
+                    {
+                        $this->sendToPlatform();
+                    }else{
+
+                        throw new Display("No Root Found",Display::HTTP_SERVICE_UNAVAILABLE);
+                    }
+
                 }
 
             }
@@ -354,13 +364,33 @@ class Dispatcher
 
     }
 
+    private function foundInPlatform()
+    {
 
+        if(isset(self::$platform[$this->_current_method]))
+        {
+            $platformRoutes = self::$platform[$this->_current_method];
+            foreach ($platformRoutes as $uri =>$namedRoute)
+            {
+                if(preg_match("$uri",$this->_current_url,$matches))
+                {
+                    $this->_current_platform = $namedRoute;
+                    return true;
+                }else{
+                    return false;
+                }
+            }
+        }
+    }
 
-
-
-
-
-
+    private function sendToPlatform()
+    {
+        if(!empty($this->_current_platform))
+        {
+            $platformObject = new Platform($this->request,$this->response,$this->_current_platform);
+            $platformObject->resolve();
+        }
+    }
 
 
 }

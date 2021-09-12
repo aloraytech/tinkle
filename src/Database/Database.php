@@ -194,12 +194,14 @@ class Database
 
 
             }catch (\PDOException $e) {
-                throw new Display($e->getMessage(),500);
+                $msg = '_msg='.$e->getMessage().'&_line='.$e->getline().'&_file='.$e->getFile().'&_code='. $e->getCode().'&_trace='. $e->getTraceAsString();
+                throw new Display($msg);
             }
 
         }catch (Display $e)
         {
-            $e->ConnectionFailed();
+
+            $e->handle();
         }
 
 

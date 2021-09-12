@@ -1,38 +1,36 @@
 <?php
-
+/**
+ * User: AlorayTech
+ * Date: 8/9/2021
+ * Time: 2:15 PM
+ */
 
 namespace Tinkle\Library\Render;
 
 
-
-use Tinkle\Event;
-use Tinkle\Library\Render\Engine\Engine;
-use Tinkle\Library\Render\Engine\Native\NativeEngine;
-use Tinkle\Library\Render\Engine\Twig\TwigEngine;
-use Tinkle\Library\Render\Themes\Themes;
+use Tinkle\Library\Render\Template\Template;
+use Tinkle\Library\Render\Theme\Theme;
 use Tinkle\Request;
 use Tinkle\Response;
-use Tinkle\Tinkle;
-use Tinkle\View;
 
-abstract class Render
+/**
+ * Class Render
+ * @author  Krishanu Bhattacharya <krishanu.info@gmail.com>
+ * @package Tinkle\Library\Render
+ */
+ class Render
 {
 
-
     public static Render $render;
-    public Themes $theme;
-    public Engine $engine;
-    protected Request $request;
-    protected Response $response;
+    private Request $request;
+    private Response $response;
+    private RenderHandler $renderHandler;
+    private Settings $settings;
 
-    protected array|object|string|int $config;
-    protected string $output ='';
-    private static bool $isStepByStep=false;
-    private static string|int|array $content;
-    protected TemplateHandler $templateHandler;
+    private static string|array $output='';
 
-    protected string|array|object $current_config;
 
+    public array $givenConfig = [];
 
 
     /**
@@ -43,102 +41,81 @@ abstract class Render
     public function __construct(Request $request, Response $response)
     {
         self::$render = $this;
-        $this->config = Tinkle::$app->config['app'];
-
         $this->request = $request;
         $this->response = $response;
-
-
-
-
+        $this->settings = new Settings();
     }
 
 
-
-    public function fetch()
+    /**
+     * @param null|mixed $content
+     */
+    public function output($content=null)
     {
-        self::$isStepByStep=true;
-        return new RenderConfiguration();
-    }
-
-
-
-
-    public function output($contain='')
-    {
-        self::$content = $contain;
-
-            $this->resolve();
-
-            ob_start();
-            //echo $this->output;
-            echo sprintf('%s',$this->output??'');
-            ob_flush();
-
-    }
-
-    public function resolve()
-    {
-        if(self::$isStepByStep)
+        $this->prepareOutput();
+        ob_start();
+        if(!empty($content) && empty(self::$output))
         {
-            // If Step By Step Process Setup
-            $this->output = $this->prepare() ?? '';
+            if(is_string($content) || is_int($content)){echo sprintf('%s',$content);}
+            else{echo sprintf('%s',json_encode($content));}
         }else{
-            // Direct Calling Without Step By Step
-            if(!empty(self::$content))
+            if(!empty(self::$output))
             {
-                if(is_string(self::$content) || !is_array(self::$content) || !is_object(self::$content)) {
-                    $this->output = sprintf('<html><head></head><body><div>%s</div></body></html>', self::$content);
-                }else{
-                    if(is_array(self::$content))
-                    {
-                        $this->output = sprintf('<html><head></head><body>%s</body></html>',implode(';',self::$content));
-                    }
-                }
-            }else{
-                $this->output = "<html><head></head><body><h1>This is Your Default Empty Tinkle View.</h1></body></html>";
+                if(is_string(self::$output) || is_int(self::$output)){echo sprintf('%s',self::$output);}
+                else{echo sprintf('%s',json_encode(self::$output));}
             }
-
         }
-        return $this->output;
-
+        ob_end_flush();
     }
 
-
-
-    private function prepare()
+    /**
+     * @param string|null|mixed $content
+     */
+    public static function display($content=null)
     {
-        $this->current_config = RenderConfiguration::getViewConfig();
-        $this->theme = new Themes($this->current_config);
-        $themeConfig = $this->theme->getAll();
-        if(isset($themeConfig['theme']) && !empty($themeConfig['theme'])){
-            if(is_array($themeConfig) && !empty($themeConfig))
-            {
-                $this->templateHandler = new TemplateHandler($themeConfig,$this->current_config);
-                if($this->templateHandler->resolve())
-                {
-                    $this->output = $this->templateHandler->getOutput();
-                }
-                return $this->output;
-            }
+        if(!empty($content))
+        {
+            ob_start();
+            echo sprintf('%s',json_encode($content));
+            ob_end_flush();
+        }
+    }
+
+
+    public function render(string $template='', array|object $PageParams=[])
+    {
+
+        $this->settings::$template = $template;
+        $this->settings::setCommonData($PageParams);
+        return $this->settings;
+    }
+
+    // Start Process For Preparing Data For Output
+
+    private function prepareOutput()
+    {
+        $this->getGivenConfig();
+        dd($this->givenConfig);
+        if(!empty($this->givenConfig['theme']))
+        {
+            $theme = new Theme($this->givenConfig);
+            self::$output = $theme->getOutput();
+        }else{
+            $template = new Template($this->givenConfig);
+            self::$output = $template->getOutput();
         }
 
+        return self::$output;
 
+    }
+
+    private function getGivenConfig()
+    {
+        $this->givenConfig = $this->settings::getSettings();
+        return $this->givenConfig;
     }
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-// Class End
 
 }

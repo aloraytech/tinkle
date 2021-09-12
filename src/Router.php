@@ -29,6 +29,7 @@ class Router extends RouterHandler
 
     protected function loadRoutes():bool
     {
+        require_once self::$route_dir.'platform.php';
         require_once self::$route_dir.'api.php';
         require_once self::$route_dir.'private.php';
         require_once self::$route_dir.'web.php';

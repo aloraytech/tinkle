@@ -130,7 +130,8 @@ abstract class RouterHandler
     public static function get(string $uri, array|object $callback)
     {
         $group = self::getGroup();
-        $route = new Router($group);
+        $route = new Router();
+        $route->setGroup($group);
         $getRoute = $route->add($uri,$callback,self::_GET);
         if(self::updateGroup($getRoute))
         {
@@ -144,7 +145,8 @@ abstract class RouterHandler
     public static function post(string $uri, array|object $callback)
     {
         $group = self::getGroup();
-        $route = new Router($group);
+        $route = new Router();
+        $route->setGroup($group);
         $getRoute = $route->add($uri,$callback,self::_POST);
         if(self::updateGroup($getRoute))
         {
@@ -155,7 +157,8 @@ abstract class RouterHandler
     public static function put(string $uri, array|object $callback)
     {
         $group = self::getGroup();
-        $route = new Router($group);
+        $route = new Router();
+        $route->setGroup($group);
         $getRoute = $route->add($uri,$callback,self::_PUT);
         if(self::updateGroup($getRoute))
         {
@@ -166,7 +169,8 @@ abstract class RouterHandler
     public static function delete(string $uri, array|object $callback)
     {
         $group = self::getGroup();
-        $route = new Router($group);
+        $route = new Router();
+        $route->setGroup($group);
         $getRoute = $route->add($uri,$callback,self::_DELETE);
         if(self::updateGroup($getRoute))
         {
@@ -177,7 +181,8 @@ abstract class RouterHandler
     public static function any(string $uri, array|object $callback)
     {
         $group = self::getGroup();
-        $route = new Router($group);
+        $route = new Router();
+        $route->setGroup($group);
         $getRoute = $route->add($uri,$callback,self::_GET);
         if(self::updateGroup($getRoute))
         {
@@ -204,10 +209,36 @@ abstract class RouterHandler
 
     public static function resolve()
     {
-        //dd(self::$groups);
-        self::$router->dispatcher->dispatch(self::$groups);
+        $platform = Router::getPlatform();
+        self::$router->dispatcher->dispatch(self::$groups,$platform);
     }
 
+
+
+
+    public static function getPlatform(string $uri, string $musk_name)
+    {
+        $router = new Router();
+        $router->updatePlatform($uri,$musk_name,self::_GET);
+    }
+
+    public static function postPlatform(string $uri, string $musk_name)
+    {
+        $router = new Router();
+        $router->updatePlatform($uri,$musk_name,self::_POST);
+    }
+
+    public static function putPlatform(string $uri, string $musk_name)
+    {
+        $router = new Router();
+        $router->updatePlatform($uri,$musk_name,self::_PUT);
+    }
+
+    public static function deletePlatform(string $uri, string $musk_name)
+    {
+        $router = new Router();
+       $router->updatePlatform($uri,$musk_name,self::_DELETE);
+    }
 
 
 

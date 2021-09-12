@@ -17,7 +17,7 @@ class UserTableSeeder extends Seeder
 
 
     /**
-     * @return string
+     * @return array
      */
     public function run()
     {

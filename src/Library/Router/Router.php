@@ -15,10 +15,13 @@ class Router
     protected array $callback=[];
     protected string $method='';
     protected string $group='';
+    public static array $platformRoutes = [];
     protected array $routes = [];
     protected static array $_param=[];
     protected const DEFAULT_GROUP='_WEB';
     protected const DEFAULT_REDIRECT_GROUP='_REDIRECT';
+    protected Platform $platform;
+    public static Router $router;
 
     /**
      * Router constructor.
@@ -27,11 +30,47 @@ class Router
      * @param string $method
      * @param string $group
      */
-    public function __construct( string $group)
+    public function __construct()
+    {
+
+        self::$_param = [];
+        self::$router = $this;
+
+    }
+
+    public function setGroup(string $group)
     {
         $this->group = $group;
-        self::$_param = [];
     }
+
+
+    public function updatePlatform(string $uri, string $musk_name,string $method)
+    {
+        if(isset(self::$platformRoutes[$method][$uri]))
+        {
+            unset(self::$platformRoutes[$method][$uri]);
+            self::$platformRoutes[$method][$this->buildUri($uri)] = $musk_name;
+        }else{
+            self::$platformRoutes[$method][$this->buildUri($uri)] = $musk_name;
+        }
+    }
+
+    public static function getPlatform(string $method='')
+    {
+        if(empty($method))
+        {
+            return self::$platformRoutes;
+        }else{
+            if(isset(self::$platformRoutes[$method]))
+            {
+                return self::$platformRoutes[$method];
+            }
+        }
+
+
+    }
+
+
 
 
     public function add(string $uri, array|object $callback,string $method)

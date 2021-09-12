@@ -6,76 +6,58 @@ namespace Tinkle\Library\Console;
 
 
 use Tinkle\Framework;
+use Tinkle\Tinkle;
 
 class Console
 {
-
-
+    public const DIVIDER=':';
+    public static Console $console;
     public string $root;
-    public string $request;
-    public static string $divider=':';
-    protected static bool $status=true;
+    public string $setRequest='';
     protected Command $command;
+
+
 
     /**
      * Console constructor.
-     * @param array $config
      * @param string $root
      */
     public function __construct(string $root='')
     {
+        self::$console = $this;
+        $this->root = $root ?? Tinkle::$ROOT_DIR;
 
-        $this->root = $root ?? Framework::$ROOT_DIR;
-        if($this->isCli())
-        {
-            $this->resolveCliRequest();
-        }else{
-            $this->resolveWebRequest();
-        }
-
-        $this->command = new Command();
 
 
     }
 
-
-    protected function generateRequest()
+    public function run()
     {
-        foreach ($_SERVER['argv'] as $key => $value)
-        {
-            if($key != 0)
-            {
-                $pattern = self::$divider;
-                if(preg_match("/$pattern/",$value,$matches))
-                {
-                    unset($matches[0]);
-                    $_GET[] = implode('/',$matches);
-                }
-                $_GET[] = $value;
-            }
-        }
-        $this->request = implode('/',$_GET);
-
+       $dispatcher = new Dispatcher();
+       $dispatcher->run();
     }
+
 
 
     public static function resolve()
     {
-        if(self::$status)
-        {
-            echo $this->request;
-        }else{
-            echo "\e[35m 
+
+           if(!Console::$console->isCli())
+           {
+               echo "\e[35m 
     ************************************************|
     ** WARNING - Please Run On Any Cli Application
     ************************************************|\n\e[0m";
-        }
+           }else{
+               self::$console->run();
+           }
+
 
 
     }
 
 
-    protected function isCli()
+    public function isCli()
     {
         if (PHP_SAPI === 'cli')
         {
@@ -83,17 +65,21 @@ class Console
             {
                 return true;
             }
-
             if(isset($_SERVER['argv']) && isset($_SERVER['argc']))
             {
                 return true;
             }
         }
-
-
         return false;
 
     }
+
+
+
+
+
+
+
 
 
 }

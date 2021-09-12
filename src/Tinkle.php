@@ -111,7 +111,13 @@ use Tinkle\Library\Designer\Designer;
 
 
         }catch (Display $e){
-            $e->Render();
+            if($this->isCli())
+            {
+                $e->RenderConsole();
+            }else{
+                $e->Render();
+            }
+
         }
 
 
@@ -194,7 +200,7 @@ use Tinkle\Library\Designer\Designer;
             }
 
         } catch (Display $e) {
-            $e->ErrorToException();
+            $e->handle();
         }
 
 
@@ -231,7 +237,24 @@ use Tinkle\Library\Designer\Designer;
         return false;
     }
 
+     /**
+      * @param string $event
+      * @param array $callback
+      */
+     public function setEvent(string $event,array $callback)
+     {
+         Event::set(Event::EVENT_ON_RUN,$event,$callback);
+     }
 
+     /**
+      * @param string $event
+      * @param mixed $parameter
+      * @return mixed
+      */
+     public function getEvent(string $event, string|array|int $parameter='')
+     {
+         return Event::trigger(Event::EVENT_ON_RUN,$event,$parameter);
+     }
 
 
 

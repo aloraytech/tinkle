@@ -17,20 +17,23 @@ class Display extends CoreException
 
 
 
-    public function Render (){
 
-        $data = [
-            'message' => $this->message,
-            'code' => $this->code,
-            'line' => $this->line,
-            'file' => $this->file,
-            'trace' => $this->getTrace()
-        ];
+    public function Render (bool $display=true){
 
-        $this->output($data);
+       $this->RenderException($display,'Rendering Exception','Rendering Traces');
 
 
     }
+
+
+
+
+
+
+
+
+
+
 
 
     public function handle()
@@ -39,13 +42,21 @@ class Display extends CoreException
         parse_str($this->message,$var);
         $data = [
             'message' => $var['_msg'],
-            'code' => $var['_code'],
+            'code' => $var['_code'] ?? $var['_severity'],
             'line' => $var['_line'],
             'file' => $var['_file'],
-            'trace' => $var['_trace'],
+            'trace' => $var['_trace']??$this->getTraceAsString(),
         ];
 
-        $this->output($data);
+        $this->message = $data['message'];
+        $this->code = $data['code'];
+        $this->line = $data['line'];
+        $this->file = $data['file'];
+
+
+
+
+        $this->RenderException(true,'Handle Exception','Handle Traces');
 
     }
 
@@ -55,59 +66,7 @@ class Display extends CoreException
 
 
 
-    public function ErrorToException()
-    {
 
-        parse_str($this->message,$var);
-        $data = [
-            'message' => $var['_msg'],
-            'code' => $var['_severity'],
-            'line' => $var['_line'],
-            'file' => $var['_file'],
-            'trace' => $this->getTrace()
-        ];
-
-        $this->output($data);
-
-    }
-
-
-    public function CliError()
-    {
-        echo "\e[92m  Exception Found : "."\n".
-                "message :".$this->message ."\n".
-                "code : ". $this->code ."\n".
-                "line :". $this->line ."\n".
-                "file :". $this->file."\n".
-                "\n\e[0m";
-
-        die;
-    }
-
-
-
-
-
-
-
-
-
-
-
-
-    public function Suggession (){
-
-        echo " Exception Found : <br>
-                message : $this->message <br>
-                code : $this->code <br>
-                line : $this->line <br>
-                file : $this->file <br>
-                
-                ";
-
-        die;
-
-    }
 
 
 

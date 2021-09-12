@@ -16,9 +16,13 @@ class Posts extends Plugins
         return "Post Created With : ". implode(',', $data);
     }
 
-}
 
-//public function getPost(int $id)
-//{
-//    return "Posts id : ".$id;
-//}
+
+    public function getPost(int $id)
+    {
+        echo "Posts id : ".$id;
+    }
+
+
+
+}

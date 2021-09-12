@@ -9,11 +9,13 @@ use Tinkle\Controller;
 use Tinkle\Event;
 use Tinkle\Framework;
 use Tinkle\interfaces\ControllerInterface;
+use Tinkle\Library\Console\Console;
 use Tinkle\Library\Render\Engine\Engine;
 use Tinkle\Library\Render\Engine\Native\NativeEngine;
 use Tinkle\Middlewares\AuthMiddleware;
 use Tinkle\Request;
 use Tinkle\Response;
+use Tinkle\Tinkle;
 use Tinkle\View;
 
 
@@ -36,13 +38,14 @@ class AppController extends Controller implements ControllerInterface
 
       //  echo "<h1>Welcome :</h1>";
 
-
-
+        $this->getMiddlewares();
+        $this->pageAttribute = ['title'=>'Homepage','favicon'=>'png','slogan'=>'Awesome'];
 
         $userModel = new UsersModel();
-        $this->render()->withTheme('ss')->withTemplate('front.home')->withModels([$userModel]);
+        $this->render('templateName')->withTheme('themeName')->withModules([$userModel]);
+        //$this->display();
 
-        View::$render->output();
+       
 
 
 

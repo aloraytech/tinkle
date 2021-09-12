@@ -4,14 +4,18 @@
 namespace Tinkle;
 
 
+use Tinkle\Library\Designer\Designer;
 use Tinkle\Library\Render\Render;
-use Tinkle\Library\Render\Themes\Themes;
 
-class View extends Render
+
+class View
 {
 
-
-
+    public Render $render;
+    public Designer $designer;
+    public static View $view;
+    private Request $request;
+    private Response $response;
 
 
 
@@ -22,7 +26,12 @@ class View extends Render
      */
     public function __construct(Request $request, Response $response)
     {
-        parent::__construct($request,$response);
+        $this->request = $request;
+        $this->response = $response;
+        $viewRender = new Render($this->request,$this->response);
+        $this->render = $viewRender::$render;
+        $this->designer = new Designer();
+
     }
 
 

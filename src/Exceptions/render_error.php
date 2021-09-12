@@ -1,34 +1,43 @@
 <?php
+header_remove('X-Powered-By');
 
 if(!$_SERVER['DEV_MODE'])
 {
 
-    $data['line'] = ' -- No Line Found --';
-    $data['file'] = ' -- No File Found --';
-    $data['trace'] = '-- No Trace Found --';
+    $data['line'] = ' -- Protected --';
+    $data['file'] = ' -- Protected --';
+    $data['trace'] = '-- Protected --';
 }
 
-header_remove('X-Powered-By');
 ?>
 
+<?php
 
-<!doctype html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
-    <style>
-        body{
-            background-color: black;
+    if( isset($display) && $display ===false)
+    {
+    $titleBlock = $title ?? $_SERVER['HTTP_HOST'].'|Exception Found!' ;
+    }else{
+    $titleBlock = $_SERVER['HTTP_HOST'].'|Exception Found!';
+    }
+    $titleBlock = '<title>'.$titleBlock.'</title>';
+
+    $cssBlock = '
+        <style>
+//        body{
+//            background-color: black;
+//            color: white;
+//            font-size: larger;
+//        }
+        div.exception {
+       // background-color: black;
             color: white;
             font-size: larger;
+
         }
-       div {
-           margin: 2rem;
-           padding: 2rem;
+       div.error-div {
+           
+           margin: 3rem;
+           padding: 3rem;
            max-height: 90%;
            max-width: 90%;
            /*background-color: #ba8b00;*/
@@ -83,17 +92,57 @@ header_remove('X-Powered-By');
             text-align: left;
         }
     </style>
+    ';
+
+$headerBlock = '
+        
+        <!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    '.$titleBlock.$cssBlock.'
+    
 
 </head>
 <body>
 
-    <h2 align="center"> Something Wrong Happen </h2>
-    <?php echo "<h1 align='center'> ".$data['code']."</h1>";  ?>
-
-    <a href="/" style="background-color: black;color: white;"> <h3 align="center">Back To Home</h3> </a>
+' ;
 
 
-        <div>
+$footerBlock = '</body></html>';
+
+$header = $header??'Something wrong happen..';
+$middle = $middle ?? '';
+$footer = $footer??'';
+$message = $data['message'] ?? '--Not Recoverable--';
+$code = $data['code'] ?? '--Not Recoverable--';
+$file = $data['file'] ?? '--Not Recoverable--';
+$line = $data['line'] ?? '--Not Recoverable--';
+$trace = $data['trace']?? '--Not Recoverable--';
+if(!$_SERVER['DEV_MODE']) {
+
+    $trace = '<div style="scroll-behavior: auto; border: black 4px solid"><h2 align="center">-: Traces :-</h2>' . $trace . '</div>';
+}else{
+    $trace='';
+}
+
+if($display)
+{
+    $headerBlock =$cssBlock;
+    $footerBlock='';
+}
+echo $headerBlock.'
+           <div class="exception">
+         <div class="error-div">
+            <h2 align="center">'.$header.'</h2> <h1 align="center"> '.$code.'</h1>
+            <p align="center">'.$middle.'</p>
+            <a href="/" style="background-color: black;color: white;"> <h3 align="center">Back To Home</h3> </a>
+
+
+        <div class="error-div">
             <table class="table table-striped table-dark">
                 <thead>
                 <tr>
@@ -107,45 +156,31 @@ header_remove('X-Powered-By');
                 <tr>
 
                     <td>Message : </td>
-                    <td><?php echo $data['message']; ?></td>
+                    <td>'.$message.'</td>
 
                 </tr>
                 <tr>
 
                     <td>Code : </td>
-                    <td> <?php echo $data['code']; ?> </td>
+                    <td>'.$code.'</td>
 
                 </tr>
                 <tr>
 
                     <td>Line : </td>
-                    <td> <?php echo $data['line']; ?> </td>
+                    <td> '.$line.'</td>
                 </tr>
 
                 <tr>
 
                     <td>File : </td>
-                    <td> <?php echo $data['file']; ?> </td>
+                    <td>'.$file.'</td>
                 </tr>
                 </tbody>
             </table>
-
-                <?php
-                if($_SERVER['DEV_MODE'])
-                {
-                    echo '<div style="scroll-behavior: auto; border: black 4px solid">';
-                    echo "<h2 align='center'>-: Traces :-</h2><pre>";
-                    print_r($data['trace']);
-                    echo "</pre>";
-                    echo "</div>";
-                }
-
-                ?>
-
-
         </div>
+        '.$trace.' <h5 align="center">'.$footer.'</h5>
+    </div>
+    </div>
 
-
-
-</body>
-</html>
+'.$footerBlock;

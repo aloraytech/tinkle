@@ -21,7 +21,8 @@ class CreateUsersMigration implements MigrationInterface
             'email'=> Column::string('email',50)->require()->finish(),
             'password'=> Column::string('password',512)->require()->finish(),
             'role'=> Column::string('role')->require()->finish(),
-            'created_at' => Column::timestamps('created_at')->require()->default()->current()->finish(),
+            'created_at' => Column::timestamps('created_at')->nullable()->default()->current()->finish(),
+            'updated_at' => Column::timestamps('updated_at')->require()->default()->current()->finish(),
             'status'=> Column::tinyInteger('status')->require()->finish(),
         ])->finish();
 

@@ -40,4 +40,10 @@ abstract class Plugins
         return Essential::$essential;
     }
 
+
+    public function updatePlatform(array $route)
+    {
+
+    }
+
 }

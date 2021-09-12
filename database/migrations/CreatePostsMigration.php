@@ -24,7 +24,8 @@ class CreatePostsMigration  implements MigrationInterface
             'id' => Column::bigIncrements('id')->require()->primaryKey()->autoIncrement()->finish(),
             'title'=> Column::string('title')->require()->finish(),
             'description'=> Column::text('description')->require()->finish(),
-            'created_at' => Column::timestamps('created_at')->require()->default()->current()->finish(),
+            'created_at' => Column::timestamps('created_at')->nullable()->default()->current()->finish(),
+            'updated_at' => Column::timestamps('updated_at')->require()->default()->current()->finish(),
             'status'=> Column::tinyInteger('status')->require()->finish(),
         ])->finish();
     }

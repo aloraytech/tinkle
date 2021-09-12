@@ -77,7 +77,7 @@ abstract class CoreException extends Exception implements IException
 
 
 
-    public function output(array $data)
+    protected function output(array $data=[],bool $display=true, string $header='',string $middle='',string $footer='')
     {
         if(is_array($data))
         {
@@ -93,17 +93,70 @@ abstract class CoreException extends Exception implements IException
             require_once __DIR__."/render_error.php";
             ob_flush();
 
-
-
         }
 
-        if($data['code'] === self::HTTP_SERVICE_UNAVAILABLE || $data['code'] === self::HTTP_FORBIDDEN)
-        {
-            die();
-        }
+
 
 
     }
+
+
+
+
+
+    /**
+     * @param bool $display
+     * @param string $header
+     * @param string $middle
+     * @param string $footer
+     */
+    final protected function RenderException (bool $display=true,string $header='',string $middle='',string $footer=''){
+
+        if (PHP_SAPI === 'cli')
+        {
+
+            echo "\e[92m ** WARNING - Error Found\n\e[0m";
+            echo $header;
+            echo "Message : ".$this->message."\n";
+            echo "Code : " . $this->codeToText($this->code) . "\n";
+            echo "Line : ". $this->line . "\n";
+            echo "File : ". $this->file . "\n";
+            echo $middle;
+            echo "Trace : " . $this->getTraceAsString() . "\n\n";
+            echo $footer;
+
+
+
+        }else{
+            $data = [
+                'message' => $this->message,
+                'code' => $this->code ?? $this->getCode(),
+                'line' => $this->line,
+                'file' => $this->file,
+                'trace' => $this->getTraceAsString()
+            ];
+
+            $this->output($data,$display,$header,$middle,$footer);
+        }
+
+        if(!$display)
+        {
+            die(503);
+        }
+
+
+
+
+    }
+
+
+
+
+
+
+
+
+
 
 
 
