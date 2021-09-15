@@ -36,14 +36,14 @@ class AppController extends Controller implements ControllerInterface
     {
 
 
-      //  echo "<h1>Welcome :</h1>";
+      echo "<h1>Welcome :</h1>";
 
-        $this->getMiddlewares();
-        $this->pageAttribute = ['title'=>'Homepage','favicon'=>'png','slogan'=>'Awesome'];
-
-        $userModel = new UsersModel();
-        $this->render('templateName')->withTheme('themeName')->withModules([$userModel]);
-        //$this->display();
+//        $this->getMiddlewares();
+//        $this->pageAttribute = ['title'=>'Homepage','favicon'=>'png','slogan'=>'Awesome'];
+//
+//        $userModel = new UsersModel();
+//        $this->render('templateName')->withTheme('themeName')->withModules([$userModel]);
+//        //$this->display();
 
        
 
@@ -175,18 +175,12 @@ class AppController extends Controller implements ControllerInterface
     public function load(Request $request, Response $response)
     {
 
-//        $_token = new Token();
-//        $_token->create();
-//        echo "<pre>";
-//        print_r($_token->getTokenBag());
 
 
-            echo "Hello";
+//            echo "Load methods";
+            return "Loading method For Api ";
 
 
-
-//        $this->setLayout('sample');
-//        $this->render('contact');
     }
 
 

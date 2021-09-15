@@ -11,6 +11,7 @@ use Tinkle\Library\Essential\Essential;
 use Tinkle\Request;
 use Tinkle\Response;
 use Tinkle\Tinkle;
+use Tinkle\View;
 
 class Dispatcher
 {
@@ -18,6 +19,8 @@ class Dispatcher
     protected array $routes=[];
     protected const DEFAULT_GROUP='_WEB';
     protected const DEFAULT_REDIRECT_GROUP='_REDIRECT';
+    protected const API_GROUP='_API';
+    protected const PLATFORM_GROUP='_PLATFORM';
     protected Request $request;
     protected Response $response;
     protected string $_current_url='';
@@ -49,224 +52,126 @@ class Dispatcher
 
 
 
-    public function dispatch(array $routes_group,array $platform_routes)
+    public function dispatch(array $routes_group)
     {
-        self::$platform = $platform_routes;
+
         $this->_groups = $routes_group;
 
-        if($this->match())
+        $matcher = new Matcher($routes_group,$this->_current_url,$this->_current_method);
+        $this->_current_route = $matcher->findOrFail();
+        if(!empty($this->_current_route))
         {
-            $this->send();
-        }
-    }
+            $currentGroup = $this->detectCurrentGroup();
 
-
-
-
-    protected function match()
-    {
-
-        $this->_current_route = $this->getMatchingCurrentRouteFromGroup($this->_groups);
-
-        if($this->_current_route != null)
-        {
-            foreach ($this->_current_route as $key => $value)
+            foreach ($this->_current_route as $route)
             {
-                if(is_array($value['callback']))
-                {
-                    foreach ($value as $v_key => $val)
-                    {
-                        if($v_key === 'param')
-                        {
-                            $this->_current_route[$key][$v_key] = $this->params;
-                        }
-                        if($v_key === 'callback')
-                        {
-                            self::$_callback =  $val;
-                        }
-                    }
-                }
-
-                if(is_object($value['callback']))
-                {
-
-
-                    if($value['callback'] instanceof \Closure)
-                    {
-
-                        self::$_closure =  \Closure::fromCallable($value['callback']);
-                        self::$_callback['callback'] = self::$_closure;
-                    }else{
-                        throw new Display("Route Found Black Hole",Display::HTTP_SERVICE_UNAVAILABLE);
-                    }
-
-
-
-
-
-                    if(is_array($value['param']))
-                    {
-                        foreach ($value as $v_key => $val)
-                        {
-                            if($v_key === 'param')
-                            {
-                                $this->_current_route[$key][$v_key] = $this->params;
-                                $this->_current_route[$key]['callback'] = self::$_closure;
-                                self::$_callback['param'] = $this->params;
-                            }
-
-                        }
-                    }
+                switch ($currentGroup) {
+                    case self::API_GROUP:
+                        $this->apiDispatcher($route);
+                        break;
+                    case self::PLATFORM_GROUP:
+                        $this->platformDispatcher($route);
+                        break;
+                    case self::DEFAULT_REDIRECT_GROUP:
+                        $this->redirectDispatcher($route);
+                        break;
+                    default:
+                        $this->groupDispatcher($route);
                 }
 
             }
 
-            return true;
+
+
+        }else{
+            throw new Display('Request Not Found',Display::HTTP_SERVICE_UNAVAILABLE);
         }
-        return false;
+
 
     }
 
 
 
 
-
-
-    protected function getMatchingCurrentRouteFromGroup(array $groups)
+    private function detectCurrentGroup()
     {
-        if(is_array($groups))
+        if(!empty($this->_current_route))
         {
-
-            // Filter According Request Method Like GET, POST,PUT etc.
-            if(array_key_exists($this->_current_method,$groups))
+            foreach ($this->_current_route as $uri => $value)
             {
-                // Now Only Take Matched Method Group From All Groups
-                $availableRoutes = $groups[$this->_current_method];
-                // Now Check Any Group Name Exist As Namespace
-                $urlParts = $this->getParts();
-
-                if(array_key_exists(strtoupper($urlParts[0]),$availableRoutes))
-                {
-                    // Lets step forward [GROUP CALL]
-                    $availableRoutes = $groups[$this->_current_method][strtoupper($urlParts[0])];
-                    $this->_current_route = $this->getCurrentRoute($availableRoutes);
-
-                    return $this->_current_route;
-
-                }else{
-
-                    // LETS STEP FORWARD [_WEB CALL]
-                    if(isset($groups[$this->_current_method][self::DEFAULT_GROUP]))
-                    {
-                        $availableRoute = $groups[$this->_current_method][self::DEFAULT_GROUP];
-
-
-                        if(empty($this->getCurrentRoute($availableRoute)))
-                        {
-
-                            if(isset($groups[$this->_current_method][self::DEFAULT_REDIRECT_GROUP]))
-                            {
-                                $availableRoutes = $groups[$this->_current_method][self::DEFAULT_REDIRECT_GROUP];
-
-                                $this->_current_route = $this->getCurrentRoute($availableRoutes);
-                            }
-
-                        }else{
-                            $this->_current_route = $this->getCurrentRoute($availableRoute);
-                        }
-                    }else{
-                        if(empty($this->_current_route))
-                        {
-
-                            if(isset($groups[$this->_current_method][self::DEFAULT_REDIRECT_GROUP]))
-                            {
-
-                                $availableRoutes = $groups[$this->_current_method][self::DEFAULT_REDIRECT_GROUP];
-                                //dd($availableRoutes);
-                                $this->_current_route = $this->getCurrentRoute($availableRoutes);
-
-                                foreach ($availableRoutes as $key => $value)
-                                {
-                                    foreach ($this->_current_route as $_key => $_value)
-                                    {
-                                        if($_key === $key)
-                                        {
-                                            $this->_current_route[$_key]['param'] = $value['param'];
-                                        }
-                                    }
-
-                                }
-                                self::$dispatchType = 1;
-
-                            }
-
-                        }
-
-                    }
-
-                        return $this->_current_route;
-
-
-                }
-
-                return null;
-
+               return $value['group'];
             }
         }
     }
 
 
-
-    protected function getCurrentRoute($availableRoutes)
+    protected function apiDispatcher(array $route)
     {
         try{
+            $callback = $route['callback'];
+            if(is_object($callback))
+            {
+                $this->lambdaDispatcher($route);
+            }elseif(is_string($callback)){
+                $this->defaultDispatcher($route);
+            }elseif($callback === false){
+                throw new Display('Request Not Found',404);
+            }else{
 
-            if(is_array($availableRoutes))
+                if(is_array($callback))
+                {
+                    if($route['callback'][0] instanceof \Closure)
+                    {
+                        $this->lambdaDispatcher($route);
+                    }else{
+                        // Create Controller Instance
+                        /** @var \App\Controllers $controller */
+                        $controller= new $callback[0]();
+                        Tinkle::$app->controller = $controller;
+                        $controller->action = $callback[1];
+                        $callback[0] = $controller;
+
+                        //Check For Middlewares
+                        foreach($controller->getMiddlewares() as $middleware)
+                        {
+                            $middleware->execute();
+                        }
+
+                        $result = call_user_func($callback,$this->request,$this->response);
+                        if(!empty($result))
+                        {
+                            //RETURN RESULT OR DISPLAY AS JSON RESPONSE
+                            echo json_encode($result);
+                        }else{
+                            throw new Display('Api Have No Return Value As Result',Display::HTTP_SERVICE_UNAVAILABLE);
+                        }
+
+                    }
+                }
+            }
+
+
+        }catch (Display $e)
+        {
+            $e->Render();
+        }
+
+
+
+    }
+
+    protected function platformDispatcher(array $route)
+    {
+        try{
+            if(empty($route['callback']))
             {
 
-                foreach ($availableRoutes as $uri => $route)
+                if(!empty($route['mask']))
                 {
-                    if(is_array($route))
-                    {
-
-                        if(preg_match($uri,$this->_current_url,$matches))
-                        {
-
-                            $this->_current_route [$uri] = $route;
-                            $params = [];
-                            foreach ($matches as $_key => $match) {
-                                if (is_string($_key)) {
-                                    $params[$_key] = $match;
-                                }
-
-                            }
-
-                            $this->params = $params;
-                            $this->_current_route [$uri]['param'] = $this->params;
-                        }
-                    }
-
+                    $platformObject = new Platform($this->request,$this->response,$route['mask']);
+                    $platformObject->resolve();
                 }
-
-
-
-                if(!empty($this->_current_route))
-                {
-                    return $this->_current_route;
-                }else{
-                    // Platform Routes
-                    if($this->foundInPlatform())
-                    {
-                        $this->sendToPlatform();
-                    }else{
-
-                        throw new Display("No Root Found",Display::HTTP_SERVICE_UNAVAILABLE);
-                    }
-
-                }
-
             }
-            return null;
 
 
         }catch (Display $e)
@@ -277,10 +182,121 @@ class Dispatcher
 
 
 
-    protected function getParts()
+    protected function redirectDispatcher(array $route)
     {
-        return explode('/',$this->_current_url);
+        try{
+            $callback = $route['callback'];
+            if(is_object($callback))
+            {
+                $this->lambdaDispatcher($route);
+            }elseif(is_string($callback)){
+                $this->defaultDispatcher($route);
+            }elseif($callback === false){
+                throw new Display('Request Not Found',404);
+            }else{
+
+                if(empty($callback))
+                {
+                    if(!empty($route['redirectTo']) && !empty($route['redirectStatus']))
+                    {
+                        Tinkle::$app->response->redirect($route['redirectTo'],$route['redirectStatus']);
+                    }else{
+                        throw new Display('Redirection For This URL  Is Wrongly Configured',Display::HTTP_SERVICE_UNAVAILABLE);
+                    }
+
+                }
+            }
+
+
+        }catch (Display $e)
+        {
+            $e->Render();
+        }
     }
+
+
+
+
+
+
+    protected function groupDispatcher(array $route)
+    {
+
+        try{
+            $callback = $route['callback'];
+            if(is_object($callback))
+            {
+                $this->lambdaDispatcher($route);
+            }elseif(is_string($callback)){
+                $this->defaultDispatcher($route);
+            }elseif($callback === false){
+                throw new Display('Request Not Found',404);
+            }else{
+
+                if(is_array($callback))
+                {
+                    if($route['callback'][0] instanceof \Closure)
+                    {
+                        $this->lambdaDispatcher($route);
+                    }else{
+                        // Create Controller Instance
+                        /** @var \App\Controllers $controller */
+                        $controller= new $callback[0]();
+                        Tinkle::$app->controller = $controller;
+                        $controller->action = $callback[1];
+                        $callback[0] = $controller;
+
+                        //Check For Middlewares
+                        foreach($controller->getMiddlewares() as $middleware)
+                        {
+                            $middleware->execute();
+                        }
+
+                        return call_user_func($callback,$this->request,$this->response);
+                    }
+                }
+            }
+
+
+        }catch (Display $e)
+        {
+            $e->Render();
+        }
+
+    }
+
+
+
+
+
+    protected function defaultDispatcher(array $route)
+    {
+        if(is_string($route['callback']))
+        {
+            return Tinkle::$app->view->render::display($route['callback']);
+        }
+    }
+
+
+    protected function lambdaDispatcher(array $route)
+    {
+
+        $callback = $route['callback'];
+        if($callback[0] instanceof \Closure)
+        {
+            $cloner = new Cloner($callback);
+            return $cloner->resolve($route['param']??[]);
+
+        }
+    }
+
+
+
+
+
+
+
+
 
 
 
@@ -364,33 +380,7 @@ class Dispatcher
 
     }
 
-    private function foundInPlatform()
-    {
 
-        if(isset(self::$platform[$this->_current_method]))
-        {
-            $platformRoutes = self::$platform[$this->_current_method];
-            foreach ($platformRoutes as $uri =>$namedRoute)
-            {
-                if(preg_match("$uri",$this->_current_url,$matches))
-                {
-                    $this->_current_platform = $namedRoute;
-                    return true;
-                }else{
-                    return false;
-                }
-            }
-        }
-    }
-
-    private function sendToPlatform()
-    {
-        if(!empty($this->_current_platform))
-        {
-            $platformObject = new Platform($this->request,$this->response,$this->_current_platform);
-            $platformObject->resolve();
-        }
-    }
 
 
 }

@@ -5,6 +5,7 @@ namespace Tinkle\Library\Router;
 
 use http\Exception;
 use Tinkle\Exceptions\Display;
+use Tinkle\Library\Http\DomDocumentHandler;
 
 class Router
 {
@@ -20,7 +21,9 @@ class Router
     protected static array $_param=[];
     protected const DEFAULT_GROUP='_WEB';
     protected const DEFAULT_REDIRECT_GROUP='_REDIRECT';
-    protected Platform $platform;
+    protected const API_GROUP='_API';
+    protected const PLATFORM_GROUP='_PLATFORM';
+    //protected Platform $platform;
     public static Router $router;
 
     /**
@@ -36,6 +39,8 @@ class Router
         self::$_param = [];
         self::$router = $this;
 
+
+
     }
 
     public function setGroup(string $group)
@@ -44,59 +49,55 @@ class Router
     }
 
 
-    public function updatePlatform(string $uri, string $musk_name,string $method)
+
+
+
+
+    public function add(string $uri,string $method, array|object|string $callback=[],bool $auth=false,string $redirectTo='',int $redirectStatusCode=null,string $musk_name='')
     {
-        if(isset(self::$platformRoutes[$method][$uri]))
+
+        if(strtoupper($this->group) === self::API_GROUP)
         {
-            unset(self::$platformRoutes[$method][$uri]);
-            self::$platformRoutes[$method][$this->buildUri($uri)] = $musk_name;
-        }else{
-            self::$platformRoutes[$method][$this->buildUri($uri)] = $musk_name;
-        }
-    }
+            $this->routes[$method][$this->group][$this->buildUri('api/'.$uri)] ['callback'] = $this->buildCallback($callback);
+            $this->routes[$method][$this->group][$this->buildUri('api/'.$uri)] ['param'] = self::$_param;
+            $this->routes[$method][$this->group][$this->buildUri('api/'.$uri)] ['redirectTo'] = $redirectTo;
+            $this->routes[$method][$this->group][$this->buildUri('api/'.$uri)] ['redirectStatus'] = $redirectStatusCode;
+            $this->routes[$method][$this->group][$this->buildUri('api/'.$uri)] ['mask'] = $musk_name ??$this->masking($uri);
+            $this->routes[$method][$this->group][$this->buildUri('api/'.$uri)] ['auth'] = $auth;
+            $this->routes[$method][$this->group][$this->buildUri('api/'.$uri)] ['group'] = strtoupper($this->group);
 
-    public static function getPlatform(string $method='')
-    {
-        if(empty($method))
-        {
-            return self::$platformRoutes;
-        }else{
-            if(isset(self::$platformRoutes[$method]))
-            {
-                return self::$platformRoutes[$method];
-            }
-        }
-
-
-    }
-
-
-
-
-    public function add(string $uri, array|object $callback,string $method)
-    {
-
-
-
-        if(strtoupper($this->group) === self::DEFAULT_GROUP)
+        }elseif (strtoupper($this->group) === self::PLATFORM_GROUP || strtoupper($this->group) === self::DEFAULT_GROUP || strtoupper($this->group) === self::DEFAULT_REDIRECT_GROUP)
         {
             $this->routes[$method][$this->group][$this->buildUri($uri)] ['callback'] = $this->buildCallback($callback);
             $this->routes[$method][$this->group][$this->buildUri($uri)] ['param'] = self::$_param;
-        }elseif (strtoupper($this->group) === self::DEFAULT_REDIRECT_GROUP)
-        {
-            $this->routes[$method][$this->group][$this->buildUri($uri)] ['callback'] = $callback[0];
-            $this->routes[$method][$this->group][$this->buildUri($uri)] ['param'] = $callback[1];
-
+            $this->routes[$method][$this->group][$this->buildUri($uri)] ['redirectTo'] = $redirectTo;
+            $this->routes[$method][$this->group][$this->buildUri($uri)] ['redirectStatus'] = $redirectStatusCode;
+            $this->routes[$method][$this->group][$this->buildUri($uri)] ['mask'] = $musk_name ??$this->masking($uri);
+            $this->routes[$method][$this->group][$this->buildUri($uri)] ['auth'] = $auth;
+            $this->routes[$method][$this->group][$this->buildUri($uri)] ['group'] = strtoupper($this->group);
         }else{
             $this->routes[$method][$this->group][$this->buildUri(strtolower($this->group).'/'.$uri)] ['callback'] = $this->buildCallback($callback);
             $this->routes[$method][$this->group][$this->buildUri(strtolower($this->group).'/'.$uri)] ['param'] = self::$_param;
+            $this->routes[$method][$this->group][$this->buildUri(strtolower($this->group).'/'.$uri)] ['redirectTo'] = $redirectTo;
+            $this->routes[$method][$this->group][$this->buildUri(strtolower($this->group).'/'.$uri)] ['redirectStatus'] = $redirectStatusCode;
+            $this->routes[$method][$this->group][$this->buildUri(strtolower($this->group).'/'.$uri)] ['mask'] = $musk_name ?? $this->masking($uri);
+            $this->routes[$method][$this->group][$this->buildUri(strtolower($this->group).'/'.$uri)] ['auth'] = $auth;
+            $this->routes[$method][$this->group][$this->buildUri(strtolower($this->group).'/'.$uri)] ['group'] = strtoupper($this->group);
 
         }
+
 
 
         return $this->routes;
     }
 
+
+
+    private function masking(string $name)
+    {
+        $name = str_replace('/','.',str_replace('{','',str_replace('}','',$name)));
+        return $name;
+    }
 
 
 
@@ -164,7 +165,7 @@ class Router
 
 
 
-    protected function buildCallback(array|object $callback)
+    protected function buildCallback(array|object|string $callback)
     {
         if(!empty($callback))
         {
@@ -197,6 +198,11 @@ class Router
                     // Sending Closure Callback To Execute As it Is...
                     return $callback;
 
+                }else{
+                    if(is_string($callback))
+                    {
+                        return $callback;
+                    }
                 }
                 return false;
             }
