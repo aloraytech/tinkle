@@ -25,7 +25,8 @@ abstract class SessionHandler
     {
 
         $this->session = new SymfonySession(new NativeSessionStorage($this->preDefineOptions()), new AttributeBag());
-        $this->dbSession = new PdoSessionHandler(Tinkle::$app->db->getConnect(),$this->preDefineSessionDBStorageOptions());
+
+        //$this->dbSession = new PdoSessionHandler(Tinkle::$app->db->getConnect(),$this->preDefineSessionDBStorageOptions());
 
         if($this->createSessionTableInDB())
         {
@@ -164,45 +165,45 @@ abstract class SessionHandler
     // SESSION DB STORAGE
 
 
-
-    public function setRecord(string $_key,string|array|int $_record)
-    {
-         $this->dbSession->open(Tinkle::$app->db->getConnect(),$this->getSessionName());
-         $this->dbSession->write($_key,json_encode($_record));
-         $this->dbSession->close();
-    }
-
-
-    public function getRecord(string $_key)
-    {
-        $this->dbSession->open(Tinkle::$app->db->getConnect(),$this->getSessionName());
-        $data = $this->dbSession->read($_key);
-        $this->dbSession->close();
-        return $data;
-    }
-
-    public function hasRecord(string $_key)
-    {
-        $this->dbSession->open(Tinkle::$app->db->getConnect(),$this->getSessionName());
-        if($this->dbSession->validateId($_key))
-        {
-            $this->dbSession->close();
-            return true;
-        }
-        $this->dbSession->close();
-        return false;
-    }
-
-    public function removeRecord(string $_key)
-    {
-        return $this->dbSession->destroy($_key);
-    }
-
-    public function updateRecord(string $_key,string|array|int $_value)
-    {
-        return $this->dbSession->updateTimestamp($_key,json_encode($_value));
-    }
-
+//
+//    public function setRecord(string $_key,string|array|int $_record)
+//    {
+//         $this->dbSession->open(Tinkle::$app->db->getConnect(),$this->getSessionName());
+//         $this->dbSession->write($_key,json_encode($_record));
+//         $this->dbSession->close();
+//    }
+//
+//
+//    public function getRecord(string $_key)
+//    {
+//        $this->dbSession->open(Tinkle::$app->db->getConnect(),$this->getSessionName());
+//        $data = $this->dbSession->read($_key);
+//        $this->dbSession->close();
+//        return $data;
+//    }
+//
+//    public function hasRecord(string $_key)
+//    {
+//        $this->dbSession->open(Tinkle::$app->db->getConnect(),$this->getSessionName());
+//        if($this->dbSession->validateId($_key))
+//        {
+//            $this->dbSession->close();
+//            return true;
+//        }
+//        $this->dbSession->close();
+//        return false;
+//    }
+//
+//    public function removeRecord(string $_key)
+//    {
+//        return $this->dbSession->destroy($_key);
+//    }
+//
+//    public function updateRecord(string $_key,string|array|int $_value)
+//    {
+//        return $this->dbSession->updateTimestamp($_key,json_encode($_value));
+//    }
+//
 
 
 
@@ -226,18 +227,18 @@ abstract class SessionHandler
 
     public function createSessionTableInDB()
     {
-         Tinkle::$app->db->query("SHOW TABLES LIKE 'sessions'");
-        $result = Tinkle::$app->db->resultSet();
-        if(!empty($result))
-        {
-            $has = 1;
-        }else{
-            $has = 0;
-        }
-        if(!$has)
-        {
-            $this->dbSession->createTable();
-        }
+//         Tinkle::$app->db->query("SHOW TABLES LIKE 'sessions'");
+//        $result = Tinkle::$app->db->resultSet();
+//        if(!empty($result))
+//        {
+//            $has = 1;
+//        }else{
+//            $has = 0;
+//        }
+//        if(!$has)
+//        {
+//            $this->dbSession->createTable();
+//        }
         return true;
     }
 

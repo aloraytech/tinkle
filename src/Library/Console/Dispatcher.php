@@ -90,7 +90,7 @@ class Dispatcher
                    $callback[0]=$instance;
                    $callback[1]=$this->methodPart;
                    $param = implode(',',$this->parameterPart);
-
+                   echo "Searching... \n"; sleep(2);
                    return call_user_func($callback,$param);
                }else{
                    throw new Display('This Tinkle Command Is Not Available');

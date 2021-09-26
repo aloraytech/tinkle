@@ -2,6 +2,7 @@
 
 namespace App\Controllers;
 
+use App\Models\UsersModel;
 use Tinkle\Controller;
 
 
@@ -17,6 +18,16 @@ class ApiController extends Controller implements ControllerInterface
 {
 
 
+    public function users()
+    {
+        $userModel = new UsersModel();
+
+       $this->result([
+           'userModel'=>$userModel
+       ]);
+
+
+    }
 
 
 

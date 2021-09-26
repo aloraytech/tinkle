@@ -2,14 +2,23 @@
 
 namespace App\Controllers;
 
+use App\App;
 use App\middlewares\AppMiddleware;
+use App\Models\PostsModel;
 use App\models\UsersModel;
 
+use Database\migrations\CreatePostsMigration;
 use Tinkle\Controller;
+use Tinkle\Database\DBAccess;
+use Tinkle\Database\Migration\Blueprint;
+use Tinkle\Database\Migration\Column;
+use Tinkle\Database\Migration\Schema;
 use Tinkle\Event;
 use Tinkle\Framework;
 use Tinkle\interfaces\ControllerInterface;
 use Tinkle\Library\Console\Console;
+use Tinkle\Library\Console\ConsoleHandler;
+use Tinkle\Library\Faker\Faker;
 use Tinkle\Library\Render\Engine\Engine;
 use Tinkle\Library\Render\Engine\Native\NativeEngine;
 use Tinkle\Middlewares\AuthMiddleware;
@@ -34,18 +43,55 @@ class AppController extends Controller implements ControllerInterface
 
     public function home(Request $request, Response $response)
     {
+            echo "<h1>HOMEPAGE</h1>";
 
 
-      echo "<h1>Welcome :</h1>";
+
+//        $post = new PostsModel();
+
+       dd($app = ConsoleHandler::dbMigrate());
+
+
+
+
+
+
+
+
+//        $this->title = 'homepage';
+//        $this->description = 'custom web app maker';
+//
+//      echo "<h1>Welcome :</h1>";
+
+
+
+
+
+
+
+
+
 
 //        $this->getMiddlewares();
 //        $this->pageAttribute = ['title'=>'Homepage','favicon'=>'png','slogan'=>'Awesome'];
 //
-//        $userModel = new UsersModel();
+        $userModel = new UsersModel();
 //        $this->render('templateName')->withTheme('themeName')->withModules([$userModel]);
 //        //$this->display();
 
-       
+        //View::render('front.index','master')->withModules($userModel)->withHeader()->withExternal()->cssHost(true,'blogger.com,pink.com')->applyExternal()->applyHeader()->display();
+
+        //$this->render('index','default')->withModules($userModel)->display();
+
+        //View::display($userModel);
+
+
+//        Schema::create('flights', function (Blueprint $table) {
+//            $table->id();
+//            $table->string('name');
+//            $table->string('airline');
+//            $table->timestamps();
+//        });
 
 
 
@@ -61,7 +107,10 @@ class AppController extends Controller implements ControllerInterface
 
 
 
-
+    public function check(\Closure $given)
+    {
+        dd($given);
+    }
 
 
 

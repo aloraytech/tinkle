@@ -39,10 +39,11 @@ class Database
     public function __construct(array $config)
     {
         self::$config = $config;
+
         $this->driver = self::$config['driver'] ?? '';
         $this->dsn = self::$config['dsn'] ?? '';
         $this->host = self::$config['host'] ?? '';
-        $this->port = self::$config['port'] ?? '';
+        $this->port = self::$config['port'] ?? 0;
         $this->name = self::$config['name'] ?? '';
         $this->user = self::$config['user'] ?? '';
         $this->password = self::$config['password'] ?? '';
@@ -166,6 +167,14 @@ class Database
 
     private function matchDriver()
     {
+//       if(!empty(self::$config['driver']))
+//       {
+//           $appDriver[] = self::$config['driver'];
+//       }else{
+//           echo "Not Found Driver";
+//       }
+
+
         if(array_intersect(PDO::getAvailableDrivers(),self::$availableDrivers,self::$config))
         {
             return true;

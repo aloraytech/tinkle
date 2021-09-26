@@ -73,9 +73,9 @@ class Cloner
         try{
             if($this->prepare())
             {
-                $this->run(true);
+                return $this->run(true);
             }else{
-                $this->run(false);
+                return $this->run(false);
 //                throw new Display("Closer Not Resolve Successfully",Display::HTTP_SERVICE_UNAVAILABLE);
             }
 
@@ -139,9 +139,9 @@ class Cloner
 
             if($case)
             {
-                call_user_func($this->cloner,$this->parameter);
+                return call_user_func($this->cloner,$this->parameter);
             }else{
-                $this->prepareCloser();
+                return $this->prepareCloser();
             }
 
         }catch (Display $e)
@@ -170,12 +170,12 @@ class Cloner
 
                $this->closer = $this->cloner->bindTo($this->reference);
 
-               call_user_func($this->closer,$this->reference);
+               return call_user_func($this->closer,$this->reference);
 
            }else{
                if(!empty($this->parameter))
                {
-                   call_user_func($this->cloner,implode(',',$this->parameter));
+                   return call_user_func($this->cloner,implode(',',$this->parameter));
                }else{
                    throw new Display("Closure Must have Same properties with Uri. Unsupported Closure Function",Display::HTTP_SERVICE_UNAVAILABLE);
                }

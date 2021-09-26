@@ -4,6 +4,7 @@
 namespace Tinkle\Library\Console\Application\Models\DB;
 
 
+use Tinkle\Exceptions\Display;
 use Tinkle\Library\Console\ConsoleModel;
 use Tinkle\Library\Logger\Logger;
 
@@ -57,9 +58,9 @@ class MigrationModel extends ConsoleModel
      */
     public function createMigrations(string $tableDetails)
     {
+
         if(!empty($tableDetails) && is_string($tableDetails))
         {
-
             if($this->pdo->exec($tableDetails))
             {
                 return true;
@@ -67,10 +68,25 @@ class MigrationModel extends ConsoleModel
                 Logger::Logit( "Unknown PDO Error :-\n Code :00000  \nDetails :\n $tableDetails",false);
                 return false;
             }
+
+
         }else{
             return false;
         }
     }
+
+
+    private function fire(string $query)
+    {
+
+    }
+
+
+
+
+
+
+
 
 
     public function saveMigrations(array $migrations)

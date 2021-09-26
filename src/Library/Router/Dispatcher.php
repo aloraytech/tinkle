@@ -58,7 +58,7 @@ class Dispatcher
         $this->_groups = $routes_group;
 
         $matcher = new Matcher($routes_group,$this->_current_url,$this->_current_method);
-        $this->_current_route = $matcher->findOrFail();
+        $this->_current_route = $matcher->findOrFail() ??[];
         if(!empty($this->_current_route))
         {
             $currentGroup = $this->detectCurrentGroup();
@@ -137,11 +137,12 @@ class Dispatcher
                             $middleware->execute();
                         }
 
-                        $result = call_user_func($callback,$this->request,$this->response);
+                         call_user_func($callback,$this->request,$this->response);
+                        $result = $callback[0]->getResult();
                         if(!empty($result))
                         {
-                            //RETURN RESULT OR DISPLAY AS JSON RESPONSE
-                            echo json_encode($result);
+                            //SEND RESULT OR DISPLAY AS JSON RESPONSE
+                            $this->response->sendJson($result);
                         }else{
                             throw new Display('Api Have No Return Value As Result',Display::HTTP_SERVICE_UNAVAILABLE);
                         }

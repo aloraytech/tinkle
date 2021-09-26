@@ -4,7 +4,7 @@
 namespace Database\seeders;
 
 
-use Tinkle\Database\Migrations\Seeder;
+use Tinkle\Database\Migration\Seeder;
 use Tinkle\Library\Encryption\Hash;
 use Tinkle\Token;
 

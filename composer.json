@@ -34,7 +34,8 @@
         "twig/twig": "^3.3",
       "ext-password": "*",
       "ext-json": "*",
-      "ext-gd": "*"
+      "ext-gd": "*",
+      "ext-pdo": "*"
     },
     "minimum-stability": "dev"
 }

@@ -8,6 +8,7 @@ use Database\DatabaseSeeder;
 use Tinkle\Library\Console\ConsoleController;
 use Tinkle\Library\Console\Application\Models\DB\MigrationModel;
 use Tinkle\Library\Console\Application\Models\DB\SeederModel;
+use Tinkle\Tinkle;
 
 class DB extends ConsoleController
 {
@@ -75,9 +76,9 @@ class DB extends ConsoleController
             {
                 if($this->migrationModel->drop($table))
                 {
-                    echo "\n $key : Drop $table Table From Database";
+                    echo "\n $key : Drop $table Table From DBConfig";
                 }else{
-                    echo "db".$this->pattern."reset process failed when reset Database";
+                    echo "db".$this->pattern."reset process failed when reset DBConfig";
                 }
             }
 
@@ -85,15 +86,15 @@ class DB extends ConsoleController
         {
             if($this->migrationModel->drop($tableName))
             {
-                echo "\n Drop $tableName Table From Database";
+                echo "\n Drop $tableName Table From DBConfig";
             }else{
                 echo "db".$this->pattern."DB reset process failed2";
             }
         }else{
-            echo "db".$this->pattern."Database reset process";
+            echo "db".$this->pattern."DBConfig reset process";
         }
 
-        echo "\nDatabase Reset Process Complete...\n";
+        echo "\nDBConfig Reset Process Complete...\n";
 
     }
 
@@ -183,22 +184,204 @@ class DB extends ConsoleController
     {
         // Check And Load All Migration Files
         $classList = $this->getAllMigrationClasses();
+
         // Check And Load All Sql Queries From Migration Files
         $queryList = $this->getQueryFromMigrationFiles($classList);
         $newMigrations = [];
-
+        //dd($queryList);
+        $readyMigration=[];
+        $pendingMigration=[];
         foreach ($queryList as $query)
         {
-            if($this->migrationModel->createMigrations($query['up']))
+            // fILE nAME
+            $migrationFileName = $query['file'];
+            // Check for Up Queries
+
+            if(isset($query['up']))
             {
-                if(!empty($query['alter']))
+                $upQuery = explode(';',$query['up']); // This Delimiter must have one for qualify db query
+                if(preg_match('/^CREATE/',$upQuery[0],$matches))
                 {
-                    $this->migrationModel->createMigrations($query['alter']);
+                    if(!empty($matches))
+                    {
+                        $readyMigration[$migrationFileName][] = $upQuery[0];
+                    }
+
                 }
 
+                unset($upQuery[0]);
+
+                if(!empty($upQuery))
+                {
+                    foreach ($upQuery as $qkey => $qva)
+                    {
+
+                        if(!empty($qva))
+                        {
+
+                            if(isset($pendingMigration[$migrationFileName]))
+                            {
+                                foreach ($pendingMigration as $pKey => $pending)
+                                {
+                                    if($pending != $qva)
+                                    {
+                                        if(preg_match('/^ALTER/',$qva,$matches))
+                                        {
+                                            if(!empty($matches))
+                                            {
+                                                $pendingMigration[$migrationFileName][]=$qva;
+                                            }
+                                        }
+
+                                    }
+                                }
+                            }else{
+                                if(preg_match('/^ALTER/',$qvas,$matches))
+                                {
+                                    if(!empty($matches))
+                                    {
+                                        $pendingMigration[$migrationFileName][]=$qvas;
+                                    }
+                                }
+                            }
+
+                        }
+
+                    }
+                }
             }
-            $newMigrations[] = $query['file'];
+
+
+            if(isset($query['alter']))
+            {
+                $altQuery = explode(';',$query['up']); // This Delimiter must have one for qualify db query
+                foreach ($altQuery as $qkey => $qvas)
+                {
+                    if(!empty($qvas))
+                    {
+                        if(!empty($qvas))
+                        {
+
+                            if(isset($pendingMigration[$migrationFileName]))
+                            {
+                                foreach ($pendingMigration as $pKey => $pending)
+                                {
+                                    if($pending != $qvas)
+                                    {
+                                        if(preg_match('/^ALTER/',$qvas,$matches))
+                                        {
+                                            if(!empty($matches))
+                                            {
+                                                $pendingMigration[$migrationFileName][]=$qvas;
+                                            }
+                                        }
+                                    }
+                                }
+                            }else{
+                                if(preg_match('/^ALTER/',$qvas,$matches))
+                                {
+                                    if(!empty($matches))
+                                    {
+                                        $pendingMigration[$migrationFileName][]=$qvas;
+                                    }
+                                }
+                            }
+
+                        }
+                    }
+                }
+            }
+
+
+
         }
+
+
+        // NOW WE GET FILTERED QUERY FOR OUR DATABASE
+        // SO, RUN THEM
+        // Now We Seperated All CREATE AND ALTER CALLS AND STORE THEM IN $readyMigration AND $pendingMigration
+
+        // Take Necessary Action For $readyMigration
+
+//        dd($readyMigration,'','','Ready Migration');
+//        dd($pendingMigration,'','','Pending Migration');
+
+
+
+        $Bag=[];
+        if(!empty($readyMigration))
+        {
+            if(is_array($readyMigration))
+            {
+                foreach ($readyMigration as $key=> $migration)
+                {
+                    if(!empty($migration[0]))
+                    {
+                        if($this->migrationModel->createMigrations($migration[0]))
+                        {
+                         continue;
+                        }
+                        $Bag[] = $key;
+                    }
+                    unset($readyMigration[$key]);
+                }
+            }
+        }
+
+
+
+        if(empty($readyMigration) && !empty($pendingMigration))
+        {
+            if(is_array($pendingMigration))
+            {
+                foreach ($pendingMigration as $key=> $migration)
+                {
+                    if(is_array($migration))
+                    {
+                        foreach ($migration as $migrate)
+                        {
+                            if(!empty($migrate))
+                            {
+                                if($this->migrationModel->createMigrations($migrate))
+                                {
+                                    continue;
+                                }
+                            }
+                        }
+                    }
+
+                    unset($pendingMigration[$key]);
+
+                }
+            }
+        }
+
+
+
+
+        // Take Record Of Current Query
+
+        if(!empty($Bag))
+        {
+            foreach ($Bag as $key =>$value)
+            {
+                if(!in_array($key,$newMigrations,true))
+                {
+                    $newMigrations[] = $value;
+                }
+            }
+        }
+
+//        $newMigrations[] = $query['file'];
+
+
+
+
+
+
+
+
+
 
         if (!empty($newMigrations)) {
 
@@ -229,6 +412,14 @@ class DB extends ConsoleController
         foreach ($toApplyMigrations as $migration)
         {
             $_fileName = str_replace(".php",'',$migration);
+//            require_once Tinkle::$ROOT_DIR."database/migrations/".$migration;
+//            $className = pathinfo($_fileName,PATHINFO_FILENAME);
+//
+//            dd($_fileName);
+//
+//            dd($className,'pink');
+
+
             $_tempObject = "\\Database\migrations\\".$_fileName;
             $_instance = array_values(class_implements(new $_tempObject));
             $classList [] =[
@@ -266,18 +457,47 @@ class DB extends ConsoleController
     {
 
         $_details = [];
-        foreach ($classList as $migration)
+        foreach ($classList as $key => $migration)
         {
 
             $object = new $migration['class'];
-            $_details[] = [
-                'file' => $migration['details']['basename'],
-                'up' => $object->up(),
-                'alter' => $object->alter(),
-                'down'=> $object->down(),
-            ];
+//            if($object->up())
+//            {
+//                $_details[0] = ['file' => $migration['details']['basename']??'',];
+//                if($object->alter())
+//                {
+//                    if($object->down())
+//                    {
+//
+//                    }
+//                }
+//            }
+
+                $object->up();
+                $up = $object->getUp()??'';
+
+                $object->alter();
+                $alt = $object->getAlter()??'';
+
+                $object->down();
+                $dwn = $object->getDown()??'';
+
+
+
+
+                $_details[] = [
+                    'file' => $migration['details']['basename']??'',
+                    'up' => $up,
+                    'alter' => $alt,
+                    'down'=> $dwn,
+                    'code'=>$object->generate_code(),
+                ];
+
+
+
 
         }
+
         return $_details;
 
     }

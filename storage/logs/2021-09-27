@@ -1,0 +1,193 @@
+[2021-09-27 00:00:54] - Unknown PDO Error :-
+ Code :00000  
+Details :
+ CREATE TABLE IF NOT EXISTS `users`( `id` BIGINT(21) AUTO_INCREMENT PRIMARY KEY, `username` VARCHAR(255) NULL, `email` VARCHAR(24) NOT NULL ,`created_at` TIMESTAMP NOT NULL ,`updated_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP) ENGINE = InnoDB
+[2021-09-27 00:00:54] - Unknown PDO Error :-
+ Code :00000  
+Details :
+ CREATE TABLE IF NOT EXISTS `posts`( `id` BIGINT(21) AUTO_INCREMENT PRIMARY KEY, `title` VARCHAR(255) NULL, `description` VARCHAR(255) NOT NULL, `author_id` BIGINT(21) NOT NULL, `category_id` BIGINT(21) NOT NULL ,`created_at` TIMESTAMP NOT NULL ,`updated_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP) ENGINE = InnoDB
+[2021-09-27 00:00:54] - Unknown PDO Error :-
+ Code :00000  
+Details :
+ CREATE TABLE IF NOT EXISTS `categories`( `id` BIGINT(21) AUTO_INCREMENT PRIMARY KEY, `title` VARCHAR(255) NULL, `description` VARCHAR(255) NOT NULL ,`created_at` TIMESTAMP NOT NULL ,`updated_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP) ENGINE = InnoDB
+[2021-09-27 00:00:54] - Unknown PDO Error :-
+ Code :00000  
+Details :
+ ALTER TABLE `posts` ADD FOREIGN KEY (`author_id`) REFERENCES `users`(`id`) ON DELETE CASCADE ON UPDATE CASCADE
+[2021-09-27 00:00:54] - Unknown PDO Error :-
+ Code :00000  
+Details :
+ ALTER TABLE `posts` ADD FOREIGN KEY (`category_id`) REFERENCES `categories`(`id`) ON DELETE CASCADE ON UPDATE CASCADE
+[2021-09-27 00:00:54] - Nothing New For Applied For Migration!
+[2021-09-27 00:00:56] - Unknown PDO Error :-
+ Code :00000  
+Details :
+ CREATE TABLE IF NOT EXISTS `users`( `id` BIGINT(21) AUTO_INCREMENT PRIMARY KEY, `username` VARCHAR(255) NULL, `email` VARCHAR(24) NOT NULL ,`created_at` TIMESTAMP NOT NULL ,`updated_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP) ENGINE = InnoDB
+[2021-09-27 00:00:56] - Unknown PDO Error :-
+ Code :00000  
+Details :
+ CREATE TABLE IF NOT EXISTS `posts`( `id` BIGINT(21) AUTO_INCREMENT PRIMARY KEY, `title` VARCHAR(255) NULL, `description` VARCHAR(255) NOT NULL, `author_id` BIGINT(21) NOT NULL, `category_id` BIGINT(21) NOT NULL ,`created_at` TIMESTAMP NOT NULL ,`updated_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP) ENGINE = InnoDB
+[2021-09-27 00:00:56] - Unknown PDO Error :-
+ Code :00000  
+Details :
+ CREATE TABLE IF NOT EXISTS `categories`( `id` BIGINT(21) AUTO_INCREMENT PRIMARY KEY, `title` VARCHAR(255) NULL, `description` VARCHAR(255) NOT NULL ,`created_at` TIMESTAMP NOT NULL ,`updated_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP) ENGINE = InnoDB
+[2021-09-27 00:00:56] - Unknown PDO Error :-
+ Code :00000  
+Details :
+ ALTER TABLE `posts` ADD FOREIGN KEY (`author_id`) REFERENCES `users`(`id`) ON DELETE CASCADE ON UPDATE CASCADE
+[2021-09-27 00:00:56] - Unknown PDO Error :-
+ Code :00000  
+Details :
+ ALTER TABLE `posts` ADD FOREIGN KEY (`category_id`) REFERENCES `categories`(`id`) ON DELETE CASCADE ON UPDATE CASCADE
+[2021-09-27 00:00:56] - Nothing New For Applied For Migration!
+[2021-09-27 00:01:29] - Unknown PDO Error :-
+ Code :00000  
+Details :
+ CREATE TABLE IF NOT EXISTS `users`( `id` BIGINT(21) AUTO_INCREMENT PRIMARY KEY, `username` VARCHAR(255) NULL, `email` VARCHAR(24) NOT NULL ,`created_at` TIMESTAMP NOT NULL ,`updated_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP) ENGINE = InnoDB
+[2021-09-27 00:01:29] - Unknown PDO Error :-
+ Code :00000  
+Details :
+ CREATE TABLE IF NOT EXISTS `posts`( `id` BIGINT(21) AUTO_INCREMENT PRIMARY KEY, `title` VARCHAR(255) NULL, `description` VARCHAR(255) NOT NULL, `author_id` BIGINT(21) NOT NULL, `category_id` BIGINT(21) NOT NULL ,`created_at` TIMESTAMP NOT NULL ,`updated_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP) ENGINE = InnoDB
+[2021-09-27 00:01:29] - Unknown PDO Error :-
+ Code :00000  
+Details :
+ CREATE TABLE IF NOT EXISTS `categories`( `id` BIGINT(21) AUTO_INCREMENT PRIMARY KEY, `title` VARCHAR(255) NULL, `description` VARCHAR(255) NOT NULL ,`created_at` TIMESTAMP NOT NULL ,`updated_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP) ENGINE = InnoDB
+[2021-09-27 00:01:29] - Unknown PDO Error :-
+ Code :00000  
+Details :
+ ALTER TABLE `posts` ADD FOREIGN KEY (`author_id`) REFERENCES `users`(`id`) ON DELETE CASCADE ON UPDATE CASCADE
+[2021-09-27 00:01:29] - Unknown PDO Error :-
+ Code :00000  
+Details :
+ ALTER TABLE `posts` ADD FOREIGN KEY (`category_id`) REFERENCES `categories`(`id`) ON DELETE CASCADE ON UPDATE CASCADE
+[2021-09-27 00:01:29] - Nothing New For Applied For Migration!
+[2021-09-27 00:01:57] - Unknown PDO Error :-
+ Code :00000  
+Details :
+ CREATE TABLE IF NOT EXISTS `users`( `id` BIGINT(21) AUTO_INCREMENT PRIMARY KEY, `username` VARCHAR(255) NULL, `email` VARCHAR(24) NOT NULL ,`created_at` TIMESTAMP NOT NULL ,`updated_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP) ENGINE = InnoDB
+[2021-09-27 00:01:57] - Unknown PDO Error :-
+ Code :00000  
+Details :
+ CREATE TABLE IF NOT EXISTS `posts`( `id` BIGINT(21) AUTO_INCREMENT PRIMARY KEY, `title` VARCHAR(255) NULL, `description` VARCHAR(255) NOT NULL, `author_id` BIGINT(21) NOT NULL, `category_id` BIGINT(21) NOT NULL ,`created_at` TIMESTAMP NOT NULL ,`updated_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP) ENGINE = InnoDB
+[2021-09-27 00:01:57] - Unknown PDO Error :-
+ Code :00000  
+Details :
+ CREATE TABLE IF NOT EXISTS `categories`( `id` BIGINT(21) AUTO_INCREMENT PRIMARY KEY, `title` VARCHAR(255) NULL, `description` VARCHAR(255) NOT NULL ,`created_at` TIMESTAMP NOT NULL ,`updated_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP) ENGINE = InnoDB
+[2021-09-27 00:01:57] - Unknown PDO Error :-
+ Code :00000  
+Details :
+ ALTER TABLE `posts` ADD FOREIGN KEY (`author_id`) REFERENCES `users`(`id`) ON DELETE CASCADE ON UPDATE CASCADE
+[2021-09-27 00:01:57] - Unknown PDO Error :-
+ Code :00000  
+Details :
+ ALTER TABLE `posts` ADD FOREIGN KEY (`category_id`) REFERENCES `categories`(`id`) ON DELETE CASCADE ON UPDATE CASCADE
+[2021-09-27 00:01:57] - Nothing New For Applied For Migration!
+[2021-09-27 00:02:23] - Unknown PDO Error :-
+ Code :00000  
+Details :
+ CREATE TABLE IF NOT EXISTS `users`( `id` BIGINT(21) AUTO_INCREMENT PRIMARY KEY, `username` VARCHAR(255) NULL, `email` VARCHAR(24) NOT NULL ,`created_at` TIMESTAMP NOT NULL ,`updated_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP) ENGINE = InnoDB
+[2021-09-27 00:02:23] - Unknown PDO Error :-
+ Code :00000  
+Details :
+ CREATE TABLE IF NOT EXISTS `posts`( `id` BIGINT(21) AUTO_INCREMENT PRIMARY KEY, `title` VARCHAR(255) NULL, `description` VARCHAR(255) NOT NULL, `author_id` BIGINT(21) NOT NULL, `category_id` BIGINT(21) NOT NULL ,`created_at` TIMESTAMP NOT NULL ,`updated_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP) ENGINE = InnoDB
+[2021-09-27 00:02:23] - Unknown PDO Error :-
+ Code :00000  
+Details :
+ CREATE TABLE IF NOT EXISTS `categories`( `id` BIGINT(21) AUTO_INCREMENT PRIMARY KEY, `title` VARCHAR(255) NULL, `description` VARCHAR(255) NOT NULL ,`created_at` TIMESTAMP NOT NULL ,`updated_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP) ENGINE = InnoDB
+[2021-09-27 00:02:23] - Unknown PDO Error :-
+ Code :00000  
+Details :
+ ALTER TABLE `posts` ADD FOREIGN KEY (`author_id`) REFERENCES `users`(`id`) ON DELETE CASCADE ON UPDATE CASCADE
+[2021-09-27 00:02:23] - Unknown PDO Error :-
+ Code :00000  
+Details :
+ ALTER TABLE `posts` ADD FOREIGN KEY (`category_id`) REFERENCES `categories`(`id`) ON DELETE CASCADE ON UPDATE CASCADE
+[2021-09-27 00:02:23] - Nothing New For Applied For Migration!
+[2021-09-27 00:02:42] - Unknown PDO Error :-
+ Code :00000  
+Details :
+ CREATE TABLE IF NOT EXISTS `users`( `id` BIGINT(21) AUTO_INCREMENT PRIMARY KEY, `username` VARCHAR(255) NULL, `email` VARCHAR(24) NOT NULL ,`created_at` TIMESTAMP NOT NULL ,`updated_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP) ENGINE = InnoDB
+[2021-09-27 00:02:42] - Unknown PDO Error :-
+ Code :00000  
+Details :
+ CREATE TABLE IF NOT EXISTS `posts`( `id` BIGINT(21) AUTO_INCREMENT PRIMARY KEY, `title` VARCHAR(255) NULL, `description` VARCHAR(255) NOT NULL, `author_id` BIGINT(21) NOT NULL, `category_id` BIGINT(21) NOT NULL ,`created_at` TIMESTAMP NOT NULL ,`updated_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP) ENGINE = InnoDB
+[2021-09-27 00:02:42] - Unknown PDO Error :-
+ Code :00000  
+Details :
+ CREATE TABLE IF NOT EXISTS `categories`( `id` BIGINT(21) AUTO_INCREMENT PRIMARY KEY, `title` VARCHAR(255) NULL, `description` VARCHAR(255) NOT NULL ,`created_at` TIMESTAMP NOT NULL ,`updated_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP) ENGINE = InnoDB
+[2021-09-27 00:02:42] - Unknown PDO Error :-
+ Code :00000  
+Details :
+ ALTER TABLE `posts` ADD FOREIGN KEY (`author_id`) REFERENCES `users`(`id`) ON DELETE CASCADE ON UPDATE CASCADE
+[2021-09-27 00:02:42] - Unknown PDO Error :-
+ Code :00000  
+Details :
+ ALTER TABLE `posts` ADD FOREIGN KEY (`category_id`) REFERENCES `categories`(`id`) ON DELETE CASCADE ON UPDATE CASCADE
+[2021-09-27 00:02:42] - Nothing New For Applied For Migration!
+[2021-09-27 00:04:02] - Unknown PDO Error :-
+ Code :00000  
+Details :
+ CREATE TABLE IF NOT EXISTS `users`( `id` BIGINT(21) AUTO_INCREMENT PRIMARY KEY, `username` VARCHAR(255) NULL, `email` VARCHAR(24) NOT NULL ,`created_at` TIMESTAMP NOT NULL ,`updated_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP) ENGINE = InnoDB
+[2021-09-27 00:04:02] - Unknown PDO Error :-
+ Code :00000  
+Details :
+ CREATE TABLE IF NOT EXISTS `posts`( `id` BIGINT(21) AUTO_INCREMENT PRIMARY KEY, `title` VARCHAR(255) NULL, `description` VARCHAR(255) NOT NULL, `author_id` BIGINT(21) NOT NULL, `category_id` BIGINT(21) NOT NULL ,`created_at` TIMESTAMP NOT NULL ,`updated_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP) ENGINE = InnoDB
+[2021-09-27 00:04:02] - Unknown PDO Error :-
+ Code :00000  
+Details :
+ CREATE TABLE IF NOT EXISTS `categories`( `id` BIGINT(21) AUTO_INCREMENT PRIMARY KEY, `title` VARCHAR(255) NULL, `description` VARCHAR(255) NOT NULL ,`created_at` TIMESTAMP NOT NULL ,`updated_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP) ENGINE = InnoDB
+[2021-09-27 00:04:02] - Unknown PDO Error :-
+ Code :00000  
+Details :
+ ALTER TABLE `posts` ADD FOREIGN KEY (`author_id`) REFERENCES `users`(`id`) ON DELETE CASCADE ON UPDATE CASCADE
+[2021-09-27 00:04:02] - Unknown PDO Error :-
+ Code :00000  
+Details :
+ ALTER TABLE `posts` ADD FOREIGN KEY (`category_id`) REFERENCES `categories`(`id`) ON DELETE CASCADE ON UPDATE CASCADE
+[2021-09-27 00:04:02] - Save Report Into DataBase And Logs
+[2021-09-27 00:04:23] - Unknown PDO Error :-
+ Code :00000  
+Details :
+ CREATE TABLE IF NOT EXISTS `users`( `id` BIGINT(21) AUTO_INCREMENT PRIMARY KEY, `username` VARCHAR(255) NULL, `email` VARCHAR(24) NOT NULL ,`created_at` TIMESTAMP NOT NULL ,`updated_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP) ENGINE = InnoDB
+[2021-09-27 00:04:23] - Unknown PDO Error :-
+ Code :00000  
+Details :
+ CREATE TABLE IF NOT EXISTS `posts`( `id` BIGINT(21) AUTO_INCREMENT PRIMARY KEY, `title` VARCHAR(255) NULL, `description` VARCHAR(255) NOT NULL, `author_id` BIGINT(21) NOT NULL, `category_id` BIGINT(21) NOT NULL ,`created_at` TIMESTAMP NOT NULL ,`updated_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP) ENGINE = InnoDB
+[2021-09-27 00:04:23] - Unknown PDO Error :-
+ Code :00000  
+Details :
+ CREATE TABLE IF NOT EXISTS `categories`( `id` BIGINT(21) AUTO_INCREMENT PRIMARY KEY, `title` VARCHAR(255) NULL, `description` VARCHAR(255) NOT NULL ,`created_at` TIMESTAMP NOT NULL ,`updated_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP) ENGINE = InnoDB
+[2021-09-27 00:04:23] - Unknown PDO Error :-
+ Code :00000  
+Details :
+ ALTER TABLE `posts` ADD FOREIGN KEY (`author_id`) REFERENCES `users`(`id`) ON DELETE CASCADE ON UPDATE CASCADE
+[2021-09-27 00:04:23] - Unknown PDO Error :-
+ Code :00000  
+Details :
+ ALTER TABLE `posts` ADD FOREIGN KEY (`category_id`) REFERENCES `categories`(`id`) ON DELETE CASCADE ON UPDATE CASCADE
+[2021-09-27 00:04:23] - Save Report Into DataBase And Logs
+[2021-09-27 00:04:31] - Nothing New For Applied For Migration!
+[2021-09-27 00:04:34] - Nothing New For Applied For Migration!
+[2021-09-27 00:05:10] - Unknown PDO Error :-
+ Code :00000  
+Details :
+ CREATE TABLE IF NOT EXISTS `users`( `id` BIGINT(21) AUTO_INCREMENT PRIMARY KEY, `username` VARCHAR(255) NULL, `email` VARCHAR(24) NOT NULL ,`created_at` TIMESTAMP NOT NULL ,`updated_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP) ENGINE = InnoDB
+[2021-09-27 00:05:10] - Unknown PDO Error :-
+ Code :00000  
+Details :
+ CREATE TABLE IF NOT EXISTS `posts`( `id` BIGINT(21) AUTO_INCREMENT PRIMARY KEY, `title` VARCHAR(255) NULL, `description` VARCHAR(255) NOT NULL, `author_id` BIGINT(21) NOT NULL, `category_id` BIGINT(21) NOT NULL ,`created_at` TIMESTAMP NOT NULL ,`updated_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP) ENGINE = InnoDB
+[2021-09-27 00:05:10] - Unknown PDO Error :-
+ Code :00000  
+Details :
+ CREATE TABLE IF NOT EXISTS `categories`( `id` BIGINT(21) AUTO_INCREMENT PRIMARY KEY, `title` VARCHAR(255) NULL, `description` VARCHAR(255) NOT NULL ,`created_at` TIMESTAMP NOT NULL ,`updated_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP) ENGINE = InnoDB
+[2021-09-27 00:05:10] - Unknown PDO Error :-
+ Code :00000  
+Details :
+ ALTER TABLE `posts` ADD FOREIGN KEY (`author_id`) REFERENCES `users`(`id`) ON DELETE CASCADE ON UPDATE CASCADE
+[2021-09-27 00:05:10] - Unknown PDO Error :-
+ Code :00000  
+Details :
+ ALTER TABLE `posts` ADD FOREIGN KEY (`category_id`) REFERENCES `categories`(`id`) ON DELETE CASCADE ON UPDATE CASCADE
+[2021-09-27 00:05:10] - Save Report Into DataBase And Logs
+[2021-09-27 00:05:12] - Nothing New For Applied For Migration!
+[2021-09-27 00:06:09] - Nothing New For Applied For Migration!

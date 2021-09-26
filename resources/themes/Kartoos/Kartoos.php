@@ -3,51 +3,136 @@
 
 namespace Themes\Kartoos;
 
+use Tinkle\Library\Render\Theme\Theme;
 
-use Tinkle\interfaces\ThemeInterface;
-use Tinkle\Library\Render\Themes\Themes;
-
-class Kartoos implements ThemeInterface
+class Kartoos extends Theme
 {
 
 
-    public function getInfo(): array
+
+    /**
+     * @return string
+     */
+    public function getName(): string
     {
-        // TODO: Implement getInfo() method.
+        return 'Master';
     }
 
-    public function getConfig(): array
+    /**
+     * @return string
+     */
+    public function getAuthor(): string
     {
-        // TODO: Implement getConfig() method.
+        return 'Krishanu';
     }
 
-    public function getAvailablePages(): array
+    /**
+     * @return string
+     */
+    public function getVersion(): string
     {
-        // TODO: Implement getAvailablePages() method.
+        return 'v.001';
     }
 
-    public function getAvailableCss(): array
+    /**
+     * @return string
+     */
+    public function getUpdateFrom(): string
     {
-        // TODO: Implement getAvailableCss() method.
+        return 'http://authorurl.com';
     }
 
-    public function getAvailableJs(): array
+    /**
+     * @return string
+     */
+    public function getLogo(): string
     {
-        // TODO: Implement getAvailableJs() method.
+        return 'assets/logo.png';
     }
 
-    public function getAvailableMedia(): array
+    /**
+     * @return array
+     */
+    public function getPreviewImages(): array
     {
-        // TODO: Implement getAvailableMedia() method.
+        return [
+            'assets/slideOne.png','assets/slideTwo.png','assets/slideThree.png',
+        ];
     }
 
-    public function isFrontend(): bool
+    /**
+     * @return bool
+     */
+    public function isFront(): bool
     {
-        // TODO: Implement isFrontend() method.
+        return true;
     }
 
-    public function isBackend(): bool
+    /**
+     * @return bool
+     */
+    public function isBack(): bool
     {
-        // TODO: Implement isBackend() method.
+        return true;
     }
+
+    /**
+     * @return string
+     */
+    public function getType(): string
+    {
+        return ['thinking'];
+    }
+
+    /**
+     * @return array
+     */
+    public function getCSS(): array
+    {
+        return [
+            'bootstrap.min.css'=> 'css/bootstrap.min.css',
+            'animate.min.css'=> 'css/animate.min.css',
+            'sidebars.css'=> 'css/sidebars.css'
+        ];
+    }
+
+    /**
+     * @return array
+     */
+    public function getJS(): array
+    {
+        return [
+            'bootstrap.min.js'=> 'js/bootstrap.min.js',
+            'sidebars.js'=> 'js/sidebars.js'
+        ];
+    }
+
+    /**
+     * @return string
+     */
+    public function getComponent(): string
+    {
+        return 'component/';
+    }
+
+
+    /**
+     * @return string
+     */
+    public function getIndex(): string
+    {
+        return 'pages/index.html';
+    }
+
+
+    /**
+     * @return array
+     */
+    public function getPages(): array
+    {
+        return [
+
+        ];
+    }
+
 }

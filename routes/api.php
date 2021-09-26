@@ -6,7 +6,8 @@ use Tinkle\Request;
 
 
 
-Router::getApi("category/show/{id}",[\App\controllers\AppController::class,'load']);
+//Router::getApi("category/show/{id}",[\App\controllers\ApiController::class,'category']);
+Router::getApi("users",[\App\controllers\ApiController::class,'users']);
 
 Router::getApi("posts/load/{aut_5v}/{id}",[\App\controllers\AppController::class,'load']);
 

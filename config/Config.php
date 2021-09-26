@@ -12,7 +12,7 @@ class Config
 
     protected Config|array $config;
     protected Client $client;
-    protected Database $database;
+    protected DBConfig $database;
     protected App $app;
     protected static string $authModel = "App\models\UsersModel";
 
@@ -26,7 +26,7 @@ class Config
         $dotenv->load();
         $this->app = new App();
         $this->client = new Client();
-        $this->database = new Database();
+        $this->database = new DBConfig();
         $this->overRideSystem();
 
 
@@ -51,7 +51,7 @@ class Config
     public function getConfig()
     {
         $this->config ['app']= Essential::getHelper()->JsonToArray($this->app->getConfig());
-        $this->config ['db']= Essential::getHelper()->JsonToArray($this->database->getConfig());
+        $this->config ['db']= $this->database->getConfig();
         $this->config ['client']= Essential::getHelper()->JsonToArray($this->client->getConfig());
         $this->config['userModel'] = self::$authModel;
         return $this->config;

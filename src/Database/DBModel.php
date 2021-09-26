@@ -6,7 +6,7 @@ namespace Tinkle\Database;
 use Tinkle\Database\Manager\DBManager;
 use Tinkle\Tinkle;
 
-abstract class DBModel extends DBManager
+abstract class DBModel
 {
 
 

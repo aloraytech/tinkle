@@ -5,6 +5,7 @@ namespace Tinkle;
 
 
 
+use Plugins\Layer\Layer;
 use Tinkle\Middlewares\SecurityMiddleware;
 use App\middlewares\AppMiddleware;
 
@@ -17,7 +18,7 @@ abstract class Controller
 {
 
     private int $viewStep = 0;
-    public string $action = '';
+//    public string $action = '';
     public Request $request;
     public array $commons=[];
     /**
@@ -25,7 +26,9 @@ abstract class Controller
      */
     protected array $middlewares = [];
     protected array $plugins = [];
-    public array $pageAttribute=[];
+    public string $title='';
+    public string $description='';
+    public array $result=[];
 
 
 
@@ -36,58 +39,53 @@ abstract class Controller
      */
     public function __construct()
     {
+        $this->setPlugin('layout.menu',[Layer::class,'getMenu']);
         $this->registerMiddleware(new SecurityMiddleware());
 
     }
 
-    public function get_allDefineParams()
+    public function result(array $array)
     {
-        return Tinkle::$app->router->incomingAttributes ?? [];
+        $this->result = $array;
     }
+
+    public function getResult()
+    {
+        return [
+            'title'=>$this->title,
+            'description'=>$this->description,
+            'result'=>$this->result,
+        ];
+    }
+
+
+
+
+
 
     /**
-     * @param string $paramKey
-     * @return array|mixed
+     * @param string $template
+     * @param string $theme
+     * @return Library\Render\Config\Config
      */
-    public function get_defineParam(string $paramKey)
+    public function render(string $template='',string $theme='')
     {
-        $all_params = $this->get_allDefineParams();
-        if(is_array($all_params))
+        Tinkle::$app->view->setLayoutParams('title',$this->title);
+        Tinkle::$app->view->setLayoutParams('description',$this->description);
+        $config = $this->getPlugin('layout.menu');
+        foreach ($config as $key=>$param)
         {
-            foreach ($all_params as $a_key => $value)
-            {
-                if($paramKey == $a_key)
-                {
-                    return $value;
-                }
-            }
-        }else{
-            return $all_params;
+            Tinkle::$app->view->setLayoutParams($key,$param);
         }
-    }
-
-
-
-
-
-
-    public function render(string $template='')
-    {
-        $this->viewStep = 1;
-        return Tinkle::$app->view->render->render($template,$this->pageAttribute);
+        return Tinkle::$app->view->render($template,$theme);
     }
 
     /**
      * @param string|mixed $content
      */
-    public function display($content='')
+    public function display(string|int|array|object $content)
     {
-        if($this->viewStep !=0)
-        {
-            return Tinkle::$app->view->render->output($content);
-        }else{
-            return View::$view->render::display($content);
-        }
+        View::display($content);
 
     }
 
@@ -132,6 +130,39 @@ abstract class Controller
     {
         return Tinkle::$app->getEvent($plugin,$parameter);
     }
+
+// Need To Fix
+
+//    /**
+//     * @return array
+//     * need to fix, cause router updated
+//     */
+//    public function get_allDefineParams()
+//    {
+//        return Tinkle::$app->router->incomingAttributes ?? [];
+//    }
+//
+//    /**
+//     * @param string $paramKey
+//     * need to fix , cause router updated
+//     * @return array|mixed
+//     */
+//    public function get_defineParam(string $paramKey)
+//    {
+//        $all_params = $this->get_allDefineParams();
+//        if(is_array($all_params))
+//        {
+//            foreach ($all_params as $a_key => $value)
+//            {
+//                if($paramKey == $a_key)
+//                {
+//                    return $value;
+//                }
+//            }
+//        }else{
+//            return $all_params;
+//        }
+//    }
 
 
 

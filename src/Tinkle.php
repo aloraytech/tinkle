@@ -6,6 +6,7 @@ namespace Tinkle;
 use App\models\UsersModel;
 
 
+use Tinkle\Database\DBHandler;
 use Tinkle\Exceptions\ExceptionMagic;
 use Tinkle\Library\Console\Console;
 use Tinkle\Library\Essential\Essential;
@@ -24,9 +25,10 @@ use Tinkle\Library\Designer\Designer;
     public Request $request;
     public Response $response;
     public Session $session;
-    public Database $db;
+    public DB $db;
     public View $view;
     public ?Controller $controller = null;
+    public ?Plugins $plugins = null;
     public array $config;
     public Designer $designer;
     public Token $token;
@@ -73,7 +75,8 @@ use Tinkle\Library\Designer\Designer;
                     self::$app = $this;
                     $this->config = $config;
                     Essential::init();
-                    $this->db = new Database ($this->config['db']);
+                    $this->db = new DB();
+
 
                     if (!$this->isCli())
                     {
@@ -87,17 +90,19 @@ use Tinkle\Library\Designer\Designer;
                         $this->view = new View($this->request,$this->response);
                         //$this->load_event_listners();
 
-                        $this->userClass = $this->config['userModel'];
+//                        $this->userClass = $this->config['userModel'];
+//
+//                        $primaryValue = $this->session->get('user');
+//
+//                        if($primaryValue){
+//                            $primaryKey = $this->userClass::primaryKey();
+//
+//                            $this->user = $this->userClass::findOne([$primaryKey => $primaryValue]);
+//                        }else{
+//                            $this->user = null;
+//                        }
 
-                        $primaryValue = $this->session->get('user');
-
-                        if($primaryValue){
-                            $primaryKey = $this->userClass::primaryKey();
-
-                            $this->user = $this->userClass::findOne([$primaryKey => $primaryValue]);
-                        }else{
-                            $this->user = null;
-                        }
+                        $this->user = null;
 
                     }else{
                         self::$console = new Console($rootPath);
@@ -166,6 +171,34 @@ use Tinkle\Library\Designer\Designer;
         $this->controller = $controller;
         return $this;
     }
+
+
+
+     /**
+      * @return Plugins|null
+      */
+     public function getPlugin()
+     {
+         return $this->plugins;
+     }
+
+
+     /**
+      * @param $plugins
+      * @return $this
+      */
+     public function setPlugin($plugins)
+     {
+         $this->plugins = $plugins;
+         return $this;
+     }
+
+
+
+
+
+
+
 
 
 

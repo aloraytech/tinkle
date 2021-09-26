@@ -8,6 +8,7 @@ use Symfony\Component\HttpFoundation\Cookie as SymfonyCookie;
 use Symfony\Component\HttpFoundation\Response as SymfonyResponse;
 use Symfony\Component\HttpFoundation\Request as SymfonyRequest;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Tinkle\Request;
 use Tinkle\Tinkle;
 
@@ -177,6 +178,12 @@ abstract class ResponseHandler
     }
 
 
+    public function sendJson(array|string $data_array)
+    {
+        $this->response->setContent(json_encode($data_array, JSON_PRETTY_PRINT));
+        $this->response->headers->set('Content-Type', 'application/json');
+        $this->response->send();
+    }
 
 
 
