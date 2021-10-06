@@ -4,7 +4,7 @@
 namespace Tinkle\Library\Console;
 
 use Tinkle\Tinkle;
-use Tinkle\Database\Database;
+use Tinkle\Databases\Database;
 
 class ConsoleModel
 {

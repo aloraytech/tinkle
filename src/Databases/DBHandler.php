@@ -11,7 +11,7 @@
  *
  */
 
-namespace Tinkle\Database;
+namespace Tinkle\Databases;
 
 use App\App;
 use Tinkle\Exceptions\Display;

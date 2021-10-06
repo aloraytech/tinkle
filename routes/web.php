@@ -7,7 +7,8 @@ use Tinkle\Request;
 
 //
 //
-Router::get("",[\App\controllers\AppController::class,'home']);
+Router::get("",[\App\controllers\TestController::class,'home']);
+Router::get("test",[\App\Controllers\Front\FrontController::class,'test']);
 
 
     Router::group('admin')->get('posts/item/{id}',[\App\Controllers\AppController::class,'item']);

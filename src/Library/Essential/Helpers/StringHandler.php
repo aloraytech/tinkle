@@ -9,10 +9,34 @@ class StringHandler
 
     const ADD_UPPER_SLASH = 'A..Z';
     const ADD_LOWER_SLASH = 'a..z';
+    public static StringHandler $str;
+
+    public function __construct()
+    {
+        self::$str=$this;
+    }
 
 
+    public function random(int $length,bool $strOnly=true)
+    {
+        if($strOnly)
+        {
+            $allowedChars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        }else{
+            $allowedChars = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        }
 
+        $allowedCharsLength = strlen($allowedChars);
+        $randomString = '';
+        for ($i = 0; $i < $length; $i++) {
+            $randomString .= $allowedChars[rand(0, $allowedCharsLength - 1)];
+        }
+        if(is_string($randomString))
+        {
+            return $randomString;
+        }
 
+    }
 
 
     public function replace(string $subject,string $search,string $replace)

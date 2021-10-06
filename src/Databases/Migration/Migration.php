@@ -11,13 +11,12 @@
  *
  */
 
-namespace Tinkle\Database\Migration;
+namespace Tinkle\Databases\Migration;
 
 abstract class Migration
 {
     protected array $table=[];
 
-    abstract public function generate_code();
 
     abstract public function up();
 
@@ -69,7 +68,10 @@ abstract class Migration
 
 
 
-
+    public static function get()
+    {
+        return Column::get();
+    }
 
 
 

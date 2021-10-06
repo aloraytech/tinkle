@@ -2,9 +2,9 @@
 
 namespace Database\migrations;
 
-use Tinkle\Database\Migration\Column;
-use Tinkle\Database\Migration\Migration;
-use Tinkle\Database\Migration\Schema;
+use Tinkle\Databases\Migration\Column;
+use Tinkle\Databases\Migration\Migration;
+use Tinkle\Databases\Migration\Schema;
 
 use Tinkle\interfaces\MigrationInterface;
 

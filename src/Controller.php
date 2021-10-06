@@ -6,6 +6,7 @@ namespace Tinkle;
 
 
 use Plugins\Layer\Layer;
+use Tinkle\Library\Console\Application\Controllers\Make;
 use Tinkle\Middlewares\SecurityMiddleware;
 use App\middlewares\AppMiddleware;
 
@@ -163,6 +164,13 @@ abstract class Controller
 //            return $all_params;
 //        }
 //    }
+
+
+    public function create()
+    {
+        return new Make();
+    }
+
 
 
 

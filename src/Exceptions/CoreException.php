@@ -4,6 +4,10 @@ namespace Tinkle\Exceptions;
 
 use Tinkle\interfaces\ExceptionInterface as IException;
 use \Exception;
+use Tinkle\Response;
+use Tinkle\Router;
+use Tinkle\Tinkle;
+
 //extends Exception implements IException
 
 /**
@@ -50,7 +54,7 @@ abstract class CoreException extends Exception implements IException
     public const HTTP_LOOP_DETECTED = 508;                                               // RFC5842
     public const HTTP_NETWORK_AUTHENTICATION_REQUIRED = 511;
 
-
+    private static DeprecationHandler $deprecationHandler;
 
     /**
      * CoreException constructor.
@@ -59,10 +63,17 @@ abstract class CoreException extends Exception implements IException
      */
     public function __construct($message = null, $code = 0)
     {
+        self::$deprecationHandler = new DeprecationHandler($message, $code);
         if (!$message) {
             throw new $this('Unknown '. get_class($this));
         }
+        if(self::$deprecationHandler->is_deprecated())
+        {
+            self::$deprecationHandler->call_deprecated();
+        }
         parent::__construct($message, $code);
+
+
     }
 
     /**
@@ -73,6 +84,14 @@ abstract class CoreException extends Exception implements IException
         return get_class($this) . " '{$this->message}' in {$this->file}({$this->line})\n"
             . "{$this->getTraceAsString()}";
     }
+
+
+
+
+
+
+
+
 
 
 
@@ -95,10 +114,11 @@ abstract class CoreException extends Exception implements IException
 //            extract($data);
 //            echo "<pre>";
 //            print_r($data);
+
             ob_start();
 //            $output = file_get_contents(__DIR__."/render_error.php");
 //            echo $output;
-            require_once __DIR__."/render_error.php";
+            require_once __DIR__."/error_template.php";
             ob_flush();
 
         }
@@ -119,6 +139,12 @@ abstract class CoreException extends Exception implements IException
      * @param string $footer
      */
     final protected function RenderException (bool $display=true,string $header='',string $middle='',string $footer=''){
+
+        if(!$display)
+        {
+
+            ob_get_clean();
+        }
 
         if (PHP_SAPI === 'cli')
         {
@@ -143,12 +169,13 @@ abstract class CoreException extends Exception implements IException
                 'file' => $this->file,
                 'trace' => $this->getTraceAsString()
             ];
-
+            //ob_get_clean();
             $this->output($data,$display,$header,$middle,$footer);
         }
 
         if(!$display)
         {
+
             die(503);
         }
 

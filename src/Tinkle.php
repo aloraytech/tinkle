@@ -6,12 +6,12 @@ namespace Tinkle;
 use App\models\UsersModel;
 
 
-use Tinkle\Database\DBHandler;
+use Tinkle\Databases\DBHandler;
 use Tinkle\Exceptions\ExceptionMagic;
 use Tinkle\Library\Console\Console;
 use Tinkle\Library\Essential\Essential;
 use Tinkle\Exceptions\Display;
-use Tinkle\Database\Database;
+use Tinkle\Databases\Database;
 use Tinkle\Library\Designer\Designer;
 
 
@@ -75,7 +75,9 @@ use Tinkle\Library\Designer\Designer;
                     self::$app = $this;
                     $this->config = $config;
                     Essential::init();
-                    $this->db = new DB();
+
+                    $this->db = new DB($this->config['db']);
+
 
 
                     if (!$this->isCli())

@@ -11,7 +11,7 @@
  *
  */
 
-namespace Tinkle\Database\Migration;
+namespace Tinkle\Databases\Migration;
 
 class Schema
 {
@@ -70,8 +70,6 @@ class Schema
         }else{
             return '';
         }
-
-
 
 
 

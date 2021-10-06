@@ -1,0 +1,47 @@
+<?php
+declare(strict_types=1);
+namespace App\Controllers{{namespace}};
+
+use Tinkle\Controller;
+use Tinkle\Request;
+use Tinkle\Response;
+
+/**
+ * Class {{class}}
+ * @package tinkle\app\controllers
+ * @author : {{author}}
+ * @version : {{version}}
+ */
+class {{class}} extends Controller
+{
+
+       /**
+        * {{class}} constructor.
+        */
+       public function __construct()
+       {
+           // Todo $this->registerMiddleware('middleware_name');
+           parent::__construct();
+           // Todo $this->setPlugin('plugin_name',['callbackClass','method']);
+       }
+
+
+        /**
+         * @param Request $request
+         * @param Response $response
+         */
+       public function my_custom_method(Request $request, Response $response)
+       {
+            // Todo implement my_custom_method
+       }
+
+
+
+
+
+
+
+
+
+
+}

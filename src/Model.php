@@ -4,11 +4,11 @@
 namespace Tinkle;
 
 
-use Tinkle\Database\DBHandler;
-use Tinkle\Database\DBModel;
+use Tinkle\Databases\Access\Access;
 
 
-abstract class Model extends DBModel
+
+abstract class Model extends Access
 {
 
 

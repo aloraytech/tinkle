@@ -14,24 +14,17 @@
 namespace Tinkle;
 
 
-use Tinkle\Database\Access;
-use Tinkle\Database\DBHandler;
+use Tinkle\Database\Database;
+use Tinkle\Databases\Access\Access;
+use Tinkle\Databases\DBHandler;
 
-class DB
+class DB extends Database
 {
 
-    public DBHandler $handler;
-    public Access $access;
 
 
-    public function __construct()
-    {
-        $this->handler = new DBHandler();
-        $this->handler->setConfig(Tinkle::$app->config['db']);
 
-        $this->access = new Access($this->handler->getConnection());
 
-    }
 
 
 }

@@ -1,0 +1,32 @@
+<?php
+namespace Database\seeders;
+
+use Tinkle\Database\Seeder\Seeder;
+use Tinkle\Library\Encryption\Hash;
+use Tinkle\DB;
+use Tinkle\Library\Essential\Essential;
+use Tinkle\Library\Essential\Helpers\StringHandler as STR;
+
+/**
+ * Class UserTableSeeder
+ * @package tinkle\database\seeders
+ * @author : {{author}}
+ * @version : {{version}}
+ */
+class {{class}} extends Seeder
+{
+
+
+    public function run()
+    {
+        DB::table('{{main}}')->insert([
+            // TODO: Implement Columns Fields.
+            // Example
+            // 'username' => Essential::STR()->random(10),
+            // 'email' => STR::$str->random(10).'@gmail.com',
+            // 'password' => Hash::make('password'),
+        ]);
+    }
+
+
+}

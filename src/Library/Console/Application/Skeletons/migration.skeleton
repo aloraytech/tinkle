@@ -1,0 +1,54 @@
+<?php
+namespace Database\migrations;
+use Tinkle\Database\Migration\Column;
+use Tinkle\Database\Migration\Migration;
+use Tinkle\Database\Migration\Schema;
+
+/**
+ * Class {{class}}
+ * @package tinkle\database\migration
+ * @author : {{author}}
+ * @version : {{version}}
+ */
+class {{class}} extends Migration
+{
+
+    /**
+     * Create Database Table With Columns
+     */
+    public function up()
+    {
+        Schema::create('{{main}}',function (Column $column) {
+            $column->id();
+            // TODO: Implement columns.
+            $column->timestamps();
+        });
+    }
+
+
+
+
+
+
+    /**
+     * Alter or Modify Database Tables
+     */
+     public function alter()
+     {
+         // TODO: Implement alter() method.
+     }
+
+
+
+
+
+
+    /**
+     * Remove Or Delete Or Drop Database Tables
+     */
+    public function down()
+    {
+       Schema::dropIfExist('{{main}}');
+    }
+
+}

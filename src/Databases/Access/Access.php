@@ -11,9 +11,15 @@
  *
  */
 
-namespace Tinkle\Database;
+namespace Tinkle\Databases\Access;
 
-class Access
+
+class Access extends OrmHandler
 {
+
+
+
+
+
 
 }

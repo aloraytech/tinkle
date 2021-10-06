@@ -18,6 +18,6 @@ use Tinkle\Model;
 class PostsModel extends Model
 {
 
-    public string $table = 'posts';
+
 
 }

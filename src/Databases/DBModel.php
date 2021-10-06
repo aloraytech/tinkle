@@ -1,9 +1,9 @@
 <?php
 
-namespace Tinkle\Database;
+namespace Tinkle\Databases;
 
 
-use Tinkle\Database\Manager\DBManager;
+use Tinkle\Databases\Manager\DBManager;
 use Tinkle\Tinkle;
 
 abstract class DBModel

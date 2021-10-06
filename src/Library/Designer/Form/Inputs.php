@@ -2,7 +2,7 @@
 
 
 namespace Tinkle\Library\Designer\Form;
-use Tinkle\Database\Manager\DBManager;
+use Tinkle\Databases\Manager\DBManager;
 
 class Inputs extends Fields
 {

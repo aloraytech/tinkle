@@ -11,7 +11,7 @@
  *
  */
 
-namespace Tinkle\Database\Migration;
+namespace Tinkle\Databases\Migration;
 
 class ColumnOptions
 {
@@ -71,6 +71,8 @@ class ColumnOptions
         $reference_table = strtolower($reference_table);
         $reference_id = strtolower($reference_id);
         self::$column['detail'] = self::$column['detail']. " REFERENCES `$reference_table`(`$reference_id`) ON DELETE CASCADE ON UPDATE CASCADE;";
+        self::$column['for'] = $reference_table;
+        self::$column['on']= $reference_id;
         Column::update(self::$columnName,self::$column);
         return $this;
     }

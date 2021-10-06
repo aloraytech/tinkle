@@ -3,7 +3,7 @@ header_remove('X-Powered-By');
 
 if(!$_SERVER['DEV_MODE'])
 {
-
+    $DisplayFile='';
     $data['line'] = ' -- Protected --';
     $data['file'] = ' -- Protected --';
     $data['trace'] = '-- Protected --';
@@ -36,10 +36,10 @@ if(!$_SERVER['DEV_MODE'])
         }
        div.error-div {
            
-           margin: 3rem;
-           padding: 3rem;
-           max-height: 90%;
-           max-width: 90%;
+//           margin: 3rem;
+//           padding: 3rem;
+//           max-height: 90%;
+//           max-width: 90%;
            /*background-color: #ba8b00;*/
            background-color: red;
            -webkit-animation-name: example; /* Safari 4.0 - 8.0 */

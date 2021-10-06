@@ -1,26 +1,15 @@
 <?php
-
+declare(strict_types=1);
 namespace App\Controllers;
 
 use App\App;
-use App\middlewares\AppMiddleware;
 use App\Models\PostsModel;
 use App\models\UsersModel;
-
-use Database\migrations\CreatePostsMigration;
+use Database\seeders\UserTableSeeder;
 use Tinkle\Controller;
-use Tinkle\Database\DBAccess;
-use Tinkle\Database\Migration\Blueprint;
-use Tinkle\Database\Migration\Column;
-use Tinkle\Database\Migration\Schema;
-use Tinkle\Event;
-use Tinkle\Framework;
 use Tinkle\interfaces\ControllerInterface;
-use Tinkle\Library\Console\Console;
-use Tinkle\Library\Console\ConsoleHandler;
-use Tinkle\Library\Faker\Faker;
-use Tinkle\Library\Render\Engine\Engine;
-use Tinkle\Library\Render\Engine\Native\NativeEngine;
+use Tinkle\Library\Console\Application\Controllers\DB;
+use Tinkle\Library\Console\Application\Controllers\Make;
 use Tinkle\Middlewares\AuthMiddleware;
 use Tinkle\Request;
 use Tinkle\Response;
@@ -28,7 +17,7 @@ use Tinkle\Tinkle;
 use Tinkle\View;
 
 
-class AppController extends Controller implements ControllerInterface
+class AppController extends Controller
 {
 
     public function __construct()
@@ -38,18 +27,59 @@ class AppController extends Controller implements ControllerInterface
         //$this->registerMiddleware(new TestMiddleware());
         parent::__construct();
 
+
     }
 
 
+    /**
+     * @param Request $request
+     * @param Response $response
+     */
     public function home(Request $request, Response $response)
     {
             echo "<h1>HOMEPAGE</h1>";
 
 
 
-//        $post = new PostsModel();
+            $postModel = new PostsModel();
+            $postModel->title = 'Moon';
+            $postModel->description = 'MoonLight';
+            $postModel->author_id = 3;
+            $postModel->category_id = 2;
 
-       dd($app = ConsoleHandler::dbMigrate());
+            $postModel->save();
+
+//            $data=[
+//                'title'=>'Sun Orbital',
+//                'description'=>'This is a Nasa Mission.',
+//                'author_id'=>4,
+//                'category_id'=>2,
+//
+//            ];
+            //$postModel->insert($data);
+            // dd($postModel->find(['title','category_id','id','created_at'])->where(['author_id'=> 2])->get());
+            //dd($postModel->update($data)->where(['id'=>8])->save());
+            // $postModel->delete(['id'=>3]);
+          // $postModel->find()->where(['author_id'=>1])->get();
+
+        //    dd();
+
+
+            //$postModel::select(['id','title']);
+//
+
+
+
+
+       //$this->create()->controller('Front/CreateUsersController');
+
+
+
+
+
+
+
+
 
 
 
@@ -75,7 +105,7 @@ class AppController extends Controller implements ControllerInterface
 //        $this->getMiddlewares();
 //        $this->pageAttribute = ['title'=>'Homepage','favicon'=>'png','slogan'=>'Awesome'];
 //
-        $userModel = new UsersModel();
+//        $userModel = new UsersModel();
 //        $this->render('templateName')->withTheme('themeName')->withModules([$userModel]);
 //        //$this->display();
 

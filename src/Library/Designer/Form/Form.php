@@ -4,7 +4,7 @@
 namespace Tinkle\Library\Designer\Form;
 
 
-use Tinkle\Database\Manager\DBManager;
+use Tinkle\Databases\Manager\DBManager;
 use Tinkle\Designer\Form\TextArea;
 use Tinkle\Library\Encryption\Hash;
 use Tinkle\Token;

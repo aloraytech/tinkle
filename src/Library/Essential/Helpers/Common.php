@@ -72,7 +72,7 @@ function ddDump($param,$bg_color='yellow',$text_color='black')
 
 function table(string &$table)
 {
-    return new \Tinkle\Database\Migration\Builder($table);
+    return new \Tinkle\Databases\Migration\Builder($table);
 }
 
 

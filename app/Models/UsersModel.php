@@ -7,7 +7,8 @@ use Tinkle\Model;
 use Tinkle\Tinkle;
 use Tinkle\UserHandler;
 
-class UsersModel extends UserHandler implements ModelInterface
+//class UsersModel extends UserHandler implements ModelInterface
+class UsersModel extends Model
 {
 
     const STATUS_INACTIVE = 0;

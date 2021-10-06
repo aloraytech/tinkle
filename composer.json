@@ -3,12 +3,13 @@
     "type": "project",
     "description": "The Tinkle Framework.",
     "keywords": ["framework", "tinkle"],
-    "license": "MIT",
-
+    "license": "(MIT or GPL-3.0-or-later)",
     "authors": [
         {
             "name": "Krishanu Bhattacharya",
-            "email": "krishanu.info@gmail.com"
+            "email": "krishanu.info@gmail.com",
+            "homepage": "https://aloraytech.com/tinkle",
+            "role": "Developer"
         }
     ],
     "autoload": {
@@ -28,14 +29,16 @@
     },
 
     "require": {
-        "php": "8.0",
+        "php": "^8.0",
         "vlucas/phpdotenv": "^5.3",
         "symfony/http-foundation": "^5.3",
         "twig/twig": "^3.3",
-      "ext-password": "*",
-      "ext-json": "*",
-      "ext-gd": "*",
-      "ext-pdo": "*"
+        "ext-json": "*",
+        "ext-gd": "*",
+        "ext-pdo": "*",
+        "phpoffice/phpspreadsheet": "dev-master",
+        "razorpay/razorpay": "2.*"
     },
-    "minimum-stability": "dev"
+    "minimum-stability": "dev",
+    "prefer-stable": true
 }

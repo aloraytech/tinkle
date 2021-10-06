@@ -6,7 +6,7 @@ namespace Tinkle\Library\Designer;
 
 
 
-use Tinkle\Database\Manager\DBManager;
+use Tinkle\Databases\Manager\DBManager;
 use Tinkle\Library\Designer\Div\Div;
 use Tinkle\Library\Designer\Form\Form;
 use Tinkle\Library\Designer\Nav\Nav;
