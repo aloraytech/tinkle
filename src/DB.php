@@ -13,10 +13,14 @@
 
 namespace Tinkle;
 
+if(Tinkle::$app->config['db']['db_service_by'] != 'native'){
+    class_alias('Tinkle\Database\EloquentHandler', 'DB_SERVICE');
+}
+else{
+    class_alias('Tinkle\Database\DatabaseHandler', 'DB_SERVICE');
+}
 
-use Tinkle\Database\DatabaseHandler;
-
-class DB extends DatabaseHandler
+class DB extends \DB_SERVICE
 {
 
 

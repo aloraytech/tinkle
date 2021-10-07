@@ -39,7 +39,8 @@
         "phpoffice/phpspreadsheet": "dev-master",
         "razorpay/razorpay": "2.*",
         "illuminate/database": "^8.63",
-        "illuminate/events": "^8.63"
+        "illuminate/events": "^8.63",
+        "phpunit/phpunit": "^9.5"
     },
     "minimum-stability": "dev",
     "prefer-stable": true

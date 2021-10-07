@@ -30,7 +30,7 @@ class Database
 
         $this->connection = $this->connect($this->currentDbConfig);
         $this->setDefaultDB();
-        self::$connect = $this->connection;
+        self::$connect = $this;
 
     }
 

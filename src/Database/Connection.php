@@ -268,8 +268,8 @@ class Connection
     }
 
     // Execute the prepared statement
-    public function execute(){
-        return $this->stmt->execute();
+    public function execute(string|array $array=[]){
+        return $this->stmt->execute($array);
     }
 
 
@@ -282,14 +282,14 @@ class Connection
 
 
     // Get result set as array of objects
-    public function resultSet(){
-        $this->execute();
+    public function resultSet(string|array $array=[]){
+        $this->execute($array);
         return $this->stmt->fetchAll(PDO::FETCH_OBJ);
     }
 
     // Get single record as object
-    public function single(){
-        $this->execute();
+    public function single(string|array $array=[]){
+        $this->execute($array);
         return $this->stmt->fetch(PDO::FETCH_OBJ);
     }
 

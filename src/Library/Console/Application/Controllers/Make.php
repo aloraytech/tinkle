@@ -35,6 +35,7 @@ class Make extends ConsoleController
     protected string $skeletonData='';
     protected string $addonLocation='';
 
+    protected string $testLocation='';
 
 
 
@@ -51,6 +52,7 @@ class Make extends ConsoleController
         $this->cliModel_dir = Tinkle::$ROOT_DIR."src/Library/Console/Application/Models/";
         $this->skeleton_dir = Tinkle::$ROOT_DIR."src/Library/Console/Application/Skeletons/";
         $this->addonLocation='';
+        $this->testLocation = Tinkle::$ROOT_DIR.'tests/';
     }
 
     public function index()
@@ -125,6 +127,64 @@ class Make extends ConsoleController
     {
 
     }
+
+
+
+    public function test(string $test)
+    {
+        $test = str_replace('\\','/',$test);
+        $test = str_replace('.php','',$test);
+        $temp=[];
+        if(preg_match("/\//",$test,$matches))
+        {
+            $temp = explode('/',$test);
+            $length = count($temp);
+
+            $test = end($temp);
+            unset($temp[$length-1]);
+            if(!empty($temp))
+            {
+                $this->addonLocation = implode('/',$temp).'/';
+            }
+
+        }
+
+        $test = str_replace("Create",'',$test);
+        $test = str_replace("create",'',$test); // strtolower.. next time..
+
+        $mainName = str_replace("Create",'',$test);
+
+
+        $this->skeletonData = $this->getSkeleton('test');
+        if(!empty($this->addonLocation))
+        {
+            $this->addonLocation = '\\'.$this->addonLocation;
+        }
+        if(!empty($this->skeletonData))
+        {
+            echo "Preparing...\n";
+            if($this->applySkeleton($test,$this->testLocation.$this->addonLocation,$mainName,$temp))
+            {
+                echo "$test File Created ...\n";
+            }else{
+                echo "$test File Creation Failed! ...\n";
+            }
+
+        }else{
+            echo "TestClass Skeleton Not Found!";
+        }
+    }
+
+
+
+
+
+
+
+
+
+
+
 
     public function migration(string $migration)
     {
