@@ -1,6 +1,6 @@
 <?php
 
-namespace Tinkle\Databases\Seeder;
+namespace Tinkle\Database\Seeder;
 
 abstract class Seeder
 {

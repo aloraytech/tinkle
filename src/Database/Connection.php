@@ -3,7 +3,9 @@
 namespace Tinkle\Database;
 
 use Tinkle\Exceptions\Display;
+use Tinkle\Library\Essential\Essential;
 use Tinkle\Tinkle;
+use PDO;
 
 class Connection
 {
@@ -11,13 +13,16 @@ class Connection
     public \PDO $pdo;
     protected static array $availableDrivers = ['mysql','sqlite'];
     protected static array $config;
-    protected string $dsn;
+
     protected string $driver;
     protected string $host;
     protected int $port;
     protected string $name;
     protected string $user;
     protected string $password;
+    protected string $charset;
+    protected string $prefix;
+    private string $activeDB='';
     /**
      * @var bool|\PDOStatement
      */
@@ -29,13 +34,12 @@ class Connection
     {
 
         self::$config = $config;
-
+        $this->prefix = self::$config['prefix'] ?? '';
         $this->driver = self::$config['driver'] ?? '';
-        $this->dsn = self::$config['dsn'] ?? '';
         $this->host = self::$config['host'] ?? '';
-        $this->port = self::$config['port'] ?? 0;
-        $this->name = self::$config['name'] ?? '';
-        $this->user = self::$config['user'] ?? '';
+        $this->charset = self::$config['charset'] ?? '';
+        $this->name = self::$config['database'] ?? '';
+        $this->user = self::$config['username'] ?? '';
         $this->password = self::$config['password'] ?? '';
 
 
@@ -64,6 +68,7 @@ class Connection
 
     public function setDB(string $database)
     {
+        $this->activeDB = $database;
         return $this->pdo->exec("USE $database");
     }
 
@@ -148,7 +153,159 @@ class Connection
     }
 
 
+    // METHODS LISTED
 
+
+    public function dbExist(string $dbName)
+    {
+        $this->query("SHOW DATABASES");
+        $result = $this->resultSet();
+        foreach ($result as $dbDetails)
+        {
+            if($dbDetails->Database === $dbName)
+            {
+                return true;
+            }
+        }
+        return false;
+
+    }
+
+
+
+    public function tableExist(string $tbl_name)
+    {
+        $attr = 'Tables_in_'.$this->activeDB;
+        $allTable = $this->getAllTables();
+        foreach ($allTable as  $table)
+        {
+            if($tbl_name === $table->$attr)
+            {
+               return true;
+            }
+        }
+        return false;
+    }
+
+
+    public function columnExist(string $column,string $table)
+    {
+
+        $tableDetail = $this->getTable($table);
+        foreach ($tableDetail as  $detail)
+        {
+            if($column === $detail->Field)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+
+
+
+
+    public function getAllTables()
+    {
+        $this->query("SHOW TABLES");
+       return $this->resultSet();
+    }
+
+    public function getTable(string $tbl_name)
+    {
+
+        if($this->tableExist($tbl_name))
+        {
+
+            $this->query("SHOW COLUMNS FROM $tbl_name");
+            return $this->resultSet();
+        }
+
+        return null;
+
+    }
+
+
+
+
+    public function lastID()
+    {
+        return $this->pdo->lastInsertId();
+    }
+
+
+
+
+
+    public function query($sql){
+        $this->stmt = $this->pdo->prepare($sql);
+    }
+
+
+
+
+
+    // Bind values
+    public function bind($param, $value, $type = null){
+        if(is_null($type)){
+            switch(true){
+                case is_int($value):
+                    $type = PDO::PARAM_INT;
+                    break;
+                case is_bool($value):
+                    $type = PDO::PARAM_BOOL;
+                    break;
+                case is_null($value):
+                    $type = PDO::PARAM_NULL;
+                    break;
+                default:
+                    $type = PDO::PARAM_STR;
+            }
+        }
+
+        $this->stmt->bindValue($param, $value, $type);
+    }
+
+    // Execute the prepared statement
+    public function execute(){
+        return $this->stmt->execute();
+    }
+
+
+    public function debug()
+    {
+        return $this->stmt->debugDumpParams();
+    }
+
+
+
+
+    // Get result set as array of objects
+    public function resultSet(){
+        $this->execute();
+        return $this->stmt->fetchAll(PDO::FETCH_OBJ);
+    }
+
+    // Get single record as object
+    public function single(){
+        $this->execute();
+        return $this->stmt->fetch(PDO::FETCH_OBJ);
+    }
+
+    // Get row count
+    public function rowCount(){
+        return $this->stmt->rowCount();
+    }
+    // Get row count
+    public function check(){
+        if(empty($this->stmt->fetchAll(PDO::FETCH_OBJ))) {
+            return false;
+        } else {
+            return true;
+        }
+
+    }
 
 
 

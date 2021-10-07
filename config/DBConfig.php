@@ -9,6 +9,8 @@ use Tinkle\interfaces\ConfigInterface;
 class DBConfig
 {
 
+    private const NATIVE_DB_HANDLER='native';
+    private const ELOQUENT_DB_HANDLER='eloquent';
 
     /**
      * @return array
@@ -17,23 +19,26 @@ class DBConfig
     {
 
         return [
+            'db_service_by'=> self::NATIVE_DB_HANDLER,
             'tinkle'=> [
-                'dsn' => $_ENV['DB_DSN'],
                 'driver'=>$_ENV['DB_DRIVER'],
                 'host'=> $_ENV['DB_HOST'],
-                'port'=>$_ENV['DB_PORT'],
-                'name'=>$_ENV['DB_NAME'],
-                'user' => $_ENV['DB_USER'],
+                'database'=>$_ENV['DB_NAME'],
+                'username' => $_ENV['DB_USER'],
                 'password' => $_ENV['DB_PASSWORD'],
+                'charset' => 'utf8',
+                'collation' => 'utf8_unicode_ci',
+                'prefix' => '',
             ],
             'dinkle'=> [
-                'dsn' => $_ENV['DB_DSN'],
                 'driver'=>$_ENV['DB_DRIVER'],
                 'host'=> $_ENV['DB_HOST'],
-                'port'=>$_ENV['DB_PORT'],
-                'name'=>$_ENV['DB_NAME'],
-                'user' => $_ENV['DB_USER'],
+                'database'=>$_ENV['DB_NAME'],
+                'username' => $_ENV['DB_USER'],
                 'password' => $_ENV['DB_PASSWORD'],
+                'charset' => 'utf8',
+                'collation' => 'utf8_unicode_ci',
+                'prefix' => '',
             ],
         ];
     }

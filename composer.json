@@ -37,7 +37,9 @@
         "ext-gd": "*",
         "ext-pdo": "*",
         "phpoffice/phpspreadsheet": "dev-master",
-        "razorpay/razorpay": "2.*"
+        "razorpay/razorpay": "2.*",
+        "illuminate/database": "^8.63",
+        "illuminate/events": "^8.63"
     },
     "minimum-stability": "dev",
     "prefer-stable": true

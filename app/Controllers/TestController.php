@@ -6,8 +6,10 @@ use App\Models\PostsModel;
 use Tinkle\Controller;
 use Tinkle\Database\Database;
 
+use Tinkle\DB;
 use Tinkle\Request;
 use Tinkle\Response;
+use Tinkle\Tinkle;
 
 /**
  * Class TestController
@@ -38,6 +40,27 @@ class TestController extends Controller
             echo "<h1>Test Controller Home</h1>";
 
            // $post = new PostsModel();
+
+           //dd(Tinkle::$app->db->getConnect());
+
+//
+          // dd(Tinkle::$app->db->getConnect()->getTable('users'));
+//           dd(Tinkle::$app->db->getConnect()->dbExist('tinkle'));
+
+           //dd(Tinkle::$app->db->getConnect()->columnExist('username','users'));
+//           $post = new PostsModel();
+//           dd($post->paginate());
+
+          // $results = DB::select('select * from users where id = ?', [1]);
+           dd(DB::$connect->select('select * from users where id = ?', [1]));
+
+
+
+
+
+
+
+
 
 
 

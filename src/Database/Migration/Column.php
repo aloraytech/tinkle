@@ -11,7 +11,7 @@
  *
  */
 
-namespace Tinkle\Databases\Migration;
+namespace Tinkle\Database\Migration;
 
 class Column
 {

@@ -14,11 +14,9 @@
 namespace Tinkle;
 
 
-use Tinkle\Database\Database;
-use Tinkle\Databases\Access\Access;
-use Tinkle\Databases\DBHandler;
+use Tinkle\Database\DatabaseHandler;
 
-class DB extends Database
+class DB extends DatabaseHandler
 {
 
 
