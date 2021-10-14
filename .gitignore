@@ -4,3 +4,4 @@ vendor
 .env
 .git
 MyReadme.md
+resources/themes
