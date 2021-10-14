@@ -66,7 +66,7 @@ class TestController extends Controller
 //           ddump($user);
 
 
-           $flights =  Posts::where('destination', 'Paris');
+           $posts =  Posts::where('destination', 'Paris');
 
 
 
