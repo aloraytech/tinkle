@@ -5,4 +5,6 @@ vendor
 .git
 MyReadme.md
 resources/themes
-public/resources
+public/resources/backups
+public/resources/upload
+public/resources/assets
