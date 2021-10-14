@@ -1,0 +1,19 @@
+<?php
+
+namespace App\Models{{namespace}};
+
+use Tinkle\Model;
+
+/**
+ * Class {{class}}
+ * @package tinkle\app\models
+ * @author : {{author}}
+ * @version : {{version}}
+ */
+
+class {{class}} extends Model
+{
+
+
+
+}

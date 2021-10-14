@@ -4,7 +4,7 @@
 namespace Tinkle;
 
 
-use Tinkle\Database\ModelHandler;
+use Tinkle\Database\Handlers\ModelHandler;
 
 
 abstract class Model extends ModelHandler

@@ -17,6 +17,13 @@ abstract class Migration
 {
     protected array $table=[];
 
+    protected Schema $schema;
+
+    public function __construct()
+    {
+        $this->schema = new Schema();
+    }
+
 
     abstract public function up();
 
@@ -28,21 +35,19 @@ abstract class Migration
 
     public function getUp()
     {
-        $schema = new Schema();
-       return $schema->getQuery(1);
+
+       return $this->schema->getQuery(1);
     }
 
     public function getAlter()
     {
-        $schema = new Schema();
-        return $schema->getQuery(2);
+        return $this->schema->getQuery(2);
     }
 
 
     public function getDown()
     {
-        $schema = new Schema();
-        return $schema->getQuery(3);
+        return $this->schema->getQuery(3);
     }
 
 
@@ -66,11 +71,14 @@ abstract class Migration
 
     }
 
-
-
-    public static function get()
+    public function getSchema()
     {
-        return Column::get();
+        return $this->schema;
+    }
+
+    public function get()
+    {
+        return $this->schema->getColumnDetail();
     }
 
 

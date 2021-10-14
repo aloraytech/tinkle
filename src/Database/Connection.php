@@ -2,7 +2,10 @@
 
 namespace Tinkle\Database;
 
+use Tinkle\Database\Drivers\MySqlDriver;
+use Tinkle\Database\Drivers\SqliteDriver;
 use Tinkle\Exceptions\Display;
+use Tinkle\Library\Debugger\Debugger;
 use Tinkle\Library\Essential\Essential;
 use Tinkle\Tinkle;
 use PDO;
@@ -10,128 +13,75 @@ use PDO;
 class Connection
 {
 
-    public \PDO $pdo;
-    protected static array $availableDrivers = ['mysql','sqlite'];
-    protected static array $config;
-
-    protected string $driver;
-    protected string $host;
-    protected int $port;
-    protected string $name;
-    protected string $user;
-    protected string $password;
-    protected string $charset;
-    protected string $prefix;
-    private string $activeDB='';
-    /**
-     * @var bool|\PDOStatement
-     */
-    private $stmt;
-    protected array $options = [\PDO::ATTR_PERSISTENT => true,\PDO::ATTR_ERRMODE => \PDO::ERRMODE_EXCEPTION,\PDO::ATTR_EMULATE_PREPARES=>false];
+    protected \PDO $pdo;
+    private \PDOStatement $stmt;
+    protected static Connection $connection;
+    private static array $availableDrivers = ['mysql','sqlite'];
+    private static array $config;
+    private string $database='';
 
 
-    public function __construct(array $config)
+    private string $_time='';
+    private string $prefix='';
+
+
+    public function __construct()
     {
+        $this->_time = microtime(true);
+        self::$connection = $this;
+    }
 
+
+
+
+    public function setConfig(array $config)
+    {
         self::$config = $config;
         $this->prefix = self::$config['prefix'] ?? '';
-        $this->driver = self::$config['driver'] ?? '';
-        $this->host = self::$config['host'] ?? '';
-        $this->charset = self::$config['charset'] ?? '';
-        $this->name = self::$config['database'] ?? '';
-        $this->user = self::$config['username'] ?? '';
-        $this->password = self::$config['password'] ?? '';
+    }
 
 
-
+    public function resolve()
+    {
         if($this->matchDriver())
         {
             if(strtolower(self::$config['driver']) === 'mysql')
             {
-                $this->port = 3306;
-                return $this->getMysqlConnection();
+                $connect = new MySqlDriver(self::$config);
+                $this->pdo = $connect->getConnect();
+
             }elseif (strtolower(self::$config['driver']) === 'sqlite')
             {
-                $this->port = 0666;
-                return $this->getSqlite3Connection();
+                $connect = new SqliteDriver(self::$config);
+                $this->pdo = $connect->getConnect();
             }else{
                 echo "Database Connection Error";
             }
         }
-
-
-
-
-
     }
+
 
 
     public function setDB(string $database)
     {
-        $this->activeDB = $database;
-        return $this->pdo->exec("USE $database");
+        $this->database = $database;
+        return $this->exec("USE ".$this->database);
     }
 
-
-
-
-
-
-    private  function getMysqlConnection()
+    public function getDB()
     {
-        //[dsn] => mysql:host=localhost;port=3306;dbname=tinkle
-        //$this->pdo = new \PDO($this->dsn,$this->user,$this->password,$this->options);
-        try{
-
-            try{
-                //$this->pdo = new \PDO("$this->driver:host=$this->host;port=$this->port;dbname=$this->name",$this->user,$this->password,$this->options);
-
-                $this->pdo = new \PDO("$this->driver:host=$this->host;port=$this->port;",$this->user,$this->password,$this->options);
-
-            }catch (\PDOException $e) {
-                $msg = '_msg='.$e->getMessage().'&_line='.$e->getline().'&_file='.$e->getFile().'&_code='. $e->getCode().'&_trace='. $e->getTraceAsString();
-                throw new Display($msg);
-            }
-
-        }catch (Display $e)
-        {
-
-            $e->handle();
-        } finally {
-            return $this->pdo;
-        }
-
+        return $this->database;
     }
 
 
-    private function getSqlite3Connection()
+    /**
+     * @return PDO
+     */
+    public function getPdo()
     {
-        $sqlPath = Tinkle::$ROOT_DIR."database/$this->name.sq3";
-        if(!file_exists($sqlPath));
-        {
-            $sqlite = fopen($sqlPath,'w+');
-            fclose($sqlite);
-        }
-
-        try{
-
-            try{
-                $this->pdo = new PDO( "sqlite:$sqlPath",$this->user,$this->password,$this->options);
-
-            }catch (\PDOException $e) {
-                $msg = '_msg='.$e->getMessage().'&_line='.$e->getline().'&_file='.$e->getFile().'&_code='. $e->getCode().'&_trace='. $e->getTraceAsString();
-                throw new Display($msg);
-            }
-
-        }catch (Display $e)
-        {
-
-            $e->handle();
-        } finally {
-            return $this->pdo;
-        }
-
+        return $this->pdo;
     }
+
 
 
 
@@ -156,77 +106,22 @@ class Connection
     // METHODS LISTED
 
 
-    public function dbExist(string $dbName)
-    {
-        $this->query("SHOW DATABASES");
-        $result = $this->resultSet();
-        foreach ($result as $dbDetails)
-        {
-            if($dbDetails->Database === $dbName)
-            {
-                return true;
-            }
-        }
-        return false;
 
+
+    // METHODS WITH PDO
+
+    public function prepare(string $sql)
+    {
+        $this->_time = microtime(true);
+        $this->pdo->prepare($sql);
     }
 
-
-
-    public function tableExist(string $tbl_name)
+    public function exec($statement)
     {
-        $attr = 'Tables_in_'.$this->activeDB;
-        $allTable = $this->getAllTables();
-        foreach ($allTable as  $table)
-        {
-            if($tbl_name === $table->$attr)
-            {
-               return true;
-            }
-        }
-        return false;
+        $time = microtime(true) - $this->_time;
+        debugIt($statement,$time,true);
+        return $this->pdo->exec($statement);
     }
-
-
-    public function columnExist(string $column,string $table)
-    {
-
-        $tableDetail = $this->getTable($table);
-        foreach ($tableDetail as  $detail)
-        {
-            if($column === $detail->Field)
-            {
-                return true;
-            }
-        }
-        return false;
-    }
-
-
-
-
-
-    public function getAllTables()
-    {
-        $this->query("SHOW TABLES");
-       return $this->resultSet();
-    }
-
-    public function getTable(string $tbl_name)
-    {
-
-        if($this->tableExist($tbl_name))
-        {
-
-            $this->query("SHOW COLUMNS FROM $tbl_name");
-            return $this->resultSet();
-        }
-
-        return null;
-
-    }
-
-
 
 
     public function lastID()
@@ -238,58 +133,57 @@ class Connection
 
 
 
-    public function query($sql){
+
+    // METHODS WITH PDO STATEMENT
+
+    public function query(string $sql){
+        $this->_time = microtime(true);
         $this->stmt = $this->pdo->prepare($sql);
     }
 
 
 
-
-
-    // Bind values
+// Bind values
     public function bind($param, $value, $type = null){
         if(is_null($type)){
-            switch(true){
-                case is_int($value):
-                    $type = PDO::PARAM_INT;
-                    break;
-                case is_bool($value):
-                    $type = PDO::PARAM_BOOL;
-                    break;
-                case is_null($value):
-                    $type = PDO::PARAM_NULL;
-                    break;
-                default:
-                    $type = PDO::PARAM_STR;
-            }
+            $type = match (true) {
+                is_int($value) => PDO::PARAM_INT,
+                is_bool($value) => PDO::PARAM_BOOL,
+                is_null($value) => PDO::PARAM_NULL,
+                default => PDO::PARAM_STR,
+            };
         }
 
-        $this->stmt->bindValue($param, $value, $type);
+       $this->stmt->bindValue($param, $value, $type);
     }
 
+
+
     // Execute the prepared statement
-    public function execute(string|array $array=[]){
+    public function execute(){
+        $time = microtime(true) - $this->_time;
+        debugIt($this->debug(),$time,true);
+         return $this->stmt->execute();
+    }
+
+
+    public function executeWith(array $array=[]){
+        $time = microtime(true) - $this->_time;
+        debugIt($this->debug(),$time,true);
         return $this->stmt->execute($array);
     }
 
 
-    public function debug()
-    {
-        return $this->stmt->debugDumpParams();
-    }
-
-
-
 
     // Get result set as array of objects
-    public function resultSet(string|array $array=[]){
-        $this->execute($array);
+    public function resultSet(){
+        $this->execute();
         return $this->stmt->fetchAll(PDO::FETCH_OBJ);
     }
 
     // Get single record as object
-    public function single(string|array $array=[]){
-        $this->execute($array);
+    public function single(){
+        $this->execute();
         return $this->stmt->fetch(PDO::FETCH_OBJ);
     }
 
@@ -306,6 +200,32 @@ class Connection
         }
 
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    public function debug()
+    {
+        ob_start();
+        $this->stmt->debugDumpParams();
+        $debugDetail = ob_get_contents();
+        ob_end_clean();
+        return $debugDetail;
+    }
+
 
 
 

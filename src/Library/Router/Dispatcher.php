@@ -66,6 +66,7 @@ class Dispatcher
             foreach ($this->_current_route as $route)
             {
                 switch ($currentGroup) {
+
                     case self::API_GROUP:
                         $this->apiDispatcher($route);
                         break;
@@ -141,6 +142,7 @@ class Dispatcher
                         $result = $callback[0]->getResult();
                         if(!empty($result))
                         {
+                            debugIt($this->request->getRequestUrl(),microtime(true)-Tinkle::$app->router->getTakenTime());
                             //SEND RESULT OR DISPLAY AS JSON RESPONSE
                             $this->response->sendJson($result);
                         }else{
@@ -170,6 +172,7 @@ class Dispatcher
                 if(!empty($route['mask']))
                 {
                     $platformObject = new Platform($this->request,$this->response,$route['mask']);
+                    debugIt($this->request->getRequestUrl(),microtime(true)-Tinkle::$app->router->getTakenTime());
                     $platformObject->resolve();
                 }
             }
@@ -252,6 +255,7 @@ class Dispatcher
                         {
                             $middleware->execute();
                         }
+                        debugIt($this->request->getRequestUrl(),microtime(true)-Tinkle::$app->router->getTakenTime());
                        return call_user_func($callback,$this->request,$this->response);
 
                     }
@@ -274,6 +278,7 @@ class Dispatcher
     {
         if(is_string($route['callback']))
         {
+            debugIt($this->request->getRequestUrl(),microtime(true)-Tinkle::$app->router->getTakenTime());
             return Tinkle::$app->view->render::display($route['callback']);
         }
     }

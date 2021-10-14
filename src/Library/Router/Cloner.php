@@ -136,7 +136,7 @@ class Cloner
     protected function run(bool|int $case=true)
     {
         try{
-
+            Tinkle::$app->debug->register('anonymousFunction',microtime(true)-Tinkle::$app->router->getTakenTime(),false);
             if($case)
             {
                 return call_user_func($this->cloner,$this->parameter);

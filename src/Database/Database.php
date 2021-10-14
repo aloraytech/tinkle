@@ -2,36 +2,30 @@
 
 namespace Tinkle\Database;
 use PDO;
+use Tinkle\Exceptions\Display;
+use Tinkle\Library\Essential\Essential;
+use Tinkle\Library\Essential\Helpers\RegexHandler;
 use Tinkle\Tinkle;
 
 class Database
 {
 
-    private array $allDbConfig=[];
-    private array $currentDbConfig=[];
-    private string $dsn='';
-    private object $connection;
-    private \PDOStatement|bool $stmt;
-    private string $currentDB='';
+
+    protected Connection $connection;
     public static Database $database;
-    private string|int $processing_time='';
-    public static object $connect;
+    protected DBResolver $resolver;
+
+    private string $db='';
+
+
+
 
     public function __construct(array $config)
     {
-        $this->processing_time = microtime(true);
         self::$database = $this;
-        $this->allDbConfig = $config;
-
-        if(empty($this->currentDbConfig))
-        {
-            $this->currentDbConfig = $this->getCurrentDbConfig();
-        }
-
-        $this->connection = $this->connect($this->currentDbConfig);
-        $this->setDefaultDB();
-        self::$connect = $this;
-
+        $this->connection = new Connection();
+        $this->resolver = new DBResolver();
+        $this->resolver->setConfig($config);
     }
 
 
@@ -41,126 +35,166 @@ class Database
         return $this->connection;
     }
 
-    /**
-     * @return string
-     */
-    public function getCurrentDB()
-    {
-        return $this->currentDB;
-    }
 
 
-    /**
-     * @return array
-     */
-    public function getCurrentDBDetails()
+    // Methods
+
+    public function setDefaultConnection()
     {
-        $tables = $this->connection->getAllTables();
-        return [
-            'database'=> $this->currentDB,
-            'tables'=> $tables,
-            'count'=>count($tables),
-            'timeTaken'=>microtime(true)-$this->processing_time,
-        ];
+        $this->db = $_ENV['DB_NAME'];
+        $this->connection->setConfig($this->resolver->getConfig($this->db));
+        $this->connection->resolve();
+        $this->connection->setDB($this->db);
     }
 
 
 
 
-
-
-    public function switchDB(string $database_name='')
+    public function createDB(string $db_name)
     {
-        $this->currentDB = $database_name;
-        return $this->connection->setDB($this->currentDB);
-    }
 
-
-    public function switchToExternalDB(string $database_name='')
-    {
-        $this->currentDB = $database_name;
-        $this->currentDbConfig = $this->getCurrentDbConfig();
-        $this->connection = $this->connect($this->currentDbConfig);
-        return $this->connection->setDB($this->currentDB);
-    }
-
-
-
-    // Database Base Methods
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    // PRIVATE METHODS FOR DATABASE
-
-    private function connect(array $dbConfig)
-    {
-        $this->connection = new Connection($dbConfig);
-        return $this->connection;
-    }
-
-
-
-    /**
-     * @param string $database_name
-     * @return array
-     */
-    private function getCurrentDbConfig(string $database_name='')
-    {
-        if(empty($database_name))
+        if(is_string($db_name))
         {
-            $database_name = $_ENV['DB_NAME'];
+            if(Essential::REGEX()->findMatch($db_name,RegexHandler::REGEX_ALPHA_NUMERIC))
+            {
+                if(!$this->dbExist($db_name) && !$this->resolver->getConfig($db_name) !== null)
+                {
+                    $this->connection->query("CREATE DATABASE $db_name");
+                    if($this->connection->execute())
+                    {
+                        return true;
+                    }
+                }
+            }
+
         }
-        return $this->allDbConfig[$database_name] ?? null;
+        return false;
+
     }
 
-    private function setDefaultDB()
+    public function set(string $database)
     {
-        $this->currentDB = $_ENV['DB_NAME'];
-        return $this->connection->setDB($this->currentDB);
+        if($this->resolver->getConfig($database) !== null)
+        {
+            $this->db = $database;
+            $this->connection->setConfig($this->resolver->getConfig($this->db));
+            $this->connection->resolve();
+            $this->connection->setDB($this->db);
+        }
     }
+
+
+    public function switch(string $database)
+    {
+        if($this->resolver->getConfig($database) !== null)
+        {
+            $this->db = $database;
+            return $this->connection->setDB($this->db);
+        }
+    }
+
+
+
+
+    public function export(string $database='')
+    {
+
+        throw new Display("Method Not Ready For Use",Display::HTTP_METHOD_NOT_ALLOWED);
+
+    }
+
+
+
+    public function dropDB(string $database)
+    {
+        if($this->dbExist($database))
+        {
+            $this->connection->query("DROP DATABASE $database");
+            if($this->connection->execute())
+            {
+                return true;
+            }
+        }
+    }
+
+
+
+
+
+
+
+    public function dbExist(string $dbName)
+    {
+        $this->connection->query("SHOW DATABASES");
+        $result = $this->connection->resultSet();
+        foreach ($result as $dbDetails)
+        {
+            if($dbDetails->Database === $dbName)
+            {
+                return true;
+            }
+        }
+        return false;
+
+    }
+
+    public function tableExist(string $tbl_name)
+    {
+        $attr = 'Tables_in_'.$this->db;
+        $allTable = $this->getAllTables();
+        foreach ($allTable as  $table)
+        {
+            if($tbl_name === $table->$attr)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+
+
+    public function columnExist(string $column,string $table)
+    {
+
+        $tableDetail = $this->getTable($table);
+        foreach ($tableDetail as  $detail)
+        {
+            if($column === $detail->Field)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+
+
+
+
+    public function getAllTables()
+    {
+        $this->connection->query("SHOW TABLES");
+        return $this->connection->resultSet();
+    }
+
+    public function getTable(string $tbl_name)
+    {
+        $table = strtolower($tbl_name);
+        if($this->tableExist($table))
+        {
+            $this->connection->query("SHOW COLUMNS FROM $table");
+            return $this->connection->resultSet();
+        }
+
+        return null;
+
+    }
+
+
+
+
+
 
 
 

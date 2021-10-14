@@ -43,5 +43,8 @@
         "phpunit/phpunit": "^9.5"
     },
     "minimum-stability": "dev",
-    "prefer-stable": true
+    "prefer-stable": true,
+    "require-dev": {
+        "symfony/var-dumper": "^5.3"
+    }
 }

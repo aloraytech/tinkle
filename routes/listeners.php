@@ -19,3 +19,13 @@ use Tinkle\Event;
 
 
 //Event::set(Event::EVENT_ON_LOAD,'adss.firsts',[\Plugins\Ads\Advert::class,'loadFirstAds']);
+
+
+Event::set(Event::EVENT_ON_END,'debugger.show',[\Plugins\Debugger\Debugger::class,'show']);
+
+
+
+
+
+
+

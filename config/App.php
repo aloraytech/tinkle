@@ -17,6 +17,7 @@ class App implements ConfigInterface
             'imageBase64'=> true,
             'cache' => true,
             'autoToken'=>true,
+            'startOn'=>microtime(true),
         ]);
     }
 }

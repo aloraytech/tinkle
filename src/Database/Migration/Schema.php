@@ -13,6 +13,9 @@
 
 namespace Tinkle\Database\Migration;
 
+
+use Tinkle\Tinkle;
+
 class Schema
 {
     public static string $tableName='';
@@ -28,6 +31,8 @@ class Schema
     {
         self::$tableName = $tableName;
         return $callback(new Column($tableName));
+
+
     }
 
 
@@ -51,6 +56,12 @@ class Schema
     }
 
     public static function hasColumn(string $table,string $column){}
+
+
+    public function getColumnDetail()
+    {
+        return Column::get();
+    }
 
 
     public function getQuery(int $type=1)
@@ -91,34 +102,34 @@ class Schema
             {
                 foreach ($columnDetail as $key => $value)
                 {
-                    if($value['type']!='TIMESTAMP')
+                    if($value['Type']!='TIMESTAMP')
                     {
-                        if(!empty($value['rule']))
+                        if(!empty($value['Rule']))
                         {
                             $buildArray[$table][$key]['query']
-                                = ' `'.$key.'` '. $value['type'] .'('.$value['size'].') '.$value['rule'].'' ;
+                                = ' `'.$key.'` '. $value['Type'] .'('.$value['Size'].') '.$value['Rule'].'' ;
 
-                                $QUERY []=' `'.$key.'` '. $value['type'] .'('.$value['size'].') '.$value['rule'].'' ;
+                                $QUERY []=' `'.$key.'` '. $value['Type'] .'('.$value['Size'].') '.$value['Rule'].'' ;
 
                         }
 
 
                     }else{
-                        if($value['type']==='TIMESTAMP')
+                        if($value['Type']==='TIMESTAMP')
                         {
 
                             $buildArray[$table][$key]['query']
-                                = ' `'.$key.'` '. $value['type'] .' '.$value['rule'].',' ;
-                            $QUERY2 .=' ,`'.$key.'` '. $value['type'] .' '.$value['rule'].'' ;
+                                = ' `'.$key.'` '. $value['Type'] .' '.$value['Rule'].',' ;
+                            $QUERY2 .=' ,`'.$key.'` '. $value['Type'] .' '.$value['Rule'].'' ;
                         }
 
                     }
 
-                    if(!empty($value['detail']))
+                    if(!empty($value['Detail']))
                     {
                         $buildArray[$table][$key]['query2']
-                            =$value['detail'].',' ;
-                        $QUERY3 .=$value['detail'] ;
+                            =$value['Detail'].',' ;
+                        $QUERY3 .=$value['Detail'] ;
                     }
 
                 }

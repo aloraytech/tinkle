@@ -28,7 +28,7 @@ abstract class RouterHandler
     protected static array $routes=[];
     protected static array $groups=[];
     protected static string $_group='';
-
+    public static string $time_taken='';
 
 
     /**
@@ -52,6 +52,32 @@ abstract class RouterHandler
     }
 
     abstract protected function loadRoutes():bool;
+
+
+
+
+
+
+    public static function resolve()
+    {
+        self::$time_taken = microtime(true);
+        self::$router->dispatcher->dispatch(self::$groups);
+    }
+
+    public function getTakenTime()
+    {
+        return self::$time_taken;
+    }
+
+
+
+
+
+
+
+
+
+
 
     public static function group(string $group_name)
     {
@@ -213,13 +239,27 @@ abstract class RouterHandler
 
 
 
-    public static function resolve()
-    {
+    /**
+     *
+     *      PLAT FORM   ROU  TER
+     *
+     *
+     *
+     */
 
-        self::$router->dispatcher->dispatch(self::$groups);
-    }
 
 
+
+
+
+
+
+
+    /**
+     * @param string $uri
+     * @param string $musk_name
+     * @param bool $auth
+     */
 
 
     public static function getPlatform(string $uri, string $musk_name, bool $auth=false)

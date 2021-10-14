@@ -9,6 +9,7 @@ use App\models\UsersModel;
 use Tinkle\Databases\DBHandler;
 use Tinkle\Exceptions\ExceptionMagic;
 use Tinkle\Library\Console\Console;
+use Tinkle\Library\Debugger\Debugger;
 use Tinkle\Library\Essential\Essential;
 use Tinkle\Exceptions\Display;
 use Tinkle\Databases\Database;
@@ -58,10 +59,10 @@ use Tinkle\Library\Designer\Designer;
 
 
         // First Thing First
-      //  restore_error_handler();
-        restore_exception_handler();
-        set_exception_handler([new ExceptionMagic(), 'handle']);
-        set_error_handler(array($this, 'ErrorHandler'));
+//        restore_error_handler();
+//        restore_exception_handler();
+//        set_exception_handler([new ExceptionMagic(), 'handle']);
+//        set_error_handler(array($this, 'ErrorHandler'));
         try {
 
             if($this->welcome())
@@ -77,7 +78,7 @@ use Tinkle\Library\Designer\Designer;
                     Essential::init();
 
                     $this->db = new DB($this->config['db']);
-
+                    $this->db->setDefaultConnection();
 
 
                     if (!$this->isCli())
@@ -214,6 +215,8 @@ use Tinkle\Library\Designer\Designer;
 
     protected function welcome()
     {
+        restore_exception_handler();
+        set_exception_handler([new ExceptionMagic(), 'handle']);
         restore_error_handler();
         set_error_handler(array($this, 'ErrorHandler'));
         return true;

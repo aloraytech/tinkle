@@ -1,14 +1,14 @@
 <?php
 namespace Database\migrations;
-use Tinkle\Database\Migration\Column;
 use Tinkle\Database\Migration\Migration;
-use Tinkle\Database\Migration\Schema;
+use Illuminate\Database\Capsule\Manager as Capsule;
 /**
- * Class m001CreateUsersMigration
- * @author :
- * @version :
+ * Class {{class}}
+ * @package tinkle\database\migration
+ * @author : {{author}}
+ * @version : {{version}}
  */
-class m001CreateUsersMigration extends Migration
+class {{class}} extends Migration
 {
 
     /**
@@ -16,14 +16,11 @@ class m001CreateUsersMigration extends Migration
      */
     public function up()
     {
-        Schema::create('users',function (Column $column) {
-            $column->id();
-            $column->string('username')->nullable();
-            $column->string('email')->required()->size(55);
-            $column->string('password')->required();
-            $column->timestamps();
+        Capsule::schema()->create('users', function ($table) {
+            $table->increments('id');
+            $table->string('email')->unique();
+            $table->timestamps();
         });
-
     }
 
 

@@ -2,7 +2,10 @@
 /**
  * Here Are Listed All Common Helpers..Which can call directly any time anywhere..
  */
+
+use Symfony\Component\VarDumper\VarDumper;
 use Tinkle\Tinkle;
+
 
 
 
@@ -31,11 +34,18 @@ function Auth()
         ];
     }
 
+//
+//    function ddDump()
+//    {
+//        foreach (func_get_args() as $x) {
+//            dump($x);
+//        }
+//        die;
+//    }
 
 
 
-
-    function dd($param,$bg_color='yellow',$text_color='black',$title='Direct Display')
+    function dryDump($param,$bg_color='yellow',$text_color='black',$title='Direct Display')
     {
         $title = ucfirst($title);
         if(!empty($param))
@@ -45,7 +55,7 @@ function Auth()
 
             ob_start();
             echo "
-<div style='background-color: $bg_color; color: $text_color;border-style: solid; border-width: thick;'>
+<div style='background-color: $bg_color; color: $text_color;border-style: solid; border-width: thick; border-color: black'>
 <h2 style='margin: auto;padding: 2px;background-color: $text_color; color: $bg_color;'  align='left'>[ ] $title:-</h2>
 <pre style='padding: 5px;word-wrap: break-word;word-break: break-all;'>";
             print_r($param);
@@ -55,7 +65,8 @@ function Auth()
         }
     }
 
-function ddDump($param,$bg_color='yellow',$text_color='black')
+if (!function_exists('dryDump')) {
+    function dryDump($param,$bg_color='yellow',$text_color='black')
 {
     if(!empty($param))
     {
@@ -68,16 +79,31 @@ function ddDump($param,$bg_color='yellow',$text_color='black')
 
     }
 }
-
-
-function table(string &$table)
-{
-    return new \Tinkle\Databases\Migration\Builder($table);
 }
 
 
 
+if (!function_exists('ddump')) {
+    function ddump(...$vars)
+    {
+        foreach ($vars as $v) {
+            VarDumper::dump($v);
+        }
 
+
+    }
+}
+
+
+if (!function_exists('debugIt')) {
+    function debugIt(string|array|object $subject, int|string|float $timeTaken='', bool $isDBDebug=false, int $traceLimit=5)
+    {
+        if (class_exists(\Tinkle\Library\Debugger\Debugger::class)) {
+           return \Tinkle\Library\Debugger\Debugger::register($subject,$timeTaken,$isDBDebug,$traceLimit);
+        }
+
+    }
+}
 
 
 

@@ -2,11 +2,15 @@
 declare(strict_types=1);
 namespace App\Controllers;
 
-use App\Models\PostsModel;
+use App\Models\Posts;
+
+use App\Models\UsersModel;
+use Database\migrations\m001CreateUsersMigration;
 use Tinkle\Controller;
 use Tinkle\Database\Database;
 
 use Tinkle\DB;
+use Tinkle\Library\Debugger\Debugger;
 use Tinkle\Request;
 use Tinkle\Response;
 use Tinkle\Tinkle;
@@ -49,12 +53,32 @@ class TestController extends Controller
 
            //dd(Tinkle::$app->db->getConnect()->columnExist('username','users'));
 //           $post = new PostsModel();
-//           dd($post->paginate());
+//                 ddump($post);
+//           $post->author_id = 2;
+
+         //  $post->find(1)->where();
+
+//          ddump();
+           //  ddump($post->findAll());
+
+
+//           $user = new UsersModel();
+//           ddump($user);
+
+
+           $flights =  Posts::where('destination', 'Paris');
+
+
+
+
+
 
           // $results = DB::select('select * from users where id = ?', [1]);
-           dd(DB::$connect->select('select * from users where id = ?', [1]));
+          //dd(DB::select('select * from users where id = ?', [1]));
 
 
+//            $app = new m001CreateUsersMigration();
+//           $app->up();
 
 
 

@@ -113,9 +113,55 @@ class Make extends ConsoleController
 
     }
 
-    public function model()
+    public function model(string $model)
     {
+        $model = str_replace('\\','/',$model);
+        $model = str_replace('.php','',$model);
+        $temp=[];
+        if(preg_match("/\//",$model,$matches))
+        {
+            $temp = explode('/',$model);
+            $length = count($temp);
 
+            $model = end($temp);
+            unset($temp[$length-1]);
+            if(!empty($temp))
+            {
+                $this->addonLocation = implode('/',$temp).'/';
+            }
+
+        }
+
+        $model = str_replace("Create",'',$model);
+        $model = str_replace("create",'',$model); // strtolower.. next time..
+        $model = str_replace('Model','',$model);
+        $model = str_replace('model','',$model);
+
+        $isPlural = substr($model, -1);
+
+        if($isPlural != 's' || $isPlural != 'S')
+        {
+            $model = $model.'s';
+        }
+
+
+        $mainName = $model;
+
+
+        $this->skeletonData = $this->getSkeleton('model');
+        if(!empty($this->skeletonData))
+        {
+            echo "Preparing...\n";
+            if($this->applySkeleton($model,$this->model_dir.$this->addonLocation,$mainName,$temp))
+            {
+                echo "$model File Created ...\n";
+            }else{
+                echo "$model File Creation Failed! ...\n";
+            }
+
+        }else{
+            echo "Model Skeleton Not Found!";
+        }
     }
 
     public function view()
@@ -196,7 +242,16 @@ class Make extends ConsoleController
             $this->addonLocation = $temp[0].'/';
         }
 
-        $this->skeletonData = $this->getSkeleton('migration');
+        if(Tinkle::$app->config['db']['db_service_by'] != 'native'){
+            $this->skeletonData = $this->getSkeleton('eloquent_migration');
+        }
+        else{
+            $this->skeletonData = $this->getSkeleton('migration');
+        }
+
+
+
+
         if(!empty($this->skeletonData))
         {
             echo "Preparing...\n";

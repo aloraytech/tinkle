@@ -20,10 +20,10 @@ class ColumnOptions
     public static string $columnName='';
     public static string $table='';
 
-    public function __construct(string $columnName,array $column)
+    public function __construct(string $columnName,array $columnSetting)
     {
         self::$table = Column::$table;
-        self::$column = $column;
+        self::$column = $columnSetting;
         self::$columnName = $columnName;
     }
 
@@ -37,7 +37,8 @@ class ColumnOptions
 
     public function nullable()
     {
-        self::$column['rule'] = self::$column['rule']. 'NULL';
+        self::$column['Require'] = false;
+        self::$column['Rule'] = self::$column['Rule']. 'NULL';
         Column::update(self::$columnName,self::$column);
         return $this;
     }
@@ -45,14 +46,15 @@ class ColumnOptions
 
     public function required()
     {
-        self::$column['rule'] = self::$column['rule']. 'NOT NULL';
+        self::$column['Require'] = true;
+        self::$column['Rule'] = self::$column['Rule']. 'NOT NULL';
         Column::update(self::$columnName,self::$column);
         return $this;
     }
 
     public function unsigned()
     {
-        self::$column['rule'] = 'UNSIGNED '.self::$column['rule'];
+        self::$column['Rule'] = 'UNSIGNED '.self::$column['Rule'];
         Column::update(self::$columnName,self::$column);
         return $this;
     }
@@ -60,7 +62,7 @@ class ColumnOptions
 
     public function size(int $size)
     {
-        self::$column['size'] = $size;
+        self::$column['Size'] = $size;
         Column::update(self::$columnName,self::$column);
         return $this;
     }
@@ -70,9 +72,9 @@ class ColumnOptions
     {
         $reference_table = strtolower($reference_table);
         $reference_id = strtolower($reference_id);
-        self::$column['detail'] = self::$column['detail']. " REFERENCES `$reference_table`(`$reference_id`) ON DELETE CASCADE ON UPDATE CASCADE;";
-        self::$column['for'] = $reference_table;
-        self::$column['on']= $reference_id;
+        self::$column['Detail'] = self::$column['Detail']. " REFERENCES `$reference_table`(`$reference_id`) ON DELETE CASCADE ON UPDATE CASCADE;";
+        self::$column['LinkTo'] = $reference_table;
+        self::$column['LinkOn']= $reference_id;
         Column::update(self::$columnName,self::$column);
         return $this;
     }
