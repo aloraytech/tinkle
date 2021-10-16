@@ -48,15 +48,15 @@ class TestController extends Controller
            //dd(Tinkle::$app->db->getConnect());
 
 //
-          // dd(Tinkle::$app->db->getConnect()->getTable('users'));
+     //     dd(Tinkle::$app->db->table('posts')->all()->where(['id'=> 1])->get());
 //           dd(Tinkle::$app->db->getConnect()->dbExist('tinkle'));
 
            //dd(Tinkle::$app->db->getConnect()->columnExist('username','users'));
-//           $post = new PostsModel();
+           $post = new Posts();
 //                 ddump($post);
 //           $post->author_id = 2;
 
-         //  $post->find(1)->where();
+          $post->find(1);
 
 //          ddump();
            //  ddump($post->findAll());
@@ -66,8 +66,52 @@ class TestController extends Controller
 //           ddump($user);
 
 
-           $posts =  Posts::where('destination', 'Paris');
+//          $posts =  Posts::all()->get();
+//          dryDump($posts);
+//           ddump($posts);
+//           ddump($posts->find(1));
+//
+//            $pp = new Posts();
+//            $pp->method();
+//
+//            dryDump($pp->all()->where(['id'=>5,'author_id'=>2])->first());
+//
+//           dryDump(Posts::all()->where(['id'=>5,'author_id'=>2])->first());
+//           echo "Here";
 
+   //         dryDump(Posts::all()->where(['id'=>5,'author_id'=>2])->first());
+//           dryDump(Posts::find()->where(['id'=>5,'author_id'=>2])->first());
+
+
+//           Posts::create([
+//               'title' => 'Taylorss',
+//               'description' => 'Otwellss',
+//               'author_id' => 1,
+//               'category_id'=> 1
+//           ]);
+
+
+//           dryDump(Posts::where('author_id', 3)
+//               ->orderBy('category_id')
+//               ->take(10)
+//               ->get());
+
+
+           //dd(Posts::find(9)->title);
+//           echo "<pre>";
+     //     print_r(Posts::find(9));
+
+
+
+
+
+      //     dryDump(Posts::find(1));
+
+//           $flight = Posts::find(1);
+//
+//           $flight->name = 'Paris to London';
+//
+//           $flight->save();
 
 
 

@@ -87,9 +87,11 @@ class Debugger
 
     public static function get()
     {
+        $maxTime = 2;
         $netTime= microtime(true)-Tinkle::$app->config['app']['startOn'];
-        $leftTime = 2- number_format((float)$netTime, 4, '.', '');
+        $leftTime = $maxTime - number_format((float)$netTime, 4, '.', '');
         return [
+            'max_time'=> $maxTime . ' seconds only',
             'time_consume'=> number_format((float)$netTime, 4, '.', '').' seconds only',
             'time_left'=>$leftTime . ' seconds only',
             'debug'=>self::$debugBag,

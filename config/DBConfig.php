@@ -1,11 +1,6 @@
 <?php
-
-
 namespace Config;
-
-
 use Tinkle\interfaces\ConfigInterface;
-
 class DBConfig
 {
 

@@ -1,14 +1,13 @@
 <?php
 
-namespace Tinkle\Database\DBAccessor;
+namespace Tinkle\Database\Access\Mapper;
 
-use Tinkle\Database\Database;
 use Tinkle\Database\Migration\Migration;
 use Tinkle\Exceptions\Display;
 use Tinkle\Library\Essential\Essential;
 use Tinkle\Tinkle;
 
-class TableResolver
+class TableMapper
 {
 
     protected string $table='';
@@ -19,6 +18,10 @@ class TableResolver
     private array|object $default=[];
     private string|float $_time='';
     private array|object|string $mFiles=[];
+
+    /**
+     * @throws Display
+     */
     public function __construct(string $table)
     {
 
@@ -40,6 +43,9 @@ class TableResolver
     }
 
 
+    /**
+     * @throws Display
+     */
     private function findNGetTableMap(string $table)
     {
         return $this->updateMap($this->resolve($this->loadFromSchema($table),$table),$table);
@@ -186,10 +192,6 @@ class TableResolver
         }
         return $result;
     }
-
-
-
-
 
 
 }

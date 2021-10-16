@@ -40,6 +40,7 @@ class MySqlDriver
 
                 $this->pdo = new \PDO("$this->driver:host=$this->host;port=$this->port;charset=$this->charset",$this->user,$this->password,$this->options);
 
+
             }catch (\PDOException $e) {
                 $msg = '_msg='.$e->getMessage().'&_line='.$e->getline().'&_file='.$e->getFile().'&_code='. $e->getCode().'&_trace='. $e->getTraceAsString();
                 throw new Display($msg);
@@ -58,6 +59,8 @@ class MySqlDriver
     {
         return $this->pdo;
     }
+
+
 
 
 

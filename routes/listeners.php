@@ -20,7 +20,7 @@ use Tinkle\Event;
 
 //Event::set(Event::EVENT_ON_LOAD,'adss.firsts',[\Plugins\Ads\Advert::class,'loadFirstAds']);
 
-
+Event::set(Event::EVENT_ON_LOAD,'maxTime.timeUp',[\Plugins\TimeUp\TimeUp::class,'maxTimeup']);
 Event::set(Event::EVENT_ON_END,'debugger.show',[\Plugins\Debugger\Debugger::class,'show']);
 
 

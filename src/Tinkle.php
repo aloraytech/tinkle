@@ -261,8 +261,13 @@ use Tinkle\Library\Designer\Designer;
 
     public function logout()
     {
-        $this->user = null;
+      //  $this->user = null;
+        if($this->db->getConnect()->close())
+        {
+            $this->response->redirect('/');
+        }
         self::$app->session->remove('user');
+
     }
 
 

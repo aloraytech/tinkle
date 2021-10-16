@@ -9,7 +9,7 @@ use Tinkle\Tinkle;
         class_alias('Tinkle\Database\Handlers\EloquentHandler', 'MODEL_CONNECTION');
     }
     else{
-        class_alias('Tinkle\Database\DBAccessor\DBExHandler', 'MODEL_CONNECTION');
+        class_alias('Tinkle\Database\Access\AccessHandler', 'MODEL_CONNECTION');
     }
 
 

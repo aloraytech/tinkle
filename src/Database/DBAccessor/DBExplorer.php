@@ -19,13 +19,14 @@ abstract class DBExplorer
     protected array|object $tableMap;
     protected ModelExplorer $model;
     protected float|string|int $_time='';
-
+    public static DBExplorer $dbe;
 
 
 
 
     public function __construct()
     {
+        self::$dbe = $this;
         if(empty($this->_time))
         {
             $this->_time = microtime(true);

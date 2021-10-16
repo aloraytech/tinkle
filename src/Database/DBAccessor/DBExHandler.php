@@ -38,6 +38,13 @@ class DBExHandler extends DBExplorer
     }
 
 
+    public static function all()
+    {
+        $theTable = strtolower($this->table);
+        $this->connection->query("SELECT * FROM {$theTable}");
+        return $this->connection->resultSet();
+    }
+
 
 
 

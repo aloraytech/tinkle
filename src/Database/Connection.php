@@ -202,8 +202,82 @@ class Connection
     }
 
 
+    public function close(string $conID='')
+    {
+        $conID = $conID ?? $this->getConnectionID();
+        return $this->query("KILL CONNECTION_ID($conID)");
+    }
 
 
+    public function getStatus()
+    {
+        return [
+            'CONNECTION_ID' => $this->getConnectionID(),
+            'STATUS'=>$this->getConStatus(),
+            'SCHEMA'=>$this->getSchema(),
+            'PROCESS_LIST'=>$this->getProcess(),
+        ];
+    }
+
+    private function getConnectionID()
+    {
+        $this->query("SELECT  CONNECTION_ID();");
+        return array_values(Essential::getHelper()->ObjectToArray($this->single()))[0];
+    }
+
+
+
+    private function getConStatus()
+    {
+        $statusData = [];
+        $this->query("show status like '%onn%';");
+        $allStatus=  $this->resultSet();
+        foreach ($allStatus as $key => $value)
+        {
+            $statusData[$value->Variable_name] = $value->Value;
+        }
+        return $statusData;
+
+
+        //$status = $this->exec("show status like '%onn%';");
+//        $processList = $this->exec("SHOW PROCESSLIST");
+//        $this->query("SELECT * FROM INFORMATION_SCHEMA.PROCESSLIST WHERE DB = :db;");
+//        $this->bind(':db',$this->database);
+//        $dbSchema = $this->resultSet();
+//        return [
+//          'status'=> $status ?? [],
+//          'process'=>$processList ?? [],
+//          'schema'=>$dbSchema ?? [],
+//        ];
+    }
+
+    private function getProcess()
+    {
+        $processData = [];
+        $this->query("SHOW PROCESSLIST");
+        $allList = $this->resultSet();
+        foreach ($allList as $key => $listValue)
+        {
+            $processData[$listValue->User][]=$listValue;
+        }
+        return $processData;
+    }
+
+
+    private function getSchema()
+    {
+        $schemaData=[];
+        $this->query("SELECT * FROM INFORMATION_SCHEMA.PROCESSLIST WHERE DB = :db;");
+        $this->bind(':db',$this->database);
+        $dbSchema = $this->resultSet();
+
+        foreach ($dbSchema as $key =>$schema)
+        {
+            $schemaData[$schema->USER][] = $schema;
+        }
+
+        return $schemaData;
+    }
 
 
 

@@ -8,6 +8,7 @@ use Razorpay\Api\Api;
 use Tinkle\Controller;
 use Tinkle\Request;
 use Tinkle\Response;
+use Tinkle\Tinkle;
 
 /**
  * Class FrontController
@@ -54,7 +55,7 @@ class FrontController extends Controller
 
 
 
-
+           Tinkle::$app->logout();
 
 
 

@@ -178,16 +178,10 @@ class Database
         return $this->connection->resultSet();
     }
 
-    public function getTable(string $tbl_name)
+    public function table(string $tbl_name)
     {
-        $table = strtolower($tbl_name);
-        if($this->tableExist($table))
-        {
-            $this->connection->query("SHOW COLUMNS FROM $table");
-            return $this->connection->resultSet();
-        }
-
-        return null;
+        $model = "App\Models\\".ucfirst($tbl_name);
+        return new $model();
 
     }
 
