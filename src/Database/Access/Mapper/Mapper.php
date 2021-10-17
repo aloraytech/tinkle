@@ -12,6 +12,7 @@ class Mapper
     private string $table='';
     private array $bag=[];
     private array $error=[];
+    private array|object $mapperBag=[];
 
     /**
      * @param string $table
@@ -28,7 +29,16 @@ class Mapper
 
     private function resolve()
     {
-        $this->mapper = self::getMapper();
+        if(!isset($this->mapperBag[$this->table]))
+        {
+            $this->mapper = self::getMapper();
+            $this->mapperBag[$this->table] = $this->mapper;
+        }else{
+            $this->mapper = $this->mapperBag[$this->table];
+        }
+
+
+
         $this->matchParamWithMap();
     }
 
@@ -59,12 +69,12 @@ class Mapper
      */
     private  function getMapper()
     {
-        Access::setDebug();
+        Access::setDebug('Searching mapper For '.$this->table);
         $tableMap = new TableMapper($this->table);
         $map= $tableMap->get();
         if(!empty($map))
         {
-            Access::setDebug();
+            Access::setDebug("Found Map For $this->table");
             return $map;
         }else{
             throw new Display(self::getTable()." - Table Mapping Failed!",Display::HTTP_SERVICE_UNAVAILABLE);

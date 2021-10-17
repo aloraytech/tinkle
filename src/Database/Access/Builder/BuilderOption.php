@@ -61,6 +61,9 @@ class BuilderOption
     }
 
 
+    /**
+     * @throws \Tinkle\Exceptions\Display
+     */
     public function get()
     {
         Access::prepareQuery($this->table,$this->bag[$this->table]);

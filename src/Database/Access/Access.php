@@ -18,6 +18,7 @@ class Access
     protected static array $int_time=[];
     protected static array $queryBag=[];
     public static string|array $error=[];
+    public string $table='';
 
 
     /**
@@ -26,7 +27,6 @@ class Access
     public function __construct()
     {
         self::$access = $this;
-        $this->intTime();
 
     }
 
@@ -81,22 +81,22 @@ class Access
         return Database::$database->getConnect();
     }
 
-    /**
-     * @throws Display
-     */
-    private static function getMapper()
-    {
-        self::setDebug();
-        $tableMap = new TableMapper(self::getTable());
-        $map= $tableMap->get();
-        if(!empty($map))
-        {
-            self::setDebug();
-            return $map;
-        }else{
-            throw new Display(self::getTable()." - Table Mapping Failed!",Display::HTTP_SERVICE_UNAVAILABLE);
-        }
-    }
+//    /**
+//     * @throws Display
+//     */
+//    private static function getMapper()
+//    {
+//        self::setDebug();
+//        $tableMap = new TableMapper(self::getTable());
+//        $map= $tableMap->get();
+//        if(!empty($map))
+//        {
+//            self::setDebug();
+//            return $map;
+//        }else{
+//            throw new Display(self::getTable()." - Table Mapping Failed!",Display::HTTP_SERVICE_UNAVAILABLE);
+//        }
+//    }
 
     public static function verifyWithMapper(string $table='', array|object $bag=[])
     {
@@ -124,6 +124,8 @@ class Access
      */
     public static function prepareQuery(string $table='',array $bag=[])
     {
+
+//        dryDump($bag);
 
         if(empty($table)){$table = self::getTable();}
         if(empty($bag)){$bag = self::$queryBag[strtolower(self::getTable())];}
@@ -200,6 +202,7 @@ class Access
             }
             if(self::getConnect()->execute())
             {
+
                 return true;
             }else{
                 return false;
@@ -230,6 +233,7 @@ class Access
         {
             if(self::prepareQuery($table,self::$queryBag[$table]))
             {
+                unset(self::$queryBag[$table]);
                 return self::getConnect()->resultSet();
             }else{
                 return self::$error;
@@ -253,6 +257,7 @@ class Access
     {
         if(self::prepareQuery())
         {
+            unset(self::$queryBag[self::getTable()]);
             return self::getConnect()->resultSet();
         }else{
             return self::$error;
@@ -278,11 +283,23 @@ class Access
     /**
      * @throws Display
      */
-    public static function find(int $id)
+    public static function find(int|string $id='')
     {
-        if(!empty($id) && is_int($id))
+
+        $table = strtolower(self::getTable());
+        unset(self::$queryBag[$table]);
+        if(empty($id))
         {
-            $table = strtolower(self::getTable());
+            self::$queryBag[$table]['query'] = [
+                'select' => ' * FROM '.$table,
+                'where'=> 'id = :id',
+            ];
+            self::$queryBag[$table]['param']['where'][':id'] = $id;
+            self::$queryBag[$table]['column'][] = 'id';
+            return new Build($table,self::$queryBag);
+
+        }else{
+
             self::$queryBag[$table]['query'] = [
                 'select' => ' * FROM '.$table,
                 'where'=> 'id = :id',
@@ -291,11 +308,15 @@ class Access
             self::$queryBag[$table]['column'][] = 'id';
             if(self::prepareQuery($table,self::$queryBag[$table]))
             {
+                unset(self::$queryBag[$table]);
                 return self::getConnect()->single();
             }else{
                 return self::$error;
             }
         }
+
+
+
 
     }
 
