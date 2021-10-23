@@ -73,6 +73,17 @@ class Connection
         return $this->database;
     }
 
+    public function getConnectionName()
+    {
+        if($this->database === $_ENV['DB_NAME'])
+        {
+            return 'default';
+        }else{
+            return $this->database;
+        }
+        return 'undefined';
+    }
+
 
     /**
      * @return PDO

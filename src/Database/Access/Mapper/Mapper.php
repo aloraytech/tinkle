@@ -13,6 +13,8 @@ class Mapper
     private array $bag=[];
     private array $error=[];
     private array|object $mapperBag=[];
+    private string|array $pk='';
+    private array $relation=[];
 
     /**
      * @param string $table
@@ -32,7 +34,7 @@ class Mapper
         if(!isset($this->mapperBag[$this->table]))
         {
             $this->mapper = self::getMapper();
-            $this->mapperBag[$this->table] = $this->mapper;
+            $this->mapperBag[$this->table] = $this->mapper['map'];
         }else{
             $this->mapper = $this->mapperBag[$this->table];
         }
@@ -45,7 +47,9 @@ class Mapper
 
     public function verify()
     {
-       // $this->mapper = [];
+
+
+
         if(empty($this->error))
         {
             return true;
@@ -61,6 +65,50 @@ class Mapper
     }
 
 
+    public function getPrimaryKey()
+    {
+        return $this->pk;
+    }
+
+    public function getRelation()
+    {
+        return $this->relation;
+    }
+
+    public function get()
+    {
+        return $this->mapper;
+    }
+
+
+    public function getParentTableField()
+    {
+        $fields = [];
+        if(isset($this->mapper['map']))
+        {
+            foreach ($this->mapper['map'] as $key => $value)
+            {
+                $fields[$key] = $value;
+            }
+            return $fields;
+        }
+        return null;
+    }
+
+    public function getChildTableField(string $childRelation)
+    {
+
+        foreach ($this->relation as $key => $rel)
+        {
+
+            if($rel['LinkTo'] === ucfirst($childRelation))
+            {
+                return $rel;
+            }
+        }
+
+    }
+
 
 
 
@@ -69,12 +117,14 @@ class Mapper
      */
     private  function getMapper()
     {
-        Access::setDebug('Searching mapper For '.$this->table);
+        Access::setDebug('Searching mapper For '.$this->table,false);
         $tableMap = new TableMapper($this->table);
         $map= $tableMap->get();
+        $this->pk = $map['pk'];
+        $this->relation = $map['fk'];
         if(!empty($map))
         {
-            Access::setDebug("Found Map For $this->table");
+            Access::setDebug("Found Map For $this->table",false);
             return $map;
         }else{
             throw new Display(self::getTable()." - Table Mapping Failed!",Display::HTTP_SERVICE_UNAVAILABLE);
@@ -132,8 +182,6 @@ class Mapper
 
         $tableMap = $this->mapper['map'];
 
-        //dryDump($tableMap);
-
         foreach ($allParam as $pKey => $pValue)
         {
 
@@ -144,6 +192,7 @@ class Mapper
                 $ext = 'is_'.$attrKey['Ext'];
                 if($ext($pValue) && $attrKey['Size'] >=$pValue)
                 {
+
                     continue;
                 }
 

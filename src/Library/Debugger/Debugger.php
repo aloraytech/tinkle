@@ -95,6 +95,7 @@ class Debugger
             'time_consume'=> number_format((float)$netTime, 4, '.', '').' seconds only',
             'time_left'=>$leftTime . ' seconds only',
             'debug'=>self::$debugBag,
+            'raw'=> debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS),
         ];
     }
 

@@ -34,47 +34,19 @@ function Auth()
         ];
     }
 
-//
-//    function ddDump()
-//    {
-//        foreach (func_get_args() as $x) {
-//            dump($x);
-//        }
-//        die;
-//    }
 
 
-
-    function dryDump($param,$bg_color='yellow',$text_color='black',$title='Direct Display')
-    {
-        $title = ucfirst($title);
-        if(!empty($param))
-        {
-            $bg_color = strtolower($bg_color);
-            $text_color = strtolower($text_color);
-
-            ob_start();
-            echo "
-<div style='background-color: $bg_color; color: $text_color;border-style: solid; border-width: thick; border-color: black'>
-<h2 style='margin: auto;padding: 2px;background-color: $text_color; color: $bg_color;'  align='left'>[ ] $title:-</h2>
-<pre style='padding: 5px;word-wrap: break-word;word-break: break-all;'>";
-            print_r($param);
-            echo "<br></pre></div>";
-            ob_end_flush();
-            
-        }
-    }
 
 if (!function_exists('dryDump')) {
-    function dryDump($param,$bg_color='yellow',$text_color='black')
+    function dryDump(mixed $param,string $text='Direct Display',$bg_color='yellow',$text_color='black')
 {
     if(!empty($param))
     {
         $bg_color = strtolower($bg_color);
         $text_color = strtolower($text_color);
 
-        echo "<div style='background-color: $bg_color; color: $text_color;border-style: solid;'><h1 style='margin: 4px;'>Direct Display:-</h1><pre style='padding: 5px;margin: 5px;'>";
-        var_dump($param);
+        echo "<div style='background-color: $bg_color; color: $text_color;border-style: solid;'><h1 style='margin: 4px;'>$text:-</h1><pre style='padding: 5px;margin: 5px;'>";
+        print_r($param);
         echo "<br></pre></div>";
 
     }
@@ -96,6 +68,7 @@ if (!function_exists('ddump')) {
 
 
 if (!function_exists('debugIt')) {
+    // For Register Debug Process And Time In Debugger For Testing Purpose
     function debugIt(string|array|object $subject, int|string|float $timeTaken='', bool $isDBDebug=false, int $traceLimit=5)
     {
         if (class_exists(\Tinkle\Library\Debugger\Debugger::class)) {
@@ -104,6 +77,8 @@ if (!function_exists('debugIt')) {
 
     }
 }
+
+
 
 
 

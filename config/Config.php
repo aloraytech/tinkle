@@ -3,7 +3,6 @@
 
 namespace Config;
 use Dotenv\Dotenv;
-use App\models\UsersModel;
 use Tinkle\Library\Essential\Essential;
 
 class Config
@@ -14,7 +13,7 @@ class Config
     protected Client $client;
     protected DBConfig $database;
     protected App $app;
-    protected static string $authModel = "App\models\UsersModel";
+    protected static string $authModel = "App\Models\Auth\Users";
 
     /**
      * Config constructor.

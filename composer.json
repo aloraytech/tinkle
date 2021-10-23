@@ -30,21 +30,20 @@
 
     "require": {
         "php": "^8.0",
-        "vlucas/phpdotenv": "^5.3",
-        "symfony/http-foundation": "^5.3",
-        "twig/twig": "^3.3",
         "ext-json": "*",
         "ext-gd": "*",
         "ext-pdo": "*",
+        "vlucas/phpdotenv": "^5.3",
+        "symfony/http-foundation": "^5.3",
+        "twig/twig": "^3.3",
         "phpoffice/phpspreadsheet": "dev-master",
-        "razorpay/razorpay": "2.*",
         "illuminate/database": "^8.63",
-        "illuminate/events": "^8.63",
-        "phpunit/phpunit": "^9.5"
+        "illuminate/events": "^8.63"
     },
     "minimum-stability": "dev",
     "prefer-stable": true,
     "require-dev": {
-        "symfony/var-dumper": "^5.3"
+        "symfony/var-dumper": "^5.3",
+        "phpunit/phpunit": "^9.5"
     }
 }

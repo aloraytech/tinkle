@@ -10,7 +10,9 @@ class Debugger extends Plugins
 
     public function show()
     {
-        return \Tinkle\Library\Debugger\Debugger::display();
+        echo "<div style='background-color: blueviolet'> <h3 style='color: white;padding: 2px;margin: 2px;'>Tinkle Debugger</h3> ";
+        \Tinkle\Library\Debugger\Debugger::display();
+        echo "</div>";
     }
 
 

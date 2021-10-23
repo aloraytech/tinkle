@@ -13,7 +13,7 @@ use Tinkle\Tinkle;
     }
 
 
-class ModelHandler extends \MODEL_CONNECTION
+abstract class ModelHandler extends \MODEL_CONNECTION
 {
 
 }

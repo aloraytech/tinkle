@@ -85,5 +85,30 @@ class Helper
 
 
 
+    public function arr2Obj(mixed $a)
+    {
+
+            if (is_array($a) ) {
+                foreach($a as $k => $v) {
+                    if (is_integer($k)) {
+                        // only need this if you want to keep the array indexes separate
+                        // from the object notation: eg. $o->{1}
+                        $a['index'][$k] = arr2Obj($v);
+                    }
+                    else {
+                        $a[$k] = arr2Obj($v);
+                    }
+                }
+
+                return (object) $a;
+            }
+
+            // else maintain the type of $a
+            return $a;
+
+    }
+
+
+
 
 }

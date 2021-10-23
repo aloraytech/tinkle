@@ -6,6 +6,8 @@ use App\Controllers\Payment\Payment;
 use App\Plugins\Razorpay\Razorpay;
 use Razorpay\Api\Api;
 use Tinkle\Controller;
+use Tinkle\Helpers\Helper;
+use Tinkle\Helpers\STR;
 use Tinkle\Request;
 use Tinkle\Response;
 use Tinkle\Tinkle;
@@ -52,10 +54,13 @@ class FrontController extends Controller
        {
             echo "<h1>Testing page</h1>";
 
+            ddump(Helper::STR()->lower('ABC'));
+           ddump(Helper::STR()::lower('ABCdfsds'));
+
+            ddump(STR::lower('XYZ'));
 
 
 
-           Tinkle::$app->logout();
 
 
 

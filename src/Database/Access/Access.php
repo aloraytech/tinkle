@@ -9,16 +9,32 @@ use Tinkle\Database\Connection;
 use Tinkle\Database\Database;
 use Tinkle\Exceptions\CoreException;
 use Tinkle\Exceptions\Display;
+use Tinkle\interfaces\AccessOrmModelInterface;
 use Tinkle\Library\Debugger\Debugger;
 use Tinkle\Database\Access\Mapper\Mapper;
-class Access
+use Tinkle\Library\Essential\Essential;
+
+abstract class Access
 {
     public static Access $access;
 
     protected static array $int_time=[];
     protected static array $queryBag=[];
     public static string|array $error=[];
+    public string $connection='';
     public string $table='';
+    public int $perPage=15;
+//    public bool $exists=false;
+//    public array|object $attributes=[];
+//    public array|object $original=[];
+//    public array $appends=[];
+//    public array|object $relations=[];
+//    public array $casts=[];
+//    public array $guarded =[];
+    private static array|object $pk=[];
+    private static array|object $relations=[];
+    private static array $preQuery=[];
+
 
 
     /**
@@ -27,8 +43,81 @@ class Access
     public function __construct()
     {
         self::$access = $this;
+        $this->connection = self::getConnect()->getConnectionName();
+        if(empty($this->table))
+        {
+            $this->table = self::getTable();
+        }
 
     }
+
+
+    public function populate()
+    {
+
+    }
+
+
+    public static function populateNReturn($content,string $table='')
+    {
+        if(empty($table))
+        {
+            $table = strtolower(self::getTable());
+        }
+
+        $countValue = count(Essential::getHelper()->ObjectToArray($content));
+        $data = [
+            'table'=> $table,
+            "$table"=> $content,
+            'primarykey'=> array_keys(self::$pk)[0],
+            'attributes'=> $content,
+            'original'=> $content,
+            "meta"=> [
+                'total' => $countValue,
+            ],
+            'guard'=> [],
+            'map'=>['primarykey'=> self::$pk,'relation'=>self::$relations[strtolower(self::getTable())],],
+
+        ];
+
+        // Here All Require Action will be taken before send back data to controller/plugin/callable class
+//        if(is_object($content))
+//        {
+//            $result = Essential::getHelper()->ObjectToArray($content);
+//
+//
+////            if(is_array($result))
+////            {
+////                foreach ($result as $key => $value)
+////                {
+////
+////                    if(is_array($value))
+////                    {
+////                        foreach ($value as $vKey =>$vValue)
+////                        {
+////                            if(is_array($vValue))
+////                            {
+////                                foreach ($vValue as $vvK => $vvValue)
+////                                {
+////                                    //self::$vvK = $vvValue;
+////                                    $newObject->{$vvK} = $vvValue;
+////                                }
+////                            }else{
+////                                $newObject->{$vKey} = $vValue;
+////                            }
+////                        }
+////                    }else{
+////                        $newObject->{$key}  = $value;
+////                    }
+////                }
+////            }
+//        }
+//      //  $object = (object) $content;
+//        //dryDump($object);
+        return json_decode(json_encode($data,JSON_PRETTY_PRINT));
+    }
+
+
 
 
 
@@ -48,7 +137,7 @@ class Access
      * @param mixed|string $message
      * @return bool
      */
-    public static function setDebug(mixed $message='')
+    public static function setDebug(mixed $message='',bool $isDebug=true)
     {
         $table = self::getTable();
         self::intTime();
@@ -60,7 +149,7 @@ class Access
 
         if(class_exists(\Tinkle\Library\Debugger\Debugger::class))
         {
-            Debugger::register($message,$timeTaken,true);
+            Debugger::register($message,$timeTaken,$isDebug);
         }
         return true;
     }
@@ -70,7 +159,10 @@ class Access
      */
     public static function getTable()
     {
-        return str_replace('Model','',str_replace('App\\Models\\','',get_called_class()));
+        $table = str_replace('Model','',str_replace('App\\Models\\','',get_called_class()));
+        $tableParts = explode('\\',$table);
+        $partsCount = count($tableParts);
+        return $tableParts[$partsCount-1];
     }
 
     /**
@@ -81,23 +173,10 @@ class Access
         return Database::$database->getConnect();
     }
 
-//    /**
-//     * @throws Display
-//     */
-//    private static function getMapper()
-//    {
-//        self::setDebug();
-//        $tableMap = new TableMapper(self::getTable());
-//        $map= $tableMap->get();
-//        if(!empty($map))
-//        {
-//            self::setDebug();
-//            return $map;
-//        }else{
-//            throw new Display(self::getTable()." - Table Mapping Failed!",Display::HTTP_SERVICE_UNAVAILABLE);
-//        }
-//    }
 
+    /**
+     * @throws Display
+     */
     public static function verifyWithMapper(string $table='', array|object $bag=[])
     {
         if(empty($table)){$table = strtolower(self::getTable());}
@@ -107,6 +186,8 @@ class Access
 
         if($mapper->verify())
         {
+            self::$pk = $mapper->getPrimaryKey();
+            self::$relations[strtolower(self::getTable())] = $mapper->getRelation();
             return true;
         }else{
             self::$error = $mapper->getError();
@@ -124,9 +205,6 @@ class Access
      */
     public static function prepareQuery(string $table='',array $bag=[])
     {
-
-//        dryDump($bag);
-
         if(empty($table)){$table = self::getTable();}
         if(empty($bag)){$bag = self::$queryBag[strtolower(self::getTable())];}
 
@@ -135,7 +213,6 @@ class Access
             $maker = new QueryMaker(strtolower($table),$bag);
             $tempQ= $maker->getQuery();
             self::prepareNBindQuery($tempQ,$bag);
-
         }
         if(empty(self::$error))
         {
@@ -234,7 +311,7 @@ class Access
             if(self::prepareQuery($table,self::$queryBag[$table]))
             {
                 unset(self::$queryBag[$table]);
-                return self::getConnect()->resultSet();
+                return self::populateNReturn(self::getConnect()->resultSet(),$table);
             }else{
                 return self::$error;
             }
@@ -243,12 +320,24 @@ class Access
             return new Build($table,self::$queryBag);
         }
 
-
-
-
-//        self::getConnect()->query("SELECT * FROM {$table}");
-//        return self::getConnect()->resultSet();
     }
+
+
+    public static function findAll(bool $deep=false)
+    {
+        if($deep)
+        {
+            return self::all(true);
+        }else{
+            $table = strtolower(self::getTable());
+            self::$queryBag[$table]['query'] = [
+                'select' => ' * FROM '.$table,
+            ];
+            return new Build($table,self::$queryBag);
+        }
+
+    }
+
 
     /**
      * @throws Display
@@ -258,7 +347,7 @@ class Access
         if(self::prepareQuery())
         {
             unset(self::$queryBag[self::getTable()]);
-            return self::getConnect()->resultSet();
+            return self::populateNReturn(self::getConnect()->resultSet(),strtolower(self::getTable()));
         }else{
             return self::$error;
         }
@@ -292,10 +381,10 @@ class Access
         {
             self::$queryBag[$table]['query'] = [
                 'select' => ' * FROM '.$table,
-                'where'=> 'id = :id',
+                'where'=> '',
             ];
-            self::$queryBag[$table]['param']['where'][':id'] = $id;
-            self::$queryBag[$table]['column'][] = 'id';
+//            self::$queryBag[$table]['param']['where'][':id'] = $id;
+//            self::$queryBag[$table]['column'][] = 'id';
             return new Build($table,self::$queryBag);
 
         }else{
@@ -309,7 +398,7 @@ class Access
             if(self::prepareQuery($table,self::$queryBag[$table]))
             {
                 unset(self::$queryBag[$table]);
-                return self::getConnect()->single();
+                return self::populateNReturn(self::getConnect()->single(),$table);
             }else{
                 return self::$error;
             }
@@ -321,15 +410,32 @@ class Access
     }
 
 
+    /**
+     * @throws Display
+     */
+    public static function load(string $relation_table)
+    {
+        $relation_table = strtolower($relation_table);
+        $table = strtolower(self::getTable());
+        // Set Mapper
+        $mapper = new Mapper($table,[]);
+        $pField = implode(', ', array_map(fn($m) => "$table.$m as $table".ucfirst($m), array_keys($mapper->getParentTableField())));
+        $relation = $mapper->getChildTableField($relation_table);
+        $rFields = implode(', ', array_map(fn($m) => "$relation_table.$m as $relation_table".ucfirst($m), array_keys($relation['Link'])));
+
+
+        unset(self::$queryBag[$table]);
+
+
+        self::$queryBag[$table]['query'] = [
+            'select' => $pField.', '.$rFields.'  FROM '.$table. " INNER JOIN ". strtolower($relation['LinkTo'])." ON ".$table.".".strtolower($relation['Field'])." = ".strtolower($relation['LinkTo']).'.'.strtolower($relation['LinkOn']),
+        ];
+        return new Build($table,self::$queryBag);
+
+    }
 
 
 
-
-
-
-
-
-    // EXTE
 
 
 

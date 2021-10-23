@@ -3,28 +3,10 @@
 namespace Tinkle\Database\Access;
 
 use Tinkle\Database\Database;
+use Tinkle\interfaces\AccessOrmModelInterface;
 
-class AccessHandler extends Access
+abstract class AccessHandler extends Access implements AccessOrmModelInterface
 {
-
-
-//    public function find(int $int)
-//    {
-//        return $this->builder->find($int);
-//
-////        $theTable = strtolower($this->table);
-////        $this->connection->query("SELECT * FROM {$theTable} WHERE id =:id");
-////        $this->connection->bind(':id',$int);
-////        return $this->connection->single();
-//    }
-//
-//
-//    public function findAll()
-//    {
-//        $theTable = strtolower($this->table);
-//        $this->connection->query("SELECT * FROM {$theTable}");
-//        return $this->connection->resultSet();
-//    }
 
 
 

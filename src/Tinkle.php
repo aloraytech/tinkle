@@ -3,11 +3,13 @@
 
 namespace Tinkle;
 
+use App\Models\Auth\Users;
 use App\models\UsersModel;
 
 
 use Tinkle\Databases\DBHandler;
 use Tinkle\Exceptions\ExceptionMagic;
+use Tinkle\Library\Auth\Auth;
 use Tinkle\Library\Console\Console;
 use Tinkle\Library\Debugger\Debugger;
 use Tinkle\Library\Essential\Essential;
@@ -34,8 +36,8 @@ use Tinkle\Library\Designer\Designer;
     public Designer $designer;
     public Token $token;
     protected static Console $console;
-    public ?UsersModel $user;
-
+    public ?Users $user;
+    public Auth $auth;
 
 
       // Put ? sign infront for Null Value like Visitor
@@ -55,31 +57,18 @@ use Tinkle\Library\Designer\Designer;
     {
 
 
-
-
-
-        // First Thing First
-//        restore_error_handler();
-//        restore_exception_handler();
-//        set_exception_handler([new ExceptionMagic(), 'handle']);
-//        set_error_handler(array($this, 'ErrorHandler'));
         try {
 
             if($this->welcome())
             {
-
-
                 if(is_string($rootPath) && is_array($config) && !empty($rootPath) && !empty($config))
                 {
-
                     self::$ROOT_DIR = $rootPath.'/';
                     self::$app = $this;
                     $this->config = $config;
                     Essential::init();
-
                     $this->db = new DB($this->config['db']);
                     $this->db->setDefaultConnection();
-
 
                     if (!$this->isCli())
                     {
@@ -91,12 +80,12 @@ use Tinkle\Library\Designer\Designer;
                         $this->router = new Router($this->request,$this->response);
                         $this->designer = new Designer();
                         $this->view = new View($this->request,$this->response);
-                        //$this->load_event_listners();
+                        $this->userClass = $this->config['userModel'];
+                        $this->auth = new Auth();
 
-//                        $this->userClass = $this->config['userModel'];
-//
-//                        $primaryValue = $this->session->get('user');
-//
+
+                        // USER CREDENTIAL CHECKING
+                        //$primaryValue = $this->session->get('user');
 //                        if($primaryValue){
 //                            $primaryKey = $this->userClass::primaryKey();
 //
@@ -104,33 +93,24 @@ use Tinkle\Library\Designer\Designer;
 //                        }else{
 //                            $this->user = null;
 //                        }
-
-                        $this->user = null;
+//                        $this->user = null;
 
                     }else{
                         self::$console = new Console($rootPath);
                     }
-
                 }else{
                     throw new Display('Unexpected Error Found, Please Update or Reset Your Application',Display::HTTP_SERVICE_UNAVAILABLE);
                 }
             }
 
-
-
         }catch (Display $e){
             if($this->isCli())
             {
-                $e->RenderConsole();
-            }else{
                 $e->Render();
+            }else{
+                $e->Render(true);
             }
-
         }
-
-
-
-
 
     }
 
@@ -156,6 +136,57 @@ use Tinkle\Library\Designer\Designer;
     }
 
 
+    // PRE METHODS
+
+     /**
+      * @return bool
+      */
+     protected function load_event_listners()
+     {
+         require_once Tinkle::$ROOT_DIR.'/routes/listeners.php';
+         return true;
+     }
+
+     /**
+      * @return bool
+      */
+     protected function welcome()
+     {
+         restore_exception_handler();
+         set_exception_handler([new ExceptionMagic(), 'handle']);
+         restore_error_handler();
+         set_error_handler(array($this, 'ErrorHandler'));
+         return true;
+     }
+
+     /**
+      * @param $severity
+      * @param $message
+      * @param $file
+      * @param $line
+      */
+     public static function ErrorHandler($severity, $message, $file, $line)
+     {
+
+         try {
+             if (!empty($severity) && !empty($message)) {
+                 // This error code is not included in error_reporting
+                 $msg = "_msg=$message"."&_line=$line"."&_file=$file"."&_severity=$severity";
+                 throw new Display("$msg");
+             }else{
+                 return;
+             }
+
+         } catch (Display $e) {
+             $e->handle();
+         }
+
+
+     }
+
+
+    // SYSTEM METHODS
+
     /**
      * @return Controller|null
      */
@@ -163,7 +194,6 @@ use Tinkle\Library\Designer\Designer;
     {
         return $this->controller;
     }
-
 
     /**
      * @param $controller
@@ -175,8 +205,6 @@ use Tinkle\Library\Designer\Designer;
         return $this;
     }
 
-
-
      /**
       * @return Plugins|null
       */
@@ -184,7 +212,6 @@ use Tinkle\Library\Designer\Designer;
      {
          return $this->plugins;
      }
-
 
      /**
       * @param $plugins
@@ -196,89 +223,21 @@ use Tinkle\Library\Designer\Designer;
          return $this;
      }
 
+     /**
+      * @return bool
+      */
+     public function isCli()
+     {
+         if(PHP_SAPI === 'cli')
+         {
+             return true;
+         }
+         return false;
+     }
 
 
 
-
-
-
-
-
-
-    protected function load_event_listners()
-    {
-       require_once Tinkle::$ROOT_DIR.'/routes/listeners.php';
-        return true;
-    }
-
-
-
-    protected function welcome()
-    {
-        restore_exception_handler();
-        set_exception_handler([new ExceptionMagic(), 'handle']);
-        restore_error_handler();
-        set_error_handler(array($this, 'ErrorHandler'));
-        return true;
-    }
-
-
-
-
-    public static function ErrorHandler($severity, $message, $file, $line)
-    {
-
-        try {
-            if (!empty($severity) && !empty($message)) {
-                // This error code is not included in error_reporting
-                $msg = "_msg=$message"."&_line=$line"."&_file=$file"."&_severity=$severity";
-                throw new Display("$msg");
-            }else{
-                return;
-            }
-
-        } catch (Display $e) {
-            $e->handle();
-        }
-
-
-    }
-
-    public static function isGuest()
-    {
-        return !self::$app->user;
-    }
-
-    public function login(UserHandler $user)
-    {
-        $this->user = $user;
-        $primaryKey = $user->primaryKey();
-        $value = $user->{$primaryKey};
-        Tinkle::$app->session->set('user', $value);
-
-        return true;
-    }
-
-    public function logout()
-    {
-      //  $this->user = null;
-        if($this->db->getConnect()->close())
-        {
-            $this->response->redirect('/');
-        }
-        self::$app->session->remove('user');
-
-    }
-
-
-    public function isCli()
-    {
-        if(PHP_SAPI === 'cli')
-        {
-            return true;
-        }
-        return false;
-    }
+     // EVENT MANAGEMENT  |||||||||||||||||||||||||||||||||||||||||||||||
 
      /**
       * @param string $event
@@ -298,6 +257,46 @@ use Tinkle\Library\Designer\Designer;
      {
          return Event::trigger(Event::EVENT_ON_RUN,$event,$parameter);
      }
+
+
+
+
+     // SYSTEM USER METHODS |||||||||||||||||||||||||||||||||||||||||||||
+
+     /**
+      * @return bool
+      */
+    public static function isGuest()
+    {
+        return !self::$app->user;
+    }
+
+     /**
+      * @param Users $user
+      * @return bool
+      */
+    public function login(Users $user)
+    {
+        $this->user = $user;
+        $primaryKey = $user->primaryKey();
+        $value = $user->{$primaryKey};
+        Tinkle::$app->session->set('user', $value);
+
+        return true;
+    }
+
+
+    public function logout()
+    {
+      //  $this->user = null;
+        if($this->db->getConnect()->close())
+        {
+            $this->response->redirect('/');
+        }
+        self::$app->session->remove('user');
+
+    }
+
 
 
 

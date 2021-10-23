@@ -138,8 +138,7 @@ class Make extends ConsoleController
         $model = str_replace('model','',$model);
 
         $isPlural = substr($model, -1);
-
-        if($isPlural != 's' || $isPlural != 'S')
+        if($isPlural != 's' && $isPlural != 'S')
         {
             $model = $model.'s';
         }

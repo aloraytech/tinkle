@@ -17,7 +17,7 @@ use Tinkle\Tinkle;
 use Tinkle\View;
 
 
-class AppController extends Controller
+class OAppController extends Controller
 {
 
     public function __construct()
@@ -38,6 +38,101 @@ class AppController extends Controller
     public function home(Request $request, Response $response)
     {
             echo "<h1>HOMEPAGE</h1>";
+
+
+
+            $postModel = new PostsModel();
+            $postModel->title = 'Moon';
+            $postModel->description = 'MoonLight';
+            $postModel->author_id = 3;
+            $postModel->category_id = 2;
+
+            $postModel->save();
+
+//            $data=[
+//                'title'=>'Sun Orbital',
+//                'description'=>'This is a Nasa Mission.',
+//                'author_id'=>4,
+//                'category_id'=>2,
+//
+//            ];
+            //$postModel->insert($data);
+            // dd($postModel->find(['title','category_id','id','created_at'])->where(['author_id'=> 2])->get());
+            //dd($postModel->update($data)->where(['id'=>8])->save());
+            // $postModel->delete(['id'=>3]);
+          // $postModel->find()->where(['author_id'=>1])->get();
+
+        //    dd();
+
+
+            //$postModel::select(['id','title']);
+//
+
+
+
+
+       //$this->create()->controller('Front/CreateUsersController');
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//        $this->title = 'homepage';
+//        $this->description = 'custom web app maker';
+//
+//      echo "<h1>Welcome :</h1>";
+
+
+
+
+
+
+
+
+
+
+//        $this->getMiddlewares();
+//        $this->pageAttribute = ['title'=>'Homepage','favicon'=>'png','slogan'=>'Awesome'];
+//
+//        $userModel = new UsersModel();
+//        $this->render('templateName')->withTheme('themeName')->withModules([$userModel]);
+//        //$this->display();
+
+        //View::render('front.index','master')->withModules($userModel)->withHeader()->withExternal()->cssHost(true,'blogger.com,pink.com')->applyExternal()->applyHeader()->display();
+
+        //$this->render('index','default')->withModules($userModel)->display();
+
+        //View::display($userModel);
+
+
+//        Schema::create('flights', function (Blueprint $table) {
+//            $table->id();
+//            $table->string('name');
+//            $table->string('airline');
+//            $table->timestamps();
+//        });
+
+
+
+
+
+
+
+
+//            $userModel = new UsersModel();
+//            $this->prepareView('homepage')->withModels([$userModel])->responseCode(200);
+//            $this->display();
     }
 
 

@@ -47,6 +47,15 @@ class Hash
 
     }
 
+    public static function check(string $checkThis, string $checkWith)
+    {
+        if(hash_equals($checkWith,$checkThis))
+        {
+            return true;
+        }
+        return false;
+    }
+
 
 
 

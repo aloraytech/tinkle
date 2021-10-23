@@ -25,7 +25,7 @@ class BuilderOption
     public function first()
     {
         Access::prepareQuery($this->table,$this->bag[$this->table]);
-        $data = Access::getConnect()->single();
+        $data = Access::populateNReturn(Access::getConnect()->single(),$this->table);
         if(!empty($data))
         {
             return $data;
@@ -41,7 +41,7 @@ class BuilderOption
     public function firstOrFail()
     {
         Access::prepareQuery($this->table,$this->bag[$this->table]);
-        $data = Access::getConnect()->single();
+        $data = Access::populateNReturn(Access::getConnect()->single(),$this->table);
         if(!empty($data))
         {
             return $data;
@@ -67,7 +67,7 @@ class BuilderOption
     public function get()
     {
         Access::prepareQuery($this->table,$this->bag[$this->table]);
-        $data = Access::getConnect()->resultSet();
+        $data = Access::populateNReturn(Access::getConnect()->resultSet(),$this->table);
         if(!empty($data))
         {
             return $data;
